@@ -1,8 +1,8 @@
-﻿/*#define bin
+﻿#define bin
 #define tree
 #define fib
 #define int
-#define hash*/
+#define hash
 #define chess
 using System;
 using System.Diagnostics;
@@ -711,9 +711,6 @@ namespace Lab2
             {
                 CheckPosition();
             }
-
-            //ToString(field);
-            //Console.WriteLine(res);
             void ToString(int[,] field)
             {
                 res = "";
