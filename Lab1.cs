@@ -1,21 +1,40 @@
 ﻿using System;
 using System.Diagnostics;
-
+using Lab2;
 namespace Lab1
 {
     class Lab1
     {
         static void Main(string[] args)
         {
+            Console.WriteLine("Введите номер лабораторной работы:\n1. Алгоритмы сортировки\n2. Методы поиска, хеширование и ферзи\n3. Поиск подстроки в строке");
+            int num = int.Parse(Console.ReadLine());
+            switch (num)
+            {
+                case 1:
+                    Run1Lab();
+                    break;
+                case 2:
+                    Lab2.Lab2.Run2Lab();
+                    break;
+                case 3:
+                    //Lab3.Lab3.Run3Lab();
+                    break;
+                default:
+                    break;
+            }
+        }
+        static void Run1Lab()
+        {
             while (true)
             {
-                Console.WriteLine("Введите размерность матрицы");
+                Console.WriteLine("Введите размерность матрицы:");
                 int size = int.Parse(Console.ReadLine());
                 Random rnd = new Random();
                 int[] matrix = new int[size * size];
-                for (int i = 0; i < size*size; i++)
+                for (int i = 0; i < size * size; i++)
                 {
-                    matrix[i] = rnd.Next(-1000, 1001);                    
+                    matrix[i] = rnd.Next(-1000, 1001);
                 }
                 Stopwatch sw = new Stopwatch();
                 sw.Start();
@@ -39,7 +58,6 @@ namespace Lab1
                 Console.ReadLine();
             }
         }
-
         static void Swap(ref int first, ref int second)
         {
             var temp = first;
@@ -64,7 +82,7 @@ namespace Lab1
             return array;
         }
         //сортировка Хоара
-        
+
         static void Quicksort(int[] arr, int start, int end)
         {
             {

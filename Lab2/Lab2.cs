@@ -1,8 +1,8 @@
-﻿/*#define bin
-#define tree
-#define fib
-#define int
-#define hash*/
+﻿//#define bin
+//#define tree
+//#define fib
+//#define int
+#define hash
 #define chess
 using System;
 using System.Diagnostics;
@@ -10,9 +10,9 @@ using System.Collections.Generic;
 
 namespace Lab2
 {
-    internal class Lab2
+    public static class Lab2
     {
-        public static void Run2Lab()
+        static void Run2Lab()
         {
             Random rnd = new Random();
             Stopwatch sw = new Stopwatch();
@@ -24,7 +24,7 @@ namespace Lab2
             while (0 != size)
             {
                 Console.WriteLine("\nВведите искомый элемент.");
-                var key_bin = int.Parse(Console.ReadLine());
+                var key = int.Parse(Console.ReadLine());
                 var mas = new int[size];
                 for (int i = 0; i < size; i++)
                 {
@@ -33,15 +33,15 @@ namespace Lab2
                 Array.Sort(mas);
                 sw.Start();
                 var start = DateTime.Now;
-                var binary = BinarySearch(mas, key_bin);
+                var binary = BinarySearch(mas, key);
                 var end = DateTime.Now;
                 sw.Stop();
-                Console.WriteLine($"\nЭлемент {key_bin} присутствует в массиве - {binary}.");
+                Console.WriteLine($"\nЭлемент {key} присутствует в массиве - {binary}.");
                 Console.WriteLine($"Затраченное время на выполнение: {/*sw.Elapsed*/start - end}.");
                 sw.Reset();
                 sw.Start();
                 start = DateTime.Now;
-                Array.BinarySearch(mas, key_bin);
+                Array.BinarySearch(mas, key);
                 end = DateTime.Now;
                 sw.Stop();
                 Console.WriteLine($"\nЗатраченное время на выполнение встроенным алгоритмом класса Array: {start - end}.");
@@ -121,9 +121,9 @@ namespace Lab2
                 {
                     set.Add(rnd.Next(-1000, 1001));
                 }
-                var arr = new int[set.Count];
-                //int[] arr = { 1, 2, 6, 14, 18, 40, 55, 91, 114, 225, 335, 556, 667, 889, 668, 44458, 88889595, 989849841, 989849843 };
-                set.CopyTo(arr);
+                //var arr = new int[set.Count];
+                int[] arr = { 1, 2, 6, 14, 18, 40, 55, 91, 114, 225, 335, 556, 667, 889, 668, 44458, 88889595, 989849841, 989849843 };
+                //set.CopyTo(arr);
                 Array.Sort(arr);
                 sw.Start();
                 var start = DateTime.Now;
@@ -152,8 +152,8 @@ namespace Lab2
                     set.Add(rnd.Next(-1000, 1001));
                 }
                 //var arr = new int[set.Count];
-                //set.CopyTo(arr);
                 int[] arr = { 1, 2, 6, 14, 18, 40, 55, 91, 114, 225, 335, 556, 667, 889, 668, 44458, 88889595, 9898491, 9898443 };
+                //set.CopyTo(arr);
                 Array.Sort(arr);
                 sw.Start();
                 var start = DateTime.Now;
@@ -179,11 +179,11 @@ namespace Lab2
             while (key != 0)
             {
                 sw.Start();
-                Console.WriteLine($"\nВарианты расстановки ферзей:\n");
                 var start = DateTime.Now;
-                Chess();
+                string res = Chess();
                 var end = DateTime.Now;
                 sw.Stop();
+                Console.WriteLine($"\nВариант расстановки ферзей:\n{res}");
                 Console.WriteLine($"Затраченное время на выполнение: {/*sw.Elapsed*/start - end}.");
                 sw.Reset();
                 Console.WriteLine("\nВведите любое значение кроме 0 для вывода результата поиска или 0 для выхода.");
@@ -686,11 +686,9 @@ namespace Lab2
 
             }
         }
-        static void Chess()
+        static string Chess()
         {
             var field = new int[8, 8];
-            int counter = 1;
-            Figure first_in_row = null;
             Stack<Figure> to_place = new Stack<Figure>(8);
             Stack<Figure> placed = new Stack<Figure>(8);
             for (int i = 8; i > 0; i--)
@@ -707,13 +705,12 @@ namespace Lab2
                 {true,true,true,true,true,true,true,true},
                 {true,true,true,true,true,true,true,true}};
             string res;
-            while (/*to_place.Count != 0&&*/ counter < 93)
+            while (to_place.Count != 0)
             {
                 CheckPosition();
             }
-
-            //ToString(field);
-            //Console.WriteLine(res);
+            ToString(field);
+            return res;
             void ToString(int[,] field)
             {
                 res = "";
@@ -746,13 +743,8 @@ namespace Lab2
                         RemoveFig();//убираем последнюю выставленную обратно в очередь
                     }
                 }
-                else
-                {
-                    ToString(field);
-                    Console.WriteLine($"{counter}:\n{res}");
-                    RemoveFig();
-                    ++counter;
-                }
+                //ToString(field);
+                //Console.WriteLine(res);
             }
             void RemoveFig()
             {
@@ -760,7 +752,6 @@ namespace Lab2
                 returned.Placed = false;
                 field[returned.NextStartPos - 1, returned.Val - 1] = 0;
                 to_place.Push(returned);
-                first_in_row = returned;
                 FreeField();
                 OccupeField();
             }
