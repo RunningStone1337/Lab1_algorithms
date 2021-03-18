@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Diagnostics;
 using static Lab2.Lab2;
+using static Lab2.Problems;
 namespace Lab1
 {
     class Lab1
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Введите номер лабораторной работы:\n1. Алгоритмы сортировки\n2. Методы поиска, хеширование и ферзи\n3. Поиск подстроки в строке");
+            Console.WriteLine("Введите номер лабораторной работы:\n1. Алгоритмы сортировки\n2. Методы поиска, хеширование и ферзи\n3. Поиск подстроки в строке\n4. Дополнительные задания");
             int num = int.Parse(Console.ReadLine());
             switch (num)
             {
@@ -18,7 +19,10 @@ namespace Lab1
                     Run2Lab();
                     break;
                 case 3:
-                    //Lab3.Lab3.Run3Lab();
+                    //Run3Lab();
+                    break;
+                case 4:
+                    RunProblems();
                     break;
                 default:
                     break;
