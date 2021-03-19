@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using static Lab2.Lab2;
 using static Lab2.Problems;
+using static Lab3.Lab3;
 namespace Lab1
 {
     class Lab1
@@ -19,7 +20,7 @@ namespace Lab1
                     Run2Lab();
                     break;
                 case 3:
-                    //Run3Lab();
+                    Run3Lab();
                     break;
                 case 4:
                     RunProblems();
