@@ -1,8 +1,8 @@
-﻿#define bin
+﻿/*#define bin
 #define tree
 #define fib
 #define int
-#define hash
+#define hash*/
 #define chess
 using System;
 using System.Diagnostics;
@@ -174,14 +174,14 @@ namespace Lab2
             #region Task 3
 #if chess
             #region Chess
-            Console.WriteLine("Введите любое значение кроме 0 для вывода результата поиска или 0 для выхода.");
+            Console.WriteLine("Введите значение от 1 до 10 для вывода результата поиска или 0 для выхода.");
             var key = int.Parse(Console.ReadLine());
             while (key != 0)
             {
                 sw.Start();
                 Console.WriteLine($"\nВарианты расстановки ферзей:\n");
                 var start = DateTime.Now;
-                Chess();
+                Chess(key);
                 var end = DateTime.Now;
                 sw.Stop();
                 Console.WriteLine($"Затраченное время на выполнение: {/*sw.Elapsed*/start - end}.");
@@ -686,39 +686,117 @@ namespace Lab2
 
             }
         }
-        static void Chess()
+        static void Chess(int size = 8)
         {
-            var field = new int[8, 8];
+            var field = new int[size, size];
             int counter = 1;
             Figure first_in_row = null;
-            Stack<Figure> to_place = new Stack<Figure>(8);
-            Stack<Figure> placed = new Stack<Figure>(8);
-            for (int i = 8; i > 0; i--)
+            Stack<Figure> to_place = new Stack<Figure>(size);
+            Stack<Figure> placed = new Stack<Figure>(size);
+            for (int i = size; i > 0; i--)
             {
                 to_place.Push(new Figure(i, 0));
             }
-            bool[,] free = {
-                {true,true,true,true,true,true,true,true},
-                {true,true,true,true,true,true,true,true},
-                {true,true,true,true,true,true,true,true},
-                {true,true,true,true,true,true,true,true},
-                {true,true,true,true,true,true,true,true},
-                {true,true,true,true,true,true,true,true},
-                {true,true,true,true,true,true,true,true},
-                {true,true,true,true,true,true,true,true}};
+            bool[,] free = new bool[size, size];
+            for (int i = 0; i < size; i++)
+            {
+                for (int j = 0; j < size; j++)
+                {
+                    free[i, j] = true;
+                }
+            }
             string res;
-            while (/*to_place.Count != 0&&*/ counter < 93)
+            long condition = 0;
+            switch (size)
+            {
+                case 1:
+                    Console.WriteLine(1);
+                    return;
+                case 2:
+                case 3:
+                    Console.WriteLine(0);
+                    return;
+                case 4:
+                    condition = (int)ChessSizes.Four;
+                    break;
+                case 5:
+                    condition = (int)ChessSizes.Five;
+                    break;
+                case 6:
+                    condition = (int)ChessSizes.Six;
+                    break;
+                case 7:
+                    condition = (int)ChessSizes.Seven;
+                    break;
+                case 8:
+                    condition = (int)ChessSizes.Standart;
+                    break;
+                case 9:
+                    condition = (int)ChessSizes.Nine;
+                    break;
+                case 10:
+                    condition = (int)ChessSizes.Ten;
+                    break;
+                case 11:
+                    condition = (int)ChessSizes.Eleven;
+                    break;
+                case 12:
+                    condition = (int)ChessSizes.Twelve;
+                    break;
+                case 13:
+                    condition = (int)ChessSizes.Thirteen;
+                    break;
+                case 14:
+                    condition = (int)ChessSizes.Fourteen;
+                    break;
+                case 15:
+                    condition = (int)ChessSizes.Fifteen;
+                    break;
+                case 16:
+                    condition = (int)ChessSizes.Sixteen;
+                    break;
+                case 17:
+                    condition = (int)ChessSizes.Seventeen;
+                    break;
+                case 18:
+                    condition = (int)ChessSizes.Eighteen;
+                    break;
+                case 19:
+                    condition = (long)ChessSizes.Nineteen;
+                    break;
+                case 20:
+                    condition = (long)ChessSizes.Twenty;
+                    break;
+                case 21:
+                    condition = (long)ChessSizes.TwentyOne;
+                    break;
+                case 22:
+                    condition = (long)ChessSizes.TwentyTwo;
+                    break;
+                case 23:
+                    condition = (long)ChessSizes.TwentyThree;
+                    break;
+                case 24:
+                    condition = (long)ChessSizes.TwentyFour;
+                    break;
+            }
+            while (counter < condition)
             {
                 CheckPosition();
             }
             void ToString(int[,] field)
             {
                 res = "";
-                for (int i = 0; i < 8; i++)
+                for (int i = 0; i < size; i++)
                 {
-                    for (int j = 0; j < 8; j++)
+                    for (int j = 0; j < size; j++)
                     {
-                        res += field[i, j] + "|";
+                        if (field[i, j].ToString().Length == 1)
+                        {
+                            res += " " + field[i, j] + "|";
+                        }
+                        else
+                            res += field[i, j] + "|";
                     }
                     res += "\n";
                 }
@@ -728,7 +806,7 @@ namespace Lab2
                 if (to_place.Count > 0)//если в стеке ещё есть неразмещённые фигуры
                 {
                     var fig = to_place.Pop();
-                    for (int i = fig.NextStartPos; i < 8; i++)
+                    for (int i = fig.NextStartPos; i < size; i++)
                     {
                         if (IsFree(i, fig.Val - 1))//если клетка не закрыта пересечением
                         {
@@ -771,9 +849,9 @@ namespace Lab2
             }
             void FreeField()
             {
-                for (int i = 0; i < 8; i++)
+                for (int i = 0; i < size; i++)
                 {
-                    for (int j = 0; j < 8; j++)
+                    for (int j = 0; j < size; j++)
                     {
                         free[i, j] = true;
                     }
@@ -789,7 +867,7 @@ namespace Lab2
             }
             void FillHorisVert(int row, int col)
             {
-                for (int i = 0; i < 8; i++)
+                for (int i = 0; i < size; i++)
                 {
                     free[i, col] = false;
                     free[row, i] = false;
@@ -798,7 +876,7 @@ namespace Lab2
             void FillDiags(int row, int col)
             {
                 int row_now = row, col_now = col;
-                while (row_now >= 0 && row_now < 8 && col_now >= 0 && col_now < 8)
+                while (row_now >= 0 && row_now < size && col_now >= 0 && col_now < size)
                 {
                     free[row_now, col_now] = false;
                     --col_now;
@@ -806,7 +884,7 @@ namespace Lab2
                 }
                 row_now = row;
                 col_now = col;
-                while (row_now >= 0 && row_now < 8 && col_now >= 0 && col_now < 8)
+                while (row_now >= 0 && row_now < size && col_now >= 0 && col_now < size)
                 {
                     free[row_now, col_now] = false;
                     ++col_now;
@@ -814,7 +892,7 @@ namespace Lab2
                 }
                 row_now = row;
                 col_now = col;
-                while (row_now >= 0 && row_now < 8 && col_now >= 0 && col_now < 8)
+                while (row_now >= 0 && row_now < size && col_now >= 0 && col_now < size)
                 {
                     free[row_now, col_now] = false;
                     ++row_now;
@@ -822,7 +900,7 @@ namespace Lab2
                 }
                 row_now = row;
                 col_now = col;
-                while (row_now >= 0 && row_now < 8 && col_now >= 0 && col_now < 8)
+                while (row_now >= 0 && row_now < size && col_now >= 0 && col_now < size)
                 {
                     free[row_now, col_now] = false;
                     --row_now;
@@ -838,6 +916,30 @@ namespace Lab2
                 FillHorisVert(row_placed, fig.Val - 1);
                 FillDiags(row_placed, fig.Val - 1);
             }
+        }
+        enum ChessSizes : long
+        {
+            Four = 3,
+            Five = 11,
+            Six = 5,
+            Seven = 41,
+            Standart = 93,
+            Nine = 353,
+            Ten = 725,
+            Eleven = 2681,
+            Twelve = 14201,
+            Thirteen = 737111,
+            Fourteen = 365597,
+            Fifteen = 2279185,
+            Sixteen = 14772513,
+            Seventeen = 95815105,
+            Eighteen = 666090625,
+            Nineteen = 4968057849,
+            Twenty = 39029188885,
+            TwentyOne = 314666222713,
+            TwentyTwo = 2691008701645,
+            TwentyThree = 24233937684441,
+            TwentyFour = 227514171973737,
         }
         #endregion
     }
