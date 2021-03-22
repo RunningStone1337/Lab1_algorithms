@@ -9,7 +9,8 @@ namespace Lab1
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Введите номер лабораторной работы:\n1. Алгоритмы сортировки\n2. Методы поиска, хеширование и ферзи\n3. Поиск подстроки в строке\n4. Дополнительные задания");
+            Console.WriteLine("Введите номер лабораторной работы:\n1. Алгоритмы сортировки\n2. Методы поиска, хеширование и ферзи\n" +
+                "3. Поиск подстроки в строке\n4. Дополнительные задания");
             int num = int.Parse(Console.ReadLine());
             switch (num)
             {
@@ -63,13 +64,6 @@ namespace Lab1
                 Console.ReadLine();
             }
         }
-        static void Swap(ref int first, ref int second)
-        {
-            var temp = first;
-            first = second;
-            second = temp;
-        }
-
         //сортировка вставками
         static int[] Insertion_sort(int[] array)
         {
@@ -86,6 +80,13 @@ namespace Lab1
             }
             return array;
         }
+        static void Swap(ref int first, ref int second)
+        {
+            var temp = first;
+            first = second;
+            second = temp;
+        }
+
         //сортировка Хоара
 
         static void Quicksort(int[] arr, int start, int end)
