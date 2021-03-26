@@ -179,7 +179,7 @@ namespace Lab2
                 var set = new HashSet<int>((int)size_simp_hash);
                 while (set.Count != size_simp_hash)
                 {
-                    set.Add(rnd.Next(-1000, (int)size_simp_hash));
+                    set.Add(rnd.Next(-(int)size_simp_hash, (int)size_simp_hash));
                 }
                 var arr = new int[set.Count];
                 set.CopyTo(arr);
@@ -212,7 +212,7 @@ namespace Lab2
                 var set = new HashSet<int>((int)size_pseudo_hash);
                 while (set.Count != size_pseudo_hash)
                 {
-                    set.Add(rnd.Next(-1000, (int)size_pseudo_hash));
+                    set.Add(rnd.Next(-(int)size_pseudo_hash, (int)size_pseudo_hash));
                 }
                 var arr = new int[set.Count];
                 set.CopyTo(arr);
@@ -243,9 +243,9 @@ namespace Lab2
             while (size_chains_hash != 0)
             {
                 var set = new HashSet<int>((int)size_chains_hash);
-                while (set.Count!= size_chains_hash)
+                while (set.Count != size_chains_hash)
                 {
-                    set.Add(rnd.Next(-1000, (int)size_chains_hash));
+                    set.Add(rnd.Next(-(int)size_chains_hash, (int)size_chains_hash));
                 }
                 var arr = new int[set.Count];
                 set.CopyTo(arr);
@@ -783,6 +783,14 @@ namespace Lab2
                     AddItem(item);
                 }
             }
+            void Delete(int item)
+            {
+                var index = IndexOf(item);
+                if (index != -1)
+                {
+                    table[index] = null;
+                }
+            }
 
             public int IndexOf(int item)
             {
@@ -838,6 +846,14 @@ namespace Lab2
                     AddItem(item);
                 }
             }
+            void Delete(int item)
+            {
+                var index = IndexOf(item);
+                if (index != -1)
+                {
+                    table[index] = null;
+                }
+            }
 
             public int IndexOf(int item)
             {
@@ -890,10 +906,20 @@ namespace Lab2
                     AddItem(item);
                 }
             }
+            void Delete(int item)
+            {
 
+                if (HasValue(item))
+                {
+                    var hash = Hash(item);
+                    var index = links[hash].IndexOf(item);
+                    links[hash].RemoveAt(index);
+                }
+            }
             public bool HasValue(int item)
             {
-                return links[Hash(item)].Exists(i => i == item);
+                var res = links[Hash(item)]?.Exists(i => i == item);
+                return res ?? false;
             }
 
             void AddItem(int item)
@@ -915,7 +941,6 @@ namespace Lab2
                 return Math.Abs(item % links.Length);
             }
         }
-
         #endregion
         #region Task 3
         class Figure
