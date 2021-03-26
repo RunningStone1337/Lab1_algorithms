@@ -1,9 +1,9 @@
 ﻿/*#define bin
 #define tree
 #define fib
-#define int
-#define hash*/
-#define chess
+#define int*/
+#define hash
+//#define chess
 using System;
 using System.Diagnostics;
 using System.Collections.Generic;
@@ -170,11 +170,112 @@ namespace Lab2
 #endif
             #endregion
             #region Task 2
+#if hash
+            #region Simple
+            Console.WriteLine("Введите размерность массива для генерации массива для простого хеширования или 0 для перехода к следующему заданию.");
+            var size_simp_hash = long.Parse(Console.ReadLine());
+            while (size_simp_hash != 0)
+            {
+                var set = new HashSet<int>((int)size_simp_hash);
+                while (set.Count != size_simp_hash)
+                {
+                    set.Add(rnd.Next(-1000, 1001));
+                }
+                var arr = new int[set.Count];
+                set.CopyTo(arr);
+                Console.WriteLine($"Введите искомый элемент");
+                int item = int.Parse(Console.ReadLine());
+                sw.Start();
+                var start = DateTime.Now;
+                SimpleHash hash = new SimpleHash(arr);
+                var end = DateTime.Now;
+                sw.Stop();
+                Console.WriteLine($"Затраченное время на хеширование: {/*sw.Elapsed*/start - end}.");
+                sw.Reset();
+                sw.Start();
+                start = DateTime.Now;
+                int index = hash.IndexOf(item);
+                end = DateTime.Now;
+                sw.Stop();
+                Console.WriteLine($"Индекс искомого элемента в хеш-таблице: {index}");
+                Console.WriteLine($"Затраченное время на поиск: {/*sw.Elapsed*/start - end}.");
+                sw.Reset();
+                Console.WriteLine("\nВведите размерность массива для повторной генерации или 0 для перехода к следующему заданию.");
+                size_simp_hash = long.Parse(Console.ReadLine());
+            }
+            #endregion
+            #region Pseudo
+            Console.WriteLine("Введите размерность массива для генерации массива для хеширования на основе псеводослучайных чисел или 0 для перехода к следующему заданию.");
+            var size_pseudo_hash = long.Parse(Console.ReadLine());
+            while (size_pseudo_hash != 0)
+            {
+                var set = new HashSet<int>((int)size_pseudo_hash);
+                while (set.Count != size_pseudo_hash)
+                {
+                    set.Add(rnd.Next(-1000, 1001));
+                }
+                var arr = new int[set.Count];
+                set.CopyTo(arr);
+                Console.WriteLine($"Введите искомый элемент");
+                int item = int.Parse(Console.ReadLine());
+                sw.Start();
+                var start = DateTime.Now;
+                PseudoHash hash = new PseudoHash(arr);
+                var end = DateTime.Now;
+                sw.Stop();
+                Console.WriteLine($"Затраченное время на хеширование: {/*sw.Elapsed*/start - end}.");
+                sw.Reset();
+                sw.Start();
+                start = DateTime.Now;
+                int index = hash.IndexOf(item);
+                end = DateTime.Now;
+                sw.Stop();
+                Console.WriteLine($"Индекс искомого элемента в хеш-таблице: {index}");
+                Console.WriteLine($"Затраченное время на поиск: {/*sw.Elapsed*/start - end}.");
+                sw.Reset();
+                Console.WriteLine("\nВведите размерность массива для повторной генерации или 0 для перехода к следующему заданию.");
+                size_simp_hash = long.Parse(Console.ReadLine());
+            }
+            #endregion
+            #region Chains
+            Console.WriteLine("Введите размерность массива для генерации массива для хеширования цепочками или 0 для перехода к следующему заданию.");
+            var size_chains_hash = long.Parse(Console.ReadLine());
+            while (size_chains_hash != 0)
+            {
+                var set = new HashSet<int>((int)size_chains_hash);
+                while (set.Count!= size_chains_hash)
+                {
+                    set.Add(rnd.Next(-1000, 1001));
+                }
+                var arr = new int[set.Count];
+                set.CopyTo(arr);
+                Console.WriteLine($"Введите искомый элемент");
+                int item = int.Parse(Console.ReadLine());
+                sw.Start();
+                var start = DateTime.Now;
+                ChainHash hash = new ChainHash(arr);
+                var end = DateTime.Now;
+                sw.Stop();
+                Console.WriteLine($"Затраченное время на хеширование: {/*sw.Elapsed*/start - end}.");
+                sw.Reset();
+                sw.Start();
+                start = DateTime.Now;
+                bool index = hash.HasValue(item);
+                end = DateTime.Now;
+                sw.Stop();
+                Console.WriteLine($"Искомый элемент присутствует в хеш-таблице: {index}");
+                Console.WriteLine($"Затраченное время на поиск: {/*sw.Elapsed*/start - end}.");
+                sw.Reset();
+                Console.WriteLine("\nВведите размерность массива для повторной генерации или 0 для перехода к следующему заданию.");
+                size_simp_hash = long.Parse(Console.ReadLine());
+            }
+            #endregion
+#endif
             #endregion
             #region Task 3
 #if chess
             #region Chess
-            Console.WriteLine("Введите значение от 1 до 10 для вывода результата поиска или 0 для выхода.");
+            Console.WriteLine("Введите значение от 1 до 24 для вывода результата поиска или 0 для выхода.");
             var key = int.Parse(Console.ReadLine());
             while (key != 0)
             {
@@ -671,6 +772,149 @@ namespace Lab2
         }
         #endregion
         #region Task 2
+        class SimpleHash
+        {
+            int?[] table;
+            public SimpleHash(int[] arr)
+            {
+                table = new int?[arr.Length];
+                foreach (var item in arr)
+                {
+                    AddItem(item);
+                }
+            }
+
+            public int IndexOf(int item)
+            {
+                return Array.IndexOf(table, item);
+            }
+
+            void AddItem(int item)
+            {
+                var index = Hash(item);
+                if (table[index] == null)
+                {
+                    table[index] = item;
+                }
+                else
+                {
+                    Rehash(item, index);
+                }
+            }
+
+            int Hash(int item)
+            {
+                return Math.Abs(item % table.Length);
+            }
+
+            void Rehash(int item, int index)
+            {
+                int i = 1;
+                bool flag = true;
+                int new_index;
+                while (flag)
+                {
+                    new_index = (index + i) % table.Length;
+                    if (table[new_index] == null)
+                    {
+                        table[new_index] = item;
+                        flag = false;
+                    }
+                    else
+                    {
+                        ++i;
+                    }
+                }
+            }
+        }
+        class PseudoHash
+        {
+            int?[] table;
+            public PseudoHash(int[] arr)
+            {
+                table = new int?[arr.Length];
+                foreach (var item in arr)
+                {
+                    AddItem(item);
+                }
+            }
+
+            public int IndexOf(int item)
+            {
+                return Array.IndexOf(table, item);
+            }
+
+            void AddItem(int item)
+            {
+                var index = Hash(item);
+                if (table[index] == null)
+                {
+                    table[index] = item;
+                }
+                else
+                {
+                    Rehash(item, index);
+                }
+            }
+
+            int Hash(int item)
+            {
+                return Math.Abs(item % table.Length);
+            }
+
+            void Rehash(int item, int index)
+            {
+                Random rnd = new Random();
+                bool flag = true;
+                int new_index;
+                while (flag)
+                {
+                    new_index = (index + rnd.Next(1, table.Length)) % table.Length;
+                    if (table[new_index] == null)
+                    {
+                        table[new_index] = item;
+                        flag = false;
+                    }
+                }
+            }
+        }
+        class ChainHash
+        {
+            List<int>[] links;
+
+            public ChainHash(int[] arr)
+            {
+                links = new List<int>[arr.Length];
+                foreach (var item in arr)
+                {
+                    AddItem(item);
+                }
+            }
+
+            public bool HasValue(int item)
+            {
+                return links[Hash(item)].Exists(i => i == item);
+            }
+
+            void AddItem(int item)
+            {
+                var index = Hash(item);
+                if (links[index] == null)
+                {
+                    links[index] = new List<int>();
+                    links[index].Add(item);
+                }
+                else
+                {
+                    links[index].Add(item);
+                }
+            }
+
+            int Hash(int item)
+            {
+                return Math.Abs(item % links.Length);
+            }
+        }
 
         #endregion
         #region Task 3
@@ -709,6 +953,7 @@ namespace Lab2
             long condition = 0;
             switch (size)
             {
+
                 case 1:
                     Console.WriteLine(1);
                     return;
