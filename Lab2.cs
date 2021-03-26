@@ -179,7 +179,7 @@ namespace Lab2
                 var set = new HashSet<int>((int)size_simp_hash);
                 while (set.Count != size_simp_hash)
                 {
-                    set.Add(rnd.Next(-1000, 1001));
+                    set.Add(rnd.Next(-1000, (int)size_simp_hash));
                 }
                 var arr = new int[set.Count];
                 set.CopyTo(arr);
@@ -212,7 +212,7 @@ namespace Lab2
                 var set = new HashSet<int>((int)size_pseudo_hash);
                 while (set.Count != size_pseudo_hash)
                 {
-                    set.Add(rnd.Next(-1000, 1001));
+                    set.Add(rnd.Next(-1000, (int)size_pseudo_hash));
                 }
                 var arr = new int[set.Count];
                 set.CopyTo(arr);
@@ -245,7 +245,7 @@ namespace Lab2
                 var set = new HashSet<int>((int)size_chains_hash);
                 while (set.Count!= size_chains_hash)
                 {
-                    set.Add(rnd.Next(-1000, 1001));
+                    set.Add(rnd.Next(-1000, (int)size_chains_hash));
                 }
                 var arr = new int[set.Count];
                 set.CopyTo(arr);
