@@ -1,4 +1,6 @@
-﻿using System;
+﻿#define strings
+//#define taken
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
@@ -11,7 +13,30 @@ namespace Lab3
         {
             Random rnd = new Random();
             Stopwatch sw = new Stopwatch();
-            long max = (long)Math.Pow(10, 9);
+#if strings
+            #region KMP
+            Console.WriteLine("Введите строку для поиска или 0 чтобы перейти к следующему заданию");
+            string str = Console.ReadLine();
+            while (str != "0")
+            {
+                Console.WriteLine("Введите подстроку для поиска");
+                string word = Console.ReadLine();
+                //str = "aabaabaaaabaabaaab";
+                //word = "aabaab";
+                var start = DateTime.Now;
+                int res = KMP(str, word);
+                var end = DateTime.Now;
+                Console.WriteLine($"Затраченное время на выполнение: {start - end}");
+                Console.WriteLine($"Индекс начала искомой подстроки в строке: {res}");
+                Console.WriteLine("Введите строку для поиска или 0 чтобы выйти");
+                str = Console.ReadLine();
+            }
+            #endregion
+            #region Boyer
+            #endregion
+#endif
+#if taken
+            //long max = (long)Math.Pow(10, 9);
             #region Taken
             Console.WriteLine("Введите любое значение кроме 0 чтобы начать игру или 0 чтобы выйти");
             var enter = int.Parse(Console.ReadLine());
@@ -50,6 +75,55 @@ namespace Lab3
                 enter = int.Parse(Console.ReadLine());
             }
             #endregion
+#endif
+        }
+
+        static int KMP(string str, string word)
+        {
+            bool flag = true;
+            var tmp = str + word;
+            char ch = ' ';
+            while (flag)
+            {
+                if (tmp.Contains(ch))
+                {
+                    ch++;
+                }
+                else
+                {
+                    flag = false;
+                }
+            }
+            tmp = word + ch + str;
+            var prefs = new int[tmp.Length];
+            CalcPrefs(tmp);
+            for (int i = word.Length; i < prefs.Length; i++)
+            {
+                if (prefs[i] == word.Length)
+                {
+                    return i - word.Length * 2;
+                }
+            }
+            return -1;
+            void CalcPrefs(string word)
+            {
+                for (int i = 0, j = 1; j < word.Length; j++, i = 0)
+                {
+                    string tempi = word[i].ToString(), tempj = word[j].ToString();
+                    int ended = j;
+                    while (tempi.Length <= j)
+                    {
+                        if (tempi.Equals(tempj) && tempj.Length > prefs[j])
+                        {
+                            prefs[j] = tempj.Length;
+                        }
+                        i++;
+                        ended--;
+                        tempi += word[i].ToString();
+                        tempj = word[ended].ToString() + tempj;
+                    }
+                }
+            }
         }
 
         static int[] Taken(int[] arr)
@@ -89,9 +163,9 @@ namespace Lab3
                 {
                     PlaceNum(arr, i);
                 }
-                void PlaceNum(int[] arr,int num)
+                void PlaceNum(int[] arr, int num)
                 {
-                    while (Array.IndexOf(arr, num) != num-1)
+                    while (Array.IndexOf(arr, num) != num - 1)
                     {
 
                     }
