@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
+using System.Linq;
 
 namespace Lab3
 {
@@ -33,6 +34,22 @@ namespace Lab3
             }
             #endregion
             #region Boyer
+            Console.WriteLine("Введите строку для поиска или 0 чтобы перейти к следующему заданию");
+            string str_bo = Console.ReadLine();
+            while (str_bo != "0")
+            {
+                Console.WriteLine("Введите подстроку для поиска");
+                string word = Console.ReadLine();
+                //str = "Hoola-hoola girls like hooligans";
+                //word = "h";
+                var start = DateTime.Now;
+                int res = BoyerMoor(str, word);
+                var end = DateTime.Now;
+                Console.WriteLine($"Затраченное время на выполнение: {start - end}");
+                Console.WriteLine($"Индекс начала искомой подстроки в строке: {res}");
+                Console.WriteLine("Введите строку для поиска или 0 чтобы выйти");
+                str = Console.ReadLine();
+            }
             #endregion
 #endif
 #if taken
@@ -76,6 +93,51 @@ namespace Lab3
             }
             #endregion
 #endif
+        }
+
+        private static int BoyerMoor(string str, string word)
+        {
+            var alphabet = new int[256];
+            for (int i = 0; i < alphabet.Length; i++)
+            {
+                alphabet[i] = word.Length;
+            }
+            string reversed = new string(word.ToCharArray().Reverse().ToArray());
+            var chars_cost = new Dictionary<char, int>();
+            for (int i = 0; i < reversed.Length; i++)
+            {
+                if (!chars_cost.ContainsKey(reversed[i]))
+                {
+                    chars_cost.Add(reversed[i], i);
+                    alphabet[reversed[i]] = i;
+                }
+            }
+            int l = word.Length - 1;
+            while (l <= str.Length)
+            {
+                if (word[word.Length - 1] != str[l])//если последний символ не == текущему
+                {
+                    l += alphabet[str[l]];
+                }
+                else//если равен
+                {
+                    var flag = false;
+                    for (int i = l - 1, j = word.Length - 2; j >= 0; i--, j--)
+                    {
+                        if (str[i] != word[j])
+                        {
+                            l += alphabet[str[i]];
+                            flag = true;
+                            break;
+                        }
+                    }
+                    if (!flag)
+                    {
+                        return l-word.Length+1;
+                    }
+                }
+            }
+            return -1;
         }
 
         static int KMP(string str, string word)
