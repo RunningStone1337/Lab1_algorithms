@@ -1,9 +1,8 @@
-﻿#define strings
-//#define taken
+﻿//#define strings
+#define taken
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Text;
 using System.Linq;
 
 namespace Lab3
@@ -66,7 +65,7 @@ namespace Lab3
                 {
                     avialible.Add(i);
                 }
-                Console.WriteLine($"Введите исходную последовательность неповторяющихся чисел от 0 до 15 включительно для игры в пятнашки или 20 для перехода к следующему заданию");
+                /*Console.WriteLine($"Введите исходную последовательность неповторяющихся чисел от 0 до 15 включительно для игры в пятнашки или 20 для перехода к следующему заданию");
                 while (count < 17)
                 {
                     Console.WriteLine($"Введите {count} число");
@@ -78,9 +77,9 @@ namespace Lab3
                     {
                         Console.Write(item + " ");
                     }
-                }
+                }*/
                 var start = DateTime.Now;
-                int[] res = Taken(arr);
+                int[] res = Taken(/*arr*/new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 0 });
                 var end = DateTime.Now;
                 Console.WriteLine($"Полученная последовательность перестановок: ");
                 foreach (var item in res)
@@ -133,7 +132,7 @@ namespace Lab3
                     }
                     if (!flag)
                     {
-                        return l-word.Length+1;
+                        return l - word.Length + 1;
                     }
                 }
             }
@@ -216,24 +215,144 @@ namespace Lab3
             {
                 return null;
             }
-            PlaceFirstRow(arr);
+            var field = new Field(arr);
+            field.PlaceFirstRow();
             return null;
 
-            void PlaceFirstRow(int[] arr)
-            {
-                for (int i = 1; i < 5; i++)
-                {
-                    PlaceNum(arr, i);
-                }
-                void PlaceNum(int[] arr, int num)
-                {
-                    while (Array.IndexOf(arr, num) != num - 1)
-                    {
+        }
 
-                    }
+    }
+    public class Cell
+    {
+        internal int Value { private set; get; }
+        internal int Row { private set; get; }
+        internal int Col { private set; get; }
+        internal int TargPosRow { private set; get; }
+        internal int TargPosCol { private set; get; }
+
+        internal Cell Up { set; get; }
+        internal Cell Right { set; get; } 
+        internal Cell Down { set; get; } 
+        internal Cell Left { set; get; } 
+        public Cell(int val, int r, int c)
+        {
+            if (val == 0)
+            {
+                TargPosCol = 3;
+                TargPosRow = 3;
+            }
+            else
+            {
+                TargPosCol = (val - 1) % 4;
+                TargPosRow = val - 1 / 4;
+            }
+            Value = val;
+            Row = r;
+            Col = c;
+        }
+
+        internal bool IsPlaced()
+        {
+            return (Row == TargPosRow && Col == TargPosCol);
+        }
+    }
+    internal class Field
+    {
+        internal Cell[,] map = new Cell[4, 4];
+        public Field(int[] arr)
+        {
+            int size = 4;
+            for (int i = 0; i < size; i++)
+            {
+                for (int j = 0; j < size; j++)
+                {
+                    map[i, j] = new Cell(arr[j + i * size], i, j);
+                }
+            }
+            for (int i = 0; i < size; i++)
+            {
+                for (int j = 0; j < size; j++)
+                {
+                    map.FindNeighbours(map[i, j]);
                 }
             }
         }
+        internal void PlaceFirstRow()
+        {
+            for (int i = 1; i < 5; i++)
+            {
+                PlaceNum(i);
+            }
+            void PlaceNum(int num)
+            {
+                Cell zero = map.FindNum(0);
+                Cell actual = map.FindNum(num);
+                while (!actual.IsPlaced())
+                {
 
+                }
+            }
+        }
+    }
+    public static class IntExtension
+    {
+        /// <summary>
+        /// Возвращает клетку поля с заданным значением
+        /// </summary>
+        /// <param name="map"></param>
+        /// <param name="val"></param>
+        /// <returns></returns>
+        public static Cell FindNum(this Cell[,] map, int val)
+        {
+            int size = 4;
+            for (int i = 0; i < size; i++)
+            {
+                for (int j = 0; j < size; j++)
+                {
+                    if (map[i, j].Value == val)
+                    {
+                        return map[i, j];
+                    }
+                }
+            }
+            return null;
+        }
+        public static void FindNeighbours(this Cell[,] map, Cell target)
+        {
+            var col = target.Col;
+            var row = target.Row;
+            if (target.Row != 0)
+            {
+                target.Up = map[row - 1, col];
+            }
+            else
+            {
+                target.Up = null;
+            }
+            if (target.Col != 3)
+            {
+                target.Right = map[row, col + 1];
+            }
+            else
+            {
+                target.Right = null;
+            }
+            if (target.Row != 3)
+            {
+                target.Down = map[row + 1, col];
+            }
+            else
+            {
+                target.Down = null;
+            }
+            if (target.Col != 0)
+            {
+                target.Left = map[row, col - 1];
+            }
+            else
+            {
+                target.Left = null;
+            }
+        }
     }
 }
