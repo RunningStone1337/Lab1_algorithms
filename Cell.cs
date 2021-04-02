@@ -32,13 +32,29 @@ namespace Lab3
             else
             {
                 TargPosCol = (val - 1) % 4;
-                TargPosRow = val - 1 / 4;
+                TargPosRow = (val - 1) / 4;
             }
             Value = val;
             Row = r;
             Col = c;
+            if (ColIsPlaced() && RowIsPlaced())
+            {
+                placed = true;
+            }
         }
-
+        public Cell(Cell father)
+        {
+            TargPosCol = father.TargPosCol;
+            TargPosRow = father.TargPosRow;
+            Value = father.Value;
+            Row = father.Row;
+            Col = father.Col;
+            Placed = father.Placed;
+        }
+        internal Cell Clone()
+        {
+            return new Cell(this);
+        }
         internal bool IsNear(Cell actual)
         {
             if (Up == actual || Right == actual || Left == actual || Down == actual)
@@ -46,15 +62,6 @@ namespace Lab3
                 return true;
             }
             return false;
-        }
-
-        /// <summary>
-        /// Перемещает вызывающую клетку в направлении клетки, переданной параметром.
-        /// </summary>
-        /// <param name="actual">Параметр</param>
-        internal void Move(Cell actual)
-        {
-            //////////////////////////ДОЛГО ДОЛГО ДУМАТЬ
         }
         internal bool RowIsPlaced()
         {
@@ -65,10 +72,6 @@ namespace Lab3
             return Col == TargPosCol;
         }
 
-        internal void Quad()
-        {
-
-        }
         /// <summary>
         /// Определяет в каком направлении находится цель относительно вызывающей
         /// </summary>

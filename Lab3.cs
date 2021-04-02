@@ -216,8 +216,9 @@ namespace Lab3
                 return null;
             }
             var field = new Field(arr);
-            field.PlaceFirstRow();
-            return null;
+            List<int> order = field.GetOrder();
+            ///визуализация
+            return order.ToArray();
 
         }
 

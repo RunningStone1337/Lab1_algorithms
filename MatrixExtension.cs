@@ -27,6 +27,19 @@ namespace Lab3
             }
             return null;
         }
+        public static Cell[,] DeepClone(this Cell[,] map)
+        {
+            var size = 4;
+            var res = new Cell[4,4];
+            for (int i = 0; i < size; i++)
+            {
+                for (int j = 0; j < size; j++)
+                {
+                    res[i, j] = map[i,j].Clone();
+                }
+            }
+            return res;
+        }
         public static void FindNeighbours(this Cell[,] map)
         {
             for (int i = 0; i < 4; i++)
@@ -36,7 +49,7 @@ namespace Lab3
                     var temp = map[i, j];
                     var col = temp.Col;
                     var row = temp.Row;
-                    if (temp.Row != 0)
+                    if (row != 0)
                     {
                         temp.Up = map[row - 1, col];
                     }
@@ -44,7 +57,7 @@ namespace Lab3
                     {
                         temp.Up = null;
                     }
-                    if (temp.Col != 3)
+                    if (col != 3)
                     {
                         temp.Right = map[row, col + 1];
                     }
@@ -52,7 +65,7 @@ namespace Lab3
                     {
                         temp.Right = null;
                     }
-                    if (temp.Row != 3)
+                    if (row != 3)
                     {
                         temp.Down = map[row + 1, col];
                     }
@@ -60,7 +73,7 @@ namespace Lab3
                     {
                         temp.Down = null;
                     }
-                    if (temp.Col != 0)
+                    if (col != 0)
                     {
                         temp.Left = map[row, col - 1];
                     }
