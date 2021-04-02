@@ -6,6 +6,48 @@ namespace Lab3
 {
     public static class MatrixExtension
     {
+        public static void MoveLeft(this Cell[,] map, Cell replaced)
+        {
+            Cell temp = replaced.Left;
+            map[temp.Row, temp.Col] = replaced;
+            map[replaced.Row, replaced.Col] = temp;
+            temp.Col += 1;
+            replaced.Col -= 1;
+            map.BindNeighbours();
+        }
+        public static void MoveDown(this Cell[,] map, Cell replaced)
+        {
+            Cell temp = replaced.Down;
+            map[temp.Row, temp.Col] = replaced;
+            map[replaced.Row, replaced.Col] = temp;
+            temp.Row -= 1;
+            replaced.Row += 1;
+            map.BindNeighbours();
+        }
+
+        public static void MoveRight(this Cell[,] map, Cell replaced)
+        {
+            Cell temp = replaced.Right;
+            map[temp.Row, temp.Col] = replaced;
+            map[replaced.Row, replaced.Col] = temp;
+            temp.Col -= 1;
+            replaced.Col += 1;
+            map.BindNeighbours();
+        }
+
+        /// <summary>
+        /// Параметром передаётся ПЕРЕДВИГАЕМАЯ в указанном направлении ячейка
+        /// </summary>
+        /// <param name="replaced"></param>
+        public static void MoveUp(this Cell[,] map, Cell replaced)
+        {
+            Cell temp = replaced.Up;
+            map[temp.Row, temp.Col] = replaced;
+            map[replaced.Row, replaced.Col] = temp;
+            temp.Row += 1;
+            replaced.Row -= 1;
+            map.BindNeighbours();
+        }
         /// <summary>
         /// Возвращает клетку поля с заданным значением
         /// </summary>
@@ -27,20 +69,61 @@ namespace Lab3
             }
             return null;
         }
-        public static Cell[,] DeepClone(this Cell[,] map)
+        public static void Print(this Cell[,] map)
         {
             var size = 4;
-            var res = new Cell[4,4];
+            Console.WriteLine(Field.counter);
+            Console.WriteLine();
             for (int i = 0; i < size; i++)
             {
                 for (int j = 0; j < size; j++)
                 {
-                    res[i, j] = map[i,j].Clone();
+                    if (map[i, j].Value.ToString().Length == 1)
+                    {
+                        Console.Write(" "+map[i, j].Value + "|");
+                    }
+                    else
+                    {
+                        Console.Write(map[i, j].Value + "|");
+                    }
+                }
+                Console.WriteLine();
+            }
+            Console.WriteLine();
+        }
+        public static bool AllPlaced(this Cell[,] map)
+        {
+            int size = 4;
+            for (int i = 0; i < size; i++)
+            {
+                for (int j = 0; j < size; j++)
+                {
+                    if (!map[i, j].Placed)
+                    {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
+        public static Cell[,] DeepClone(this Cell[,] map)////////проверено
+        {
+            var size = 4;
+            var res = new Cell[4, 4];
+            for (int i = 0; i < size; i++)
+            {
+                for (int j = 0; j < size; j++)
+                {
+                    res[i, j] = map[i, j].Clone();
                 }
             }
             return res;
         }
-        public static void FindNeighbours(this Cell[,] map)
+        /// <summary>
+        /// Привязывает соседей со всех сторон для каждой клетки поля
+        /// </summary>
+        /// <param name="map"></param>
+        public static void BindNeighbours(this Cell[,] map)
         {
             for (int i = 0; i < 4; i++)
             {

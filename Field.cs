@@ -6,8 +6,8 @@ namespace Lab3
 {
     class Field
     {
+        internal static long counter = 0;
         Cell[,] map = new Cell[4, 4];
-        Queue<Cell> queue = new Queue<Cell>();
         public Field(int[] arr)
         {
             int size = 4;
@@ -18,123 +18,17 @@ namespace Lab3
                     map[i, j] = new Cell(arr[j + i * size], i, j);
                 }
             }
-            map.FindNeighbours();
+            map.BindNeighbours();
         }
-        internal void PlaceFirstRow()
-        {
-            for (int i = 1; i < 5; i++)
-            {
-                PlaceNum(i);
-            }
-            void PlaceNum(int num)
-            {
-                Cell zero = map.GetNum(0);
-                Cell actual = map.GetNum(num);
-                while (!actual.Placed)
-                {
-                    if (actual.RowIsPlaced() && actual.ColIsPlaced())
-                    {
-                        actual.Placed = true;
-                        break;
-                    }
-
-                    /*while (!zero.IsNear(actual))//пока 0 не окажется по соседству с целевой
-                    {
-                        switch (zero.GetDirection(actual))//двигаем по направлению к ней
-                        {
-                            case 'u'://если 0 снизу цели
-                                MoveUp(zero);
-                                break;
-                            case 'r'://если 0 слева от цели
-                                MoveRight(zero);
-                                break;
-                            case 'd'://если 0 сверху цели
-                                MoveDown(zero);
-                                break;
-                            case 'l'://если 0 справа от цели
-                                MoveLeft(zero);
-                                break;
-                            default:
-                                break;
-                        }
-                    }
-                    
-                    
-                    switch (zero.GetDirection(actual))//определяем, с какой стороны от целевой находится 0 
-                    {
-                        case 'u'://если 0 снизу цели
-                            break;
-                        case 'r'://если 0 слева от цели
-                            break;
-                        case 'd'://если 0 сверху цели
-
-                            break;
-                        case 'l'://если 0 справа от цели
-                            break;
-                        default:
-                            break;
-                    }*/
-                }
-            }
-        }
-        private void MoveLeft(Cell replaced)
-        {
-            Cell temp = replaced.Left;
-            map[temp.Row, temp.Col] = replaced;
-            map[replaced.Row, replaced.Col] = temp;
-            temp.Col += 1;
-            replaced.Col -= 1;
-            map.FindNeighbours();
-        }
-        private void MoveDown(Cell replaced)
-        {
-            Cell temp = replaced.Down;
-            map[temp.Row, temp.Col] = replaced;
-            map[replaced.Row, replaced.Col] = temp;
-            temp.Row -= 1;
-            replaced.Row += 1;
-            map.FindNeighbours();
-        }
-
-        private void MoveRight(Cell replaced)
-        {
-            Cell temp = replaced.Right;
-            map[temp.Row, temp.Col] = replaced;
-            map[replaced.Row, replaced.Col] = temp;
-            temp.Col -= 1;
-            replaced.Col += 1;
-            map.FindNeighbours();
-        }
-
-        /// <summary>
-        /// Параметром передаётся ПЕРЕДВИГАЕМАЯ в указанном направлении ячейка
-        /// </summary>
-        /// <param name="replaced"></param>
-        private void MoveUp(Cell replaced)
-        {
-            Cell temp = replaced.Up;
-            map[temp.Row, temp.Col] = replaced;
-            map[replaced.Row, replaced.Col] = temp;
-            temp.Row += 1;
-            replaced.Row -= 1;
-            map.FindNeighbours();
-        }
+        
+        
         /// <summary>
         /// Возвращает порядок перемещений для решения
         /// </summary>
         /// <returns>Лист с порядком перестановок</returns>
         internal List<int> GetOrder()
         {
-            var res = new List<int>();
-            for (int i = 1; i < 16; i++)
-            {
-                queue.Enqueue(map.GetNum(i));
-            }
-            for (int i = 0; i < queue.Count; i++)
-            {
-                res.AddRange(Place(map, queue.Dequeue()));
-            }
-            return res;
+            return Place(map);
         }
         /// <summary>
         /// Возвращает список перемещений для конкретной ветки графа
@@ -142,9 +36,11 @@ namespace Lab3
         /// <param name="map">Начальная карта состояний</param>
         /// <param name="actual">Устанавливамый на своё место элемент</param>
         /// <returns>Список перемещений для ветки</returns>
-        private List<int> Place(Cell[,] map, Cell actual)
+        private List<int> Place(Cell[,] map)
         {
-            if (actual.Placed)
+            counter++;
+            map.Print();
+            if (map.AllPlaced())
             {
                 return new List<int>();
             }
@@ -153,14 +49,13 @@ namespace Lab3
             {
                 list[i] = new List<int>();
             }
-            var value = actual.Value;
-            if (map.GetNum(0).Down != null)//если можем меняться вверх 
+            if (map.GetNum(0).Down != null)//если можем передвинуть вверх 
             {
                 Cell[,] localmap_down = map.DeepClone();
-                localmap_down.FindNeighbours();
-                var target = localmap_down.GetNum(value);
+                localmap_down.BindNeighbours();
                 var zero = localmap_down.GetNum(0);
-                MoveDown(zero);
+                var target = localmap_down.GetNum(zero.Down.Value);
+                localmap_down.MoveDown(zero);
                 list[0].Add(zero.Up.Value);
                 if (target.ColIsPlaced() && target.RowIsPlaced())
                 {
@@ -168,58 +63,62 @@ namespace Lab3
                 }
                 else
                 {
-                    list[0].AddRange(Place(localmap_down, target));
+                    target.Placed = false;
+                    list[0].AddRange(Place(localmap_down));
                 }
             }
-            if (map.GetNum(0).Left != null)//если можем меняться вправо 
+            if (map.GetNum(0).Left != null)//если можем передвинуть вправо 
             {
                 Cell[,] localmap_left = map.DeepClone();
-                localmap_left.FindNeighbours();
-                var target = localmap_left.GetNum(value);
+                localmap_left.BindNeighbours();
                 var zero = localmap_left.GetNum(0);
-                MoveLeft(zero);
-                list[1].Add(zero.Up.Value);
+                var target = localmap_left.GetNum(zero.Left.Value);
+                localmap_left.MoveLeft(zero);
+                list[1].Add(zero.Right.Value);
                 if (target.ColIsPlaced() && target.RowIsPlaced())
                 {
                     target.Placed = true;
                 }
                 else
                 {
-                    list[1].AddRange(Place(localmap_left, target));
+                    target.Placed = false;
+                    list[1].AddRange(Place(localmap_left));
                 }
             }
-            if (map.GetNum(0).Up != null)//если можем меняться вниз 
+            if (map.GetNum(0).Up != null)//если можем передвинуть вниз 
             {
                 Cell[,] localmap_up = map.DeepClone();
-                localmap_up.FindNeighbours();
-                var target = localmap_up.GetNum(value);
+                localmap_up.BindNeighbours();
                 var zero = localmap_up.GetNum(0);
-                MoveUp(zero);
-                list[2].Add(zero.Up.Value);
+                var target = localmap_up.GetNum(zero.Up.Value);
+                localmap_up.MoveUp(zero);
+                list[2].Add(zero.Down.Value);
                 if (target.ColIsPlaced() && target.RowIsPlaced())
                 {
                     target.Placed = true;
                 }
                 else
                 {
-                    list[2].AddRange(Place(localmap_up, target));
+                    target.Placed = false;
+                    list[2].AddRange(Place(localmap_up));
                 }
             }
-            if (map.GetNum(0).Right != null)//если можем меняться влево 
+            if (map.GetNum(0).Right != null)//если можем передвинуть влево 
             {
                 Cell[,] localmap_right = map.DeepClone();
-                localmap_right.FindNeighbours();
-                var target = localmap_right.GetNum(value);
+                localmap_right.BindNeighbours();
                 var zero = localmap_right.GetNum(0);
-                MoveRight(zero);
-                list[3].Add(zero.Up.Value);
+                var target = localmap_right.GetNum(zero.Left.Value);
+                localmap_right.MoveRight(zero);
+                list[3].Add(zero.Left.Value);
                 if (target.ColIsPlaced() && target.RowIsPlaced())
                 {
                     target.Placed = true;
                 }
                 else
                 {
-                    list[3].AddRange(Place(localmap_right, target));
+                    target.Placed = false;
+                    list[3].AddRange(Place(localmap_right));
                 }
             }
             long min = long.MaxValue;

@@ -79,7 +79,7 @@ namespace Lab3
                     }
                 }*/
                 var start = DateTime.Now;
-                int[] res = Taken(/*arr*/new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 0 });
+                int[] res = Taken(/*arr*/new int[] { 5,9,1,2,12,0,3,8,10,14,13,4,6,7,15,11 });
                 var end = DateTime.Now;
                 Console.WriteLine($"Полученная последовательность перестановок: ");
                 foreach (var item in res)
