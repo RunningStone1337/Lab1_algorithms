@@ -79,7 +79,7 @@ namespace Lab3
                     }
                 }*/
                 var start = DateTime.Now;
-                int[] res = Taken(/*arr*/new int[] { 5,9,1,2,12,0,3,8,10,14,13,4,6,7,15,11 });
+                int[] res = Taken(/*arr*/new int[] { 9,3,6,10,2,0,5,4,15,1,13,8,7,14,11,12 });
                 var end = DateTime.Now;
                 Console.WriteLine($"Полученная последовательность перестановок: ");
                 foreach (var item in res)
@@ -216,9 +216,10 @@ namespace Lab3
                 return null;
             }
             var field = new Field(arr);
-            List<int> order = field.GetOrder();
+            field.PlaceFirstRow();
+            field.PlaceFirstCol();
             ///визуализация
-            return order.ToArray();
+            return res.ToArray();
 
         }
 

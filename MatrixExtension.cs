@@ -1,52 +1,186 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-
+using System.Threading;
 namespace Lab3
 {
     public static class MatrixExtension
     {
-        public static void MoveLeft(this Cell[,] map, Cell replaced)
+        public static void MoveLeft(this Cell[,] map, Cell replaced, int timeout =500)
         {
+            Field.counter++;
             Cell temp = replaced.Left;
             map[temp.Row, temp.Col] = replaced;
             map[replaced.Row, replaced.Col] = temp;
             temp.Col += 1;
             replaced.Col -= 1;
             map.BindNeighbours();
+            temp.CheckPlace();
+            map.Print();
+            Thread.Sleep(timeout);
         }
-        public static void MoveDown(this Cell[,] map, Cell replaced)
+        public static void MoveDown(this Cell[,] map, Cell replaced, int timeout = 500)
         {
+            Field.counter++;
+
             Cell temp = replaced.Down;
             map[temp.Row, temp.Col] = replaced;
             map[replaced.Row, replaced.Col] = temp;
             temp.Row -= 1;
             replaced.Row += 1;
             map.BindNeighbours();
-        }
+            temp.CheckPlace();
+            map.Print();
+            Thread.Sleep(timeout);
 
-        public static void MoveRight(this Cell[,] map, Cell replaced)
-        {
-            Cell temp = replaced.Right;
-            map[temp.Row, temp.Col] = replaced;
-            map[replaced.Row, replaced.Col] = temp;
-            temp.Col -= 1;
-            replaced.Col += 1;
-            map.BindNeighbours();
         }
 
         /// <summary>
         /// Параметром передаётся ПЕРЕДВИГАЕМАЯ в указанном направлении ячейка
         /// </summary>
         /// <param name="replaced"></param>
-        public static void MoveUp(this Cell[,] map, Cell replaced)
+        public static void MoveUp(this Cell[,] map, Cell replaced, int timeout = 500)
         {
+            Field.counter++;
             Cell temp = replaced.Up;
             map[temp.Row, temp.Col] = replaced;
             map[replaced.Row, replaced.Col] = temp;
             temp.Row += 1;
             replaced.Row -= 1;
             map.BindNeighbours();
+            temp.CheckPlace();
+            map.Print();
+            Thread.Sleep(timeout);
+        }
+        public static void MoveRight(this Cell[,] map, Cell replaced, int timeout = 500)
+        {
+            Field.counter++;
+
+            Cell temp = replaced.Right;
+            map[temp.Row, temp.Col] = replaced;
+            map[replaced.Row, replaced.Col] = temp;
+            temp.Col -= 1;
+            replaced.Col += 1;
+            map.BindNeighbours();
+            temp.CheckPlace();
+            map.Print();
+            Thread.Sleep(timeout);
+        }
+        public static void MoveGroup1(this Cell[,] map, Cell replaced)
+        {
+            map.MoveRight(replaced);
+            map.MoveUp(replaced);
+            map.MoveUp(replaced);
+            map.MoveLeft(replaced);
+            map.MoveDown(replaced);
+        }
+        public static void MoveGroup3(this Cell[,] map, Cell replaced)
+        {
+            map.MoveUp(replaced);
+            map.MoveLeft(replaced);
+            map.MoveDown(replaced);
+        }
+        public static void MoveGroup2(this Cell[,] map, Cell replaced)
+        {
+            map.MoveLeft(replaced);
+            map.MoveUp(replaced);
+            map.MoveUp(replaced);
+            map.MoveRight(replaced);
+            map.MoveDown(replaced);
+        }
+        public static void MoveGroup4(this Cell[,] map, Cell replaced)
+        {
+            map.MoveRight(replaced);
+            map.MoveDown(replaced);
+            map.MoveDown(replaced);
+            map.MoveLeft(replaced);
+            map.MoveLeft(replaced);
+            map.MoveUp(replaced);
+            map.MoveRight(replaced);
+        }
+        public static void MoveGroup5(this Cell[,] map, Cell replaced)
+        {
+            map.MoveDown(replaced);
+            map.MoveLeft(replaced);
+            map.MoveLeft(replaced);
+            map.MoveUp(replaced);
+            map.MoveRight(replaced);
+        }
+        public static void MoveGroup6(this Cell[,] map, Cell replaced)
+        {
+            map.MoveUp(replaced);
+            map.MoveLeft(replaced);
+            map.MoveLeft(replaced);
+            map.MoveDown(replaced);
+            map.MoveRight(replaced);
+        }
+        public static void MoveGroup7(this Cell[,] map, Cell replaced)
+        {
+            map.MoveLeft(replaced);
+            map.MoveUp(replaced);
+            map.MoveRight(replaced);
+        }
+        public static void MoveGroup8(this Cell[,] map, Cell replaced)
+        {
+            map.MoveLeft(replaced);
+            map.MoveDown(replaced);
+            map.MoveRight(replaced);
+        }
+        public static void MoveGroup9(this Cell[,] map, Cell replaced)
+        {
+            map.MoveUp(replaced);
+            map.MoveLeft(replaced);
+            map.MoveLeft(replaced);
+            map.MoveDown(replaced);
+            map.MoveRight(replaced);
+        }
+        public static void MoveGroup10(this Cell[,] map, Cell replaced)
+        {
+            map.MoveRight(replaced);
+            map.MoveDown(replaced);
+            map.MoveLeft(replaced);
+        }
+        public static void MoveGroup11(this Cell[,] map, Cell replaced)
+        {
+            map.MoveUp(replaced);
+            map.MoveRight(replaced);
+            map.MoveRight(replaced);
+            map.MoveDown(replaced);
+            map.MoveLeft(replaced);
+        }
+        public static void MoveGroup12(this Cell[,] map, Cell replaced)
+        {
+            map.MoveDown(replaced);
+            map.MoveRight(replaced);
+            map.MoveRight(replaced);
+            map.MoveUp(replaced);
+            map.MoveLeft(replaced);
+        }
+        public static void MoveGroup13(this Cell[,] map, Cell replaced)
+        {
+            map.MoveRight(replaced);
+            map.MoveUp(replaced);
+            map.MoveLeft(replaced);
+        }
+        public static void MoveGroup14(this Cell[,] map, Cell replaced)
+        {
+            map.MoveRight(replaced);
+            map.MoveDown(replaced);
+            map.MoveDown(replaced);
+            map.MoveLeft(replaced);
+            map.MoveUp(replaced);
+        }
+        public static void MoveGroup15(this Cell[,] map, Cell replaced)
+        {
+            map.MoveDown(replaced);
+            map.MoveLeft(replaced);
+            map.MoveUp(replaced);
+        }
+        public static void MoveGroup16(this Cell[,] map, Cell replaced)
+        {
+            map.MoveDown(replaced);
+            map.MoveRight(replaced);
+            map.MoveUp(replaced);
         }
         /// <summary>
         /// Возвращает клетку поля с заданным значением
@@ -80,7 +214,7 @@ namespace Lab3
                 {
                     if (map[i, j].Value.ToString().Length == 1)
                     {
-                        Console.Write(" "+map[i, j].Value + "|");
+                        Console.Write(" " + map[i, j].Value + "|");
                     }
                     else
                     {

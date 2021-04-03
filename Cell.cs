@@ -6,46 +6,58 @@ namespace Lab3
 {
     public class Cell
     {
-        bool placed;
-        internal bool Placed
-        {
-            get { return placed; }
-            set { placed = value; }
-        }
+        internal bool Placed { get; set; }
         internal int Value { private set; get; }
         internal int Row { set; get; }
         internal int Col { set; get; }
-        internal int TargPosRow { private set; get; }
-        internal int TargPosCol { private set; get; }
+        internal int TargRow { private set; get; }
+        internal int TargCol { private set; get; }
+        /// <summary>
+        /// Устанавливает true или false для placed
+        /// </summary>
+        internal void CheckPlace()
+        {
+            if (ColIsPlaced() && RowIsPlaced())
+            {
+                Placed = true;
+            }
+            else
+            {
+                Placed = false;
+            }
+        }
 
         internal Cell Up { set; get; }
         internal Cell Right { set; get; }
         internal Cell Down { set; get; }
         internal Cell Left { set; get; }
+
         public Cell(int val, int r, int c)
         {
             if (val == 0)
             {
-                TargPosCol = 3;
-                TargPosRow = 3;
+                TargCol = 3;
+                TargRow = 3;
+            }
+            else if (val == 4)
+            {
+                TargCol = 2;
+                TargRow = 1;
             }
             else
             {
-                TargPosCol = (val - 1) % 4;
-                TargPosRow = (val - 1) / 4;
+                TargCol = (val - 1) % 4;
+                TargRow = (val - 1) / 4;
             }
             Value = val;
             Row = r;
             Col = c;
-            if (ColIsPlaced() && RowIsPlaced())
-            {
-                placed = true;
-            }
+            CheckPlace();
         }
         public Cell(Cell father)
         {
-            TargPosCol = father.TargPosCol;
-            TargPosRow = father.TargPosRow;
+            TargCol = father.TargCol;
+            TargRow = father.TargRow;
             Value = father.Value;
             Row = father.Row;
             Col = father.Col;
@@ -55,6 +67,11 @@ namespace Lab3
         {
             return new Cell(this);
         }
+        /// <summary>
+        /// Проверяет на соседство вызывающей клетки с параметром
+        /// </summary>
+        /// <param name="actual"></param>
+        /// <returns></returns>
         internal bool IsNear(Cell actual)
         {
             if (Up == actual || Right == actual || Left == actual || Down == actual)
@@ -65,27 +82,37 @@ namespace Lab3
         }
         internal bool RowIsPlaced()
         {
-            return Row == TargPosRow;
+            return Row == TargRow;
         }
         internal bool ColIsPlaced()
         {
-            return Col == TargPosCol;
+            return Col == TargCol;
         }
 
         /// <summary>
-        /// Определяет в каком направлении находится цель относительно вызывающей
+        /// Определяет в каком направлении двигаться к цели вызывающей клетке с учётом установленных на свои места
         /// </summary>
         /// <param name="actual">Целевая клетка</param>
         /// <returns></returns>
-        internal char GetDirection(Cell actual)
+        internal char GetDirection(Cell actual, bool accurate = false)
         {
             if (Row < actual.Row)//если 0 сверху цели
             {
                 return 'd';
             }
-            if (Row > actual.Row)//если 0 снизу цели
+            if (accurate)
             {
-                return 'u';
+                if (Row > actual.Row && !Up.Placed)//если 0 снизу цели и над 0 неустановленная клетка
+                {
+                    return 'u';
+                }
+            }
+            else
+            {
+                if (Row > actual.Row)//если 0 снизу цели 
+                {
+                    return 'u';
+                }
             }
             if (Col < actual.Col)//если 0 слева от цели
             {
@@ -95,6 +122,42 @@ namespace Lab3
             {
                 return 'l';
             }
+        }
+
+        internal bool NeedUp()
+        {
+            if (Row > TargRow)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        internal bool NeedLeft()
+        {
+            if (Col > TargCol)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        internal bool NeedRight()
+        {
+            if (Col < TargCol)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        internal bool NeedDown()
+        {
+            if (Row < TargRow)
+            {
+                return true;
+            }
+            return false;
         }
     }
 }
