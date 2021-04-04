@@ -6,7 +6,13 @@ namespace Lab3
 {
     public static class MatrixExtension
     {
-        public static void MoveLeft(this Cell[,] map, Cell replaced, int timeout =500)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="map"></param>
+        /// <param name="replaced">Перемещаемая клетка</param>
+        /// <param name="timeout"></param>
+        public static void MoveLeft(this Cell[,] map, Cell replaced)
         {
             Field.counter++;
             Cell temp = replaced.Left;
@@ -14,12 +20,13 @@ namespace Lab3
             map[replaced.Row, replaced.Col] = temp;
             temp.Col += 1;
             replaced.Col -= 1;
+            replaced.Previous = "left";
+            temp.Previous = "right";
             map.BindNeighbours();
-            temp.CheckPlace();
             map.Print();
-            Thread.Sleep(timeout);
+            Thread.Sleep(Field.delay);
         }
-        public static void MoveDown(this Cell[,] map, Cell replaced, int timeout = 500)
+        public static void MoveDown(this Cell[,] map, Cell replaced)
         {
             Field.counter++;
 
@@ -28,11 +35,11 @@ namespace Lab3
             map[replaced.Row, replaced.Col] = temp;
             temp.Row -= 1;
             replaced.Row += 1;
+            replaced.Previous = "down";
+            temp.Previous = "up";
             map.BindNeighbours();
-            temp.CheckPlace();
             map.Print();
-            Thread.Sleep(timeout);
-
+            Thread.Sleep(Field.delay);
         }
 
         /// <summary>
@@ -47,24 +54,25 @@ namespace Lab3
             map[replaced.Row, replaced.Col] = temp;
             temp.Row += 1;
             replaced.Row -= 1;
+            replaced.Previous = "up";
+            temp.Previous = "down";
             map.BindNeighbours();
-            temp.CheckPlace();
             map.Print();
-            Thread.Sleep(timeout);
+            Thread.Sleep(Field.delay);
         }
-        public static void MoveRight(this Cell[,] map, Cell replaced, int timeout = 500)
+        public static void MoveRight(this Cell[,] map, Cell replaced)
         {
             Field.counter++;
-
             Cell temp = replaced.Right;
             map[temp.Row, temp.Col] = replaced;
             map[replaced.Row, replaced.Col] = temp;
             temp.Col -= 1;
             replaced.Col += 1;
+            replaced.Previous = "right";
+            temp.Previous = "left";
             map.BindNeighbours();
-            temp.CheckPlace();
             map.Print();
-            Thread.Sleep(timeout);
+            Thread.Sleep(Field.delay);
         }
         public static void MoveGroup1(this Cell[,] map, Cell replaced)
         {
@@ -182,6 +190,22 @@ namespace Lab3
             map.MoveRight(replaced);
             map.MoveUp(replaced);
         }
+        public static void MoveGroup17(this Cell[,] map, Cell replaced)
+        {
+            map.MoveLeft(replaced);
+            map.MoveDown(replaced);
+            map.MoveRight(replaced);
+        }
+        public static void MoveGroup18(this Cell[,] map, Cell replaced)
+        {
+            map.MoveRight(replaced);
+            map.MoveUp(replaced);
+            map.MoveUp(replaced);
+            map.MoveLeft(replaced);
+            map.MoveLeft(replaced);
+            map.MoveDown(replaced);
+            map.MoveRight(replaced);
+        }
         /// <summary>
         /// Возвращает клетку поля с заданным значением
         /// </summary>
@@ -240,7 +264,7 @@ namespace Lab3
             }
             return true;
         }
-        public static Cell[,] DeepClone(this Cell[,] map)////////проверено
+        public static Cell[,] DeepClone(this Cell[,] map)
         {
             var size = 4;
             var res = new Cell[4, 4];
@@ -252,6 +276,45 @@ namespace Lab3
                 }
             }
             return res;
+        }
+        public static bool IsFine1(this Cell[,] map)
+        {
+            var ten = map.GetNum(10);
+            var eleven = map.GetNum(11);
+            var twelve = map.GetNum(12);
+            var fourteen = map.GetNum(14);
+            var fifteen = map.GetNum(15);
+            if (ten.Col==1&&ten.Row==3&&eleven.Col==1&&eleven.Row==2&&twelve.Col==2&&twelve.Row==2&&fourteen.Col==2&&fourteen.Row==3&&fifteen.Row==3&&fifteen.Col==3)
+            {
+                return true;
+            }
+            return false;
+        }
+        public static bool IsFine2(this Cell[,] map)
+        {
+            var ten = map.GetNum(10);
+            var eleven = map.GetNum(11);
+            var twelve = map.GetNum(12);
+            var fourteen = map.GetNum(14);
+            var fifteen = map.GetNum(15);
+            if (ten.Col == 1 && ten.Row == 3 && eleven.Col == 1 && eleven.Row == 2 && twelve.Col == 2 && twelve.Row == 2 && fourteen.Col == 3 && fourteen.Row == 3 && fifteen.Row == 2 && fifteen.Col == 3)
+            {
+                return true;
+            }
+            return false;
+        }
+        public static bool IsFine3(this Cell[,] map)
+        {
+            var ten = map.GetNum(10);
+            var eleven = map.GetNum(11);
+            var twelve = map.GetNum(12);
+            var fourteen = map.GetNum(14);
+            var fifteen = map.GetNum(15);
+            if (ten.Col == 1 && ten.Row == 2 && eleven.Col == 2 && eleven.Row == 3 && twelve.Col == 1 && twelve.Row == 3 && fourteen.Col == 3 && fourteen.Row == 2 && fifteen.Row == 2 && fifteen.Col == 2)
+            {
+                return true;
+            }
+            return false;
         }
         /// <summary>
         /// Привязывает соседей со всех сторон для каждой клетки поля

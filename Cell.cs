@@ -10,20 +10,22 @@ namespace Lab3
         internal int Value { private set; get; }
         internal int Row { set; get; }
         internal int Col { set; get; }
-        internal int TargRow { private set; get; }
-        internal int TargCol { private set; get; }
+        internal int TargRow {  set; get; }
+        internal int TargCol {  set; get; }
         /// <summary>
         /// Устанавливает true или false для placed
         /// </summary>
-        internal void CheckPlace()
+        internal bool CheckPlace()
         {
             if (ColIsPlaced() && RowIsPlaced())
             {
                 Placed = true;
+                return true;
             }
             else
             {
                 Placed = false;
+                return false;
             }
         }
 
@@ -31,6 +33,7 @@ namespace Lab3
         internal Cell Right { set; get; }
         internal Cell Down { set; get; }
         internal Cell Left { set; get; }
+        internal string Previous { get; set; }
 
         public Cell(int val, int r, int c)
         {
@@ -38,11 +41,6 @@ namespace Lab3
             {
                 TargCol = 3;
                 TargRow = 3;
-            }
-            else if (val == 4)
-            {
-                TargCol = 2;
-                TargRow = 1;
             }
             else
             {
@@ -52,7 +50,6 @@ namespace Lab3
             Value = val;
             Row = r;
             Col = c;
-            CheckPlace();
         }
         public Cell(Cell father)
         {
@@ -90,37 +87,50 @@ namespace Lab3
         }
 
         /// <summary>
-        /// Определяет в каком направлении двигаться к цели вызывающей клетке с учётом установленных на свои места
+        /// Определяет в каком направлении находится по отношению к цели с учётом приоритета
         /// </summary>
         /// <param name="actual">Целевая клетка</param>
         /// <returns></returns>
         internal char GetDirection(Cell actual, bool accurate = false)
         {
-            if (Row < actual.Row)//если 0 сверху цели
-            {
-                return 'd';
-            }
             if (accurate)
             {
                 if (Row > actual.Row && !Up.Placed)//если 0 снизу цели и над 0 неустановленная клетка
                 {
                     return 'u';
                 }
+                if (Row < actual.Row && !Down.Placed)//если 0 сверху цели
+                {
+                    return 'd';
+                }
+                if (Col < actual.Col)//если 0 слева от цели
+                {
+                    return 'r';
+                }
+                else//если 0 справа от цели
+                {
+                    return 'l';
+                }
             }
             else
             {
+                if (Row < actual.Row)//если 0 сверху цели
+                {
+                    return 'd';
+                }
+
                 if (Row > actual.Row)//если 0 снизу цели 
                 {
                     return 'u';
                 }
-            }
-            if (Col < actual.Col)//если 0 слева от цели
-            {
-                return 'r';
-            }
-            else//если 0 справа от цели
-            {
-                return 'l';
+                if (Col < actual.Col)//если 0 слева от цели
+                {
+                    return 'r';
+                }
+                else//если 0 справа от цели
+                {
+                    return 'l';
+                }
             }
         }
 
@@ -154,6 +164,42 @@ namespace Lab3
         internal bool NeedDown()
         {
             if (Row < TargRow)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        internal bool CanUp()
+        {
+            if (Up!=null && !Up.Placed)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        internal bool CanRight()
+        {
+            if (Right != null && !Right.Placed)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        internal bool CanDown()
+        {
+            if (Down != null && !Down.Placed)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        internal bool CanLeft()
+        {
+            if (Left != null && !Left.Placed)
             {
                 return true;
             }

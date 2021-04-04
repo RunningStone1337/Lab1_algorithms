@@ -7,6 +7,7 @@ namespace Lab3
     class Field
     {
         internal static long counter = 0;
+        internal static int delay = 100;
         Cell[,] map = new Cell[4, 4];
         public Field(int[] arr)
         {
@@ -20,125 +21,18 @@ namespace Lab3
             }
             map.BindNeighbours();
         }
-
-
-        /*/// <summary>
-        /// Возвращает порядок перемещений для решения
-        /// </summary>
-        /// <returns>Лист с порядком перестановок</returns>
-        internal List<int> GetOrder()
-        {
-            return Place(map);
-        }
-        /// <summary>
-        /// Возвращает список перемещений для конкретной ветки графа
-        /// </summary>
-        /// <param name="map">Начальная карта состояний</param>
-        /// <param name="actual">Устанавливамый на своё место элемент</param>
-        /// <returns>Список перемещений для ветки</returns>
-        private List<int> Place(Cell[,] map)
-        {
-            counter++;
-            map.Print();
-            if (map.AllPlaced())
-            {
-                return new List<int>();
-            }
-            var list = new List<int>[4];
-            for (int i = 0; i < 4; i++)
-            {
-                list[i] = new List<int>();
-            }
-            if (map.GetNum(0).Down != null)//если можем передвинуть вверх 
-            {
-                Cell[,] localmap_down = map.DeepClone();
-                localmap_down.BindNeighbours();
-                var zero = localmap_down.GetNum(0);
-                var target = localmap_down.GetNum(zero.Down.Value);
-                localmap_down.MoveDown(zero);
-                list[0].Add(zero.Up.Value);
-                if (target.ColIsPlaced() && target.RowIsPlaced())
-                {
-                    target.Placed = true;
-                }
-                else
-                {
-                    target.Placed = false;
-                    list[0].AddRange(Place(localmap_down));
-                }
-            }
-            if (map.GetNum(0).Left != null)//если можем передвинуть вправо 
-            {
-                Cell[,] localmap_left = map.DeepClone();
-                localmap_left.BindNeighbours();
-                var zero = localmap_left.GetNum(0);
-                var target = localmap_left.GetNum(zero.Left.Value);
-                localmap_left.MoveLeft(zero);
-                list[1].Add(zero.Right.Value);
-                if (target.ColIsPlaced() && target.RowIsPlaced())
-                {
-                    target.Placed = true;
-                }
-                else
-                {
-                    target.Placed = false;
-                    list[1].AddRange(Place(localmap_left));
-                }
-            }
-            if (map.GetNum(0).Up != null)//если можем передвинуть вниз 
-            {
-                Cell[,] localmap_up = map.DeepClone();
-                localmap_up.BindNeighbours();
-                var zero = localmap_up.GetNum(0);
-                var target = localmap_up.GetNum(zero.Up.Value);
-                localmap_up.MoveUp(zero);
-                list[2].Add(zero.Down.Value);
-                if (target.ColIsPlaced() && target.RowIsPlaced())
-                {
-                    target.Placed = true;
-                }
-                else
-                {
-                    target.Placed = false;
-                    list[2].AddRange(Place(localmap_up));
-                }
-            }
-            if (map.GetNum(0).Right != null)//если можем передвинуть влево 
-            {
-                Cell[,] localmap_right = map.DeepClone();
-                localmap_right.BindNeighbours();
-                var zero = localmap_right.GetNum(0);
-                var target = localmap_right.GetNum(zero.Left.Value);
-                localmap_right.MoveRight(zero);
-                list[3].Add(zero.Left.Value);
-                if (target.ColIsPlaced() && target.RowIsPlaced())
-                {
-                    target.Placed = true;
-                }
-                else
-                {
-                    target.Placed = false;
-                    list[3].AddRange(Place(localmap_right));
-                }
-            }
-            long min = long.MaxValue;
-            List<int> result = null;
-            for (int i = 0; i < 4; i++)
-            {
-                if (list[i].Count < min)
-                {
-                    result = list[i];
-                }
-            }
-            return result;
-        }*/
-
         internal void PlaceFirstRow()
         {
             map.Print();
             PlaceNum(map.GetNum(1));
             PlaceNum(map.GetNum(2));
             PlaceNum(map.GetNum(3));
+            if (map.GetNum(4).CheckPlace())
+            {
+                return;
+            }
+            map.GetNum(4).TargRow = 1;
+            map.GetNum(4).TargCol = 2;
             var zero = map.GetNum(0);
             if (zero.Row == 0 && zero.Col == 3 && zero.Down.Value == 4)
             {
@@ -147,16 +41,364 @@ namespace Lab3
             else if (!(map.GetNum(4).Row == 0 && map.GetNum(4).Col == 3))
             {
                 PlaceNum(map.GetNum(4));
-                BlackMagic(map.GetNum(4));
+                BlackMagic1(map.GetNum(4));
             }
         }
         internal void PlaceFirstCol()
         {
+            if (map.GetNum(5).CheckPlace() && map.GetNum(9).CheckPlace() && map.GetNum(13).CheckPlace())
+            {
+                return;
+            }
+            var zero = map.GetNum(0);
             PlaceNum(map.GetNum(13));
+            map.GetNum(5).TargRow = 2;
+            map.GetNum(9).TargRow = 2;
+            map.GetNum(9).TargCol = 1;
+            if (map.GetNum(5).Row == 3 && map.GetNum(5).Col == 1)
+            {
+                BlackMagic4(map.GetNum(5));
+            }
+            else
+            {
+                PlaceNum(map.GetNum(5));
+            }
+            if (map.GetNum(9).Row == 1 && map.GetNum(9).Col == 0)
+            {
+                BlackMagic2(map.GetNum(9));
+            }
+            else if (zero.Right.Value == 9 && zero.Down.Value == 5)
+            {
+                BlackMagic5(map.GetNum(9));
+            }
+            else
+            {
+                PlaceNum(map.GetNum(9));
+                BlackMagic3(map.GetNum(9));
+            }
+            map.GetNum(5).TargRow = 1;
+            map.GetNum(9).TargRow = 2;
+            map.GetNum(9).TargCol = 0;
+            map.GetNum(5).CheckPlace();
+            map.GetNum(9).CheckPlace();
         }
-        private void BlackMagic(Cell four)
+        private void BlackMagic5(Cell nine)
         {
             var zero = map.GetNum(0);
+            map.MoveGroup12(zero);
+            map.MoveDown(zero);
+            map.MoveRight(zero);
+            map.MoveGroup9(zero);
+            map.MoveUp(zero);
+            map.MoveLeft(zero);
+            map.MoveGroup12(zero);
+            map.MoveGroup8(zero);
+        }
+        private void BlackMagic4(Cell five)
+        {
+            var zero = map.GetNum(0);
+            while (!zero.IsNear(five))
+            {
+                switch (zero.GetDirection(five, true))
+                {
+                    case 'd'://если 0 сверху цели
+                        map.MoveDown(zero);
+                        break;
+                    case 'l'://если 0 справа от цели
+                        map.MoveLeft(zero);
+                        break;
+                    case 'u'://если 0 снизу цели
+                        map.MoveUp(zero);
+                        break;
+                    case 'r'://если 0 слева от цели
+                        map.MoveRight(zero);
+                        break;
+                    default:
+                        break;
+                }
+            }
+            switch (zero.GetDirection(five))
+            {
+                case 'd'://если 0 сверху цели
+                    map.MoveDown(zero);
+                    map.MoveRight(zero);
+                    map.MoveUp(zero);
+                    map.MoveUp(zero);
+                    map.MoveLeft(zero);
+                    map.MoveLeft(zero);
+                    map.MoveDown(zero);
+                    map.MoveRight(zero);
+                    break;
+                case 'l'://если 0 справа от цели
+                    map.MoveUp(zero);
+                    map.MoveLeft(zero);
+                    goto case 'd';
+                case 'u'://если 0 снизу от цели
+                    map.MoveRight(zero);
+                    map.MoveUp(zero);
+                    goto case 'l';
+                default:
+                    break;
+            }
+
+        }
+        internal void PlaceRest()
+        {
+            if (map.GetNum(10).Placed && map.GetNum(11).Placed && map.GetNum(12).Placed && map.GetNum(14).Right == map.GetNum(15))
+            {
+                PlaceNum(map.GetNum(14));
+                PlaceNum(map.GetNum(15));
+                return;
+            }
+            var zero = map.GetNum(0);
+            var ten = map.GetNum(10);
+            var fourteen = map.GetNum(14);
+            var eleven = map.GetNum(11);
+            var twelve = map.GetNum(12);
+            var fifteen = map.GetNum(15);
+            while (!ten.ColIsPlaced() || !ten.RowIsPlaced() || !fourteen.ColIsPlaced() || !fourteen.RowIsPlaced())
+            {
+                RandomMove(zero);
+            }
+            ten.CheckPlace();
+            fourteen.CheckPlace();
+            while (!eleven.ColIsPlaced() || !eleven.RowIsPlaced() || !twelve.ColIsPlaced() || !twelve.RowIsPlaced() || !fifteen.ColIsPlaced() || !fifteen.RowIsPlaced())
+            {
+                RandomMove(zero);
+            }
+        }
+        private void RandomMove(Cell zero)
+        {
+            Random rand = new Random();
+            int next = rand.Next(0, 4);
+            var flag = false;
+            while (!flag)
+            {
+                switch (next)
+                {
+                    case 0:
+                        if (zero.CanUp() && zero.Previous != "down")
+                        {
+                            map.MoveUp(zero);
+                            zero.Previous = "up";
+                            flag = true;
+                        }
+                        else
+                        {
+                            next = rand.Next(0, 4);
+                        }
+                        break;
+                    case 1:
+                        if (zero.CanRight() && zero.Previous != "left")
+                        {
+                            map.MoveRight(zero);
+                            zero.Previous = "right";
+                            flag = true;
+                        }
+                        else
+                        {
+                            next = rand.Next(0, 4);
+                        }
+                        break;
+                    case 2:
+                        if (zero.CanDown() && zero.Previous != "up")
+                        {
+                            map.MoveDown(zero);
+                            zero.Previous = "down";
+                            flag = true;
+                        }
+                        else
+                        {
+                            next = rand.Next(0, 4);
+                        }
+                        break;
+                    case 3:
+                        if (zero.CanLeft() && zero.Previous != "right")
+                        {
+                            map.MoveLeft(zero);
+                            zero.Previous = "left";
+                            flag = true;
+                        }
+                        else
+                        {
+                            next = rand.Next(0, 4);
+                        }
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+        internal void PlaceSecondRow()
+        {
+            PlaceNum(map.GetNum(6));
+            PlaceNum(map.GetNum(7));
+            if (map.GetNum(8).CheckPlace())
+            {
+                return;
+            }
+            map.GetNum(8).TargRow = 2;
+            map.GetNum(8).TargCol = 2;
+            var zero = map.GetNum(0);
+            if (zero.Down.Value==8&& map.GetNum(8).Row == 2 && map.GetNum(8).Col == 3)
+            {
+                map.MoveDown(zero);
+            }
+            else if (!(map.GetNum(8).Row == 1 && map.GetNum(8).Col == 3))//если 8 не на месте
+            {
+                PlaceNum(map.GetNum(8));
+                BlackMagic6(map.GetNum(8));
+            }
+            map.GetNum(8).TargCol = 3;
+            map.GetNum(8).TargRow = 1;
+            map.GetNum(6).CheckPlace();
+            map.GetNum(7).CheckPlace();
+            map.GetNum(8).CheckPlace();
+        }
+        private void BlackMagic6(Cell eight)
+        {
+            var zero = map.GetNum(0);
+            while (!zero.IsNear(eight))
+            {
+                switch (zero.GetDirection(eight, true))
+                {
+                    case 'd'://если 0 сверху цели
+                        map.MoveDown(zero);
+                        break;
+                    case 'l'://если 0 справа от цели
+                        map.MoveLeft(zero);
+                        break;
+                    case 'u'://если 0 снизу цели
+                        map.MoveUp(zero);
+                        break;
+                    case 'r'://если 0 слева от цели
+                        map.MoveRight(zero);
+                        break;
+                    default:
+                        break;
+                }
+            }
+            switch (zero.GetDirection(eight))
+            {
+                case 'l'://если 0 справа от цели
+                    map.MoveDown(zero);
+                    map.MoveLeft(zero);
+                    goto case 'u';
+                case 'u'://если 0 снизу цели
+                    map.MoveLeft(zero);
+                    map.MoveUp(zero);
+                    goto case 'r';
+                case 'r'://если 0 слева от цели
+                    map.MoveUp(zero);
+                    map.MoveRight(zero);
+                    map.MoveDown(zero);
+                    map.MoveRight(zero);
+                    map.MoveUp(zero);
+                    map.MoveLeft(zero);
+                    map.MoveLeft(zero);
+                    map.MoveDown(zero);
+                    break;
+                default:
+                    break;
+            }
+        }
+        private void BlackMagic3(Cell nine)
+        {
+            var zero = map.GetNum(0);
+            while (!zero.IsNear(nine))
+            {
+                switch (zero.GetDirection(nine, true))
+                {
+                    case 'd'://если 0 сверху цели
+                        map.MoveDown(zero);
+                        break;
+                    case 'l'://если 0 справа от цели
+                        map.MoveLeft(zero);
+                        break;
+                    case 'u'://если 0 снизу цели
+                        map.MoveUp(zero);
+                        break;
+                    case 'r'://если 0 слева от цели
+                        map.MoveRight(zero);
+                        break;
+                    default:
+                        break;
+                }
+            }
+            switch (zero.GetDirection(nine))
+            {
+                case 'd'://если 0 сверху цели
+                    map.MoveGroup17(zero);
+                    break;
+                case 'l'://если 0 справа от цели
+                    map.MoveUp(zero);
+                    map.MoveLeft(zero);
+                    goto case 'd';
+                case 'u'://если 0 снизу цели
+                    map.MoveRight(zero);
+                    map.MoveUp(zero);
+                    goto case 'l';
+                default:
+                    break;
+            }
+
+        }
+        private void BlackMagic2(Cell nine)
+        {
+            var zero = map.GetNum(0);
+            while (!zero.IsNear(nine))
+            {
+                switch (zero.GetDirection(nine, true))
+                {
+                    case 'd'://если 0 сверху цели
+                        map.MoveDown(zero);
+                        break;
+                    case 'l'://если 0 справа от цели
+                        map.MoveLeft(zero);
+                        break;
+                    case 'u'://если 0 снизу цели
+                        map.MoveUp(zero);
+                        break;
+                    case 'r'://если 0 слева от цели
+                        map.MoveRight(zero);
+                        break;
+                    default:
+                        break;
+                }
+            }
+            map.MoveGroup17(zero);
+            map.MoveRight(zero);
+            map.MoveUp(zero);
+            map.MoveGroup17(zero);
+            map.MoveGroup9(zero);
+            map.MoveUp(zero);
+            map.MoveGroup17(zero);
+            map.MoveRight(zero);
+            map.MoveGroup9(zero);
+        }
+        private void BlackMagic1(Cell four)
+        {
+            var zero = map.GetNum(0);
+            while (!zero.IsNear(four))
+            {
+                switch (zero.GetDirection(four, true))
+                {
+                    case 'd'://если 0 сверху цели
+                        map.MoveDown(zero);
+                        break;
+                    case 'l'://если 0 справа от цели
+                        map.MoveLeft(zero);
+                        break;
+                    case 'u'://если 0 снизу цели
+                        map.MoveUp(zero);
+                        break;
+                    case 'r'://если 0 слева от цели
+                        map.MoveRight(zero);
+                        break;
+                    default:
+                        break;
+                }
+            }
             switch (zero.GetDirection(four))
             {
                 case 'l'://если 0 справа от цели
@@ -184,10 +426,10 @@ namespace Lab3
                     break;
             }
         }
-
         private void PlaceNum(Cell actual)
         {
             var zero = map.GetNum(0);
+            actual.CheckPlace();
             if (actual.Placed)
             {
                 return;
@@ -311,7 +553,7 @@ namespace Lab3
                             switch (actual.Col - actual.TargCol)//определяем число разделяющих стоолбцов
                             {
                                 case 1:
-                                    if (actual.Col == 3 || actual.Row == 3)
+                                    if (actual.Col == 3 || actual.Row == 3 || (map.GetNum(13).Placed && actual.Value == 5))
                                     {
                                         map.MoveLeft(zero);
                                         map.MoveDown(zero);
@@ -323,14 +565,21 @@ namespace Lab3
                                     }
                                     break;
                                 case 2:
-                                    if (actual.Col != 3 && actual.Row != 3)
+                                    if ((actual.Col != 3 && actual.Row != 3) && (actual.Value != 5))
                                     {
                                         map.MoveGroup4(zero);
                                         map.MoveGroup5(zero);
                                     }
+                                    else if (actual.Value == 5)
+                                    {
+                                        map.MoveGroup8(zero);
+                                        map.MoveGroup3(zero);
+                                        map.MoveGroup18(zero);
+
+                                    }
                                     else
                                     {
-                                        map.MoveGroup7(zero);
+                                        map.MoveGroup8(zero);
                                         map.MoveGroup6(zero);
                                     }
                                     break;
@@ -408,10 +657,24 @@ namespace Lab3
                                     map.MoveRight(zero);
                                     break;
                                 case 2:
-                                    if (actual.Row != 3)
+                                    if ((actual.Row != 3 && !map.GetNum(13).Placed) || (actual.Row == 1 && (actual.Value == 9 || actual.Value == 5 || actual.Value == 6)))
                                     {
                                         map.MoveRight(zero);
                                         map.MoveGroup5(zero);
+                                    }
+                                    else if (map.GetNum(13).Placed && actual.Value == 5 && actual.Row == 3)
+                                    {
+                                        map.MoveRight(zero);
+                                        map.MoveGroup3(zero);
+                                        map.MoveRight(zero);
+                                        map.MoveUp(zero);
+                                        map.MoveUp(zero);
+                                        map.MoveLeft(zero);
+                                        map.MoveLeft(zero);
+                                        map.MoveDown(zero);
+                                        map.MoveRight(zero);
+                                        //map.MoveGroup9(zero);
+                                        //map.MoveGroup18(zero);
                                     }
                                     else
                                     {
@@ -425,6 +688,13 @@ namespace Lab3
                                         map.MoveRight(zero);
                                         map.MoveGroup5(zero);
                                         map.MoveGroup5(zero);
+                                    }
+                                    else if (map.GetNum(13).Placed && actual.Value == 5)
+                                    {
+                                        map.MoveRight(zero);
+                                        map.MoveGroup9(zero);
+                                        map.MoveGroup3(zero);
+                                        map.MoveGroup18(zero);
                                     }
                                     else
                                     {
@@ -478,6 +748,7 @@ namespace Lab3
                                     }
                                     else
                                     {
+                                        map.MoveLeft(zero);
                                         map.MoveGroup11(zero);
                                     }
                                     break;
@@ -626,6 +897,7 @@ namespace Lab3
                             break;
                     }
                 }
+                actual.CheckPlace();
             }
         }
     }
