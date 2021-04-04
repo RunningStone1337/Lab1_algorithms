@@ -13,7 +13,7 @@ namespace Lab3
         internal int TargRow {  set; get; }
         internal int TargCol {  set; get; }
         /// <summary>
-        /// Устанавливает true или false для placed
+        /// Проверяет, на своём ли месте клетка
         /// </summary>
         internal bool CheckPlace()
         {

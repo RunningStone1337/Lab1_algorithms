@@ -16,6 +16,7 @@ namespace Lab3
         {
             Field.counter++;
             Cell temp = replaced.Left;
+            Field.movelist.Add(temp.Value);
             map[temp.Row, temp.Col] = replaced;
             map[replaced.Row, replaced.Col] = temp;
             temp.Col += 1;
@@ -29,8 +30,8 @@ namespace Lab3
         public static void MoveDown(this Cell[,] map, Cell replaced)
         {
             Field.counter++;
-
             Cell temp = replaced.Down;
+            Field.movelist.Add(temp.Value);
             map[temp.Row, temp.Col] = replaced;
             map[replaced.Row, replaced.Col] = temp;
             temp.Row -= 1;
@@ -46,10 +47,11 @@ namespace Lab3
         /// Параметром передаётся ПЕРЕДВИГАЕМАЯ в указанном направлении ячейка
         /// </summary>
         /// <param name="replaced"></param>
-        public static void MoveUp(this Cell[,] map, Cell replaced, int timeout = 500)
+        public static void MoveUp(this Cell[,] map, Cell replaced)
         {
             Field.counter++;
             Cell temp = replaced.Up;
+            Field.movelist.Add(temp.Value);
             map[temp.Row, temp.Col] = replaced;
             map[replaced.Row, replaced.Col] = temp;
             temp.Row += 1;
@@ -64,6 +66,7 @@ namespace Lab3
         {
             Field.counter++;
             Cell temp = replaced.Right;
+            Field.movelist.Add(temp.Value);
             map[temp.Row, temp.Col] = replaced;
             map[replaced.Row, replaced.Col] = temp;
             temp.Col -= 1;
@@ -73,6 +76,36 @@ namespace Lab3
             map.BindNeighbours();
             map.Print();
             Thread.Sleep(Field.delay);
+        }
+        public static bool TenFourteenPlaced(this Cell[,] map)
+        {
+            var ten = map.GetNum(10);
+            var fourteen = map.GetNum(14);
+            if (ten.RowIsPlaced() && ten.ColIsPlaced() && fourteen.ColIsPlaced() && fourteen.RowIsPlaced())
+            {
+                return true;
+            }
+            return false;
+        }
+        public static bool TenElevenPlaced(this Cell[,] map)
+        {
+            var ten = map.GetNum(10);
+            var eleven = map.GetNum(11);
+            if (ten.Row==3 && ten.Col==1 && eleven.Col==1 && eleven.Row==2)
+            {
+                return true;
+            }
+            return false;
+        }
+        public static bool TwelveFifteenPlaced(this Cell[,] map)
+        {
+            var twelve = map.GetNum(12);
+            var fifteen = map.GetNum(15);
+            if (twelve.RowIsPlaced() && twelve.ColIsPlaced() && fifteen.RowIsPlaced() && fifteen.Col == 3)
+            {
+                return true;
+            }
+            return false;
         }
         public static void MoveGroup1(this Cell[,] map, Cell replaced)
         {

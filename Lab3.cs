@@ -54,40 +54,89 @@ namespace Lab3
 #if taken
             //long max = (long)Math.Pow(10, 9);
             #region Taken
-            Console.WriteLine("Введите любое значение кроме 0 чтобы начать игру или 0 чтобы выйти");
+            Console.WriteLine("Введите 1 чтобы ввести массив вручную, 2 сгенерировать случайный массив или 0 чтобы выйти");
+            var arr = new int?[16];
             var enter = int.Parse(Console.ReadLine());
             while (enter != 0)
             {
-                var arr = new int[16];
-                int count = 1;
-                var avialible = new List<int>(16);
-                for (int i = 0; i < avialible.Capacity; i++)
+                if (enter == 1)
                 {
-                    avialible.Add(i);
+                    arr = new int?[16];
+                    int count = 1;
+                    var avialible = new List<int>(16);
+                    for (int i = 0; i < avialible.Capacity; i++)
+                    {
+                        avialible.Add(i);
+                    }
+                    Console.WriteLine($"Введите исходную последовательность неповторяющихся чисел от 0 до 15 включительно для игры в пятнашки или 20 для перехода к следующему заданию");
+                    while (count < 17)
+                    {
+                        int entered;
+                        Console.WriteLine($"Введите {count} число");
+                        try
+                        {
+                            entered = int.Parse(Console.ReadLine());
+                        }
+                        catch (FormatException)
+                        {
+                            Console.WriteLine($"Ошибка преобразования типов. Повторите ввод");
+                            continue;
+                        }
+                        if (!arr.Contains(entered) && entered < 16 && entered >= 0)
+                        {
+                            arr[count - 1] = entered;
+                            avialible.Remove(entered);
+                            count++;
+                        }
+                        else
+                        {
+                            Console.WriteLine($"Введённое число уже есть в массиве или не входит в заданный диапазон! Введите другое число.");
+                        }
+                        Console.Write($"Доступные числа для ввода: ");
+                        foreach (var item in avialible)
+                        {
+                            Console.Write(item + " ");
+                        }
+                    }
                 }
-                /*Console.WriteLine($"Введите исходную последовательность неповторяющихся чисел от 0 до 15 включительно для игры в пятнашки или 20 для перехода к следующему заданию");
-                while (count < 17)
+                else if (enter == 2)
                 {
-                    Console.WriteLine($"Введите {count} число");
-                    arr[count - 1] = int.Parse(Console.ReadLine());
-                    avialible.Remove(arr[count - 1]);
-                    count++;
-                    Console.Write($"Доступные числа для ввода: ");
-                    foreach (var item in avialible)
+                    arr = new int?[16];
+                    int count = 1;
+                    var avialible = new List<int>(16);
+                    for (int i = 0; i < avialible.Capacity; i++)
+                    {
+                        avialible.Add(i);
+                    }
+                    Random rand = new Random();
+                    for (int i = 0; i < 16;)
+                    {
+                        var next = rand.Next(0, 16);
+                        if (!arr.Contains(next))
+                        {
+                            arr[i] = next;
+                            i++;
+                        }
+                    }
+                }
+                var start = DateTime.Now;
+                int[] res = Taken(arr/*new int[] {5,11,8,3,7,14,10,6,13,1,0,12,9,2,4,15}*/);
+                var end = DateTime.Now;
+                Console.WriteLine($"Полученная последовательность перестановок: ");
+                if (res != null)
+                {
+                    foreach (var item in res)
                     {
                         Console.Write(item + " ");
                     }
-                }*/
-                var start = DateTime.Now;
-                int[] res = Taken(/*arr*/new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 13, 9, 11, 12, 10, 14, 15, 0 });
-                var end = DateTime.Now;
-                Console.WriteLine($"Полученная последовательность перестановок: ");
-                foreach (var item in res)
-                {
-                    Console.Write(item + " ");
                 }
+                else
+                {
+                    Console.WriteLine("Нерешаемая комбинация.");
+                }
+                Console.WriteLine();
                 Console.WriteLine($"Затраченное время на выполнение: {start - end}");
-                Console.WriteLine("Введите любое значение кроме 0 чтобы начать игру или 0 чтобы выйти");
+                Console.WriteLine("1: Ввести новый массив вручную\n2: Cгенерировать случайный массив\n0: Выйти\nЛюбое другое число: - повторить");
                 enter = int.Parse(Console.ReadLine());
             }
             #endregion
@@ -187,9 +236,8 @@ namespace Lab3
             }
         }
 
-        static int[] Taken(int[] arr)
+        static int[] Taken(int?[] arr)
         {
-            var res = new List<int>();
             var counter = 0;
             bool[] placed = new bool[16];
             for (int i = 0; i < arr.Length - 1; i++)
@@ -220,10 +268,8 @@ namespace Lab3
             field.PlaceFirstCol();
             field.PlaceSecondRow();
             field.PlaceRest();
-
-            ///визуализация
             Field.counter = 0;
-            return res.ToArray();
+            return Field.movelist.ToArray();
         }
     }
 }

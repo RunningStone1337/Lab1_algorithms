@@ -7,19 +7,22 @@ namespace Lab3
     class Field
     {
         internal static long counter = 0;
-        internal static int delay = 100;
+        internal static int delay = 50;
+        internal static List<int> movelist;
+
         Cell[,] map = new Cell[4, 4];
-        public Field(int[] arr)
+        public Field(int?[] arr)
         {
             int size = 4;
             for (int i = 0; i < size; i++)
             {
                 for (int j = 0; j < size; j++)
                 {
-                    map[i, j] = new Cell(arr[j + i * size], i, j);
+                    map[i, j] = new Cell((int)arr[j + i * size], i, j);
                 }
             }
             map.BindNeighbours();
+            movelist = new List<int>();
         }
         internal void PlaceFirstRow()
         {
@@ -144,27 +147,72 @@ namespace Lab3
         }
         internal void PlaceRest()
         {
-            if (map.GetNum(10).Placed && map.GetNum(11).Placed && map.GetNum(12).Placed && map.GetNum(14).Right == map.GetNum(15))
-            {
-                PlaceNum(map.GetNum(14));
-                PlaceNum(map.GetNum(15));
-                return;
-            }
             var zero = map.GetNum(0);
             var ten = map.GetNum(10);
             var fourteen = map.GetNum(14);
             var eleven = map.GetNum(11);
             var twelve = map.GetNum(12);
             var fifteen = map.GetNum(15);
-            while (!ten.ColIsPlaced() || !ten.RowIsPlaced() || !fourteen.ColIsPlaced() || !fourteen.RowIsPlaced())
+            while (!ten.CheckPlace()|| !fourteen.CheckPlace()||!eleven.CheckPlace()||!twelve.CheckPlace()||!fifteen.CheckPlace())
             {
-                RandomMove(zero);
-            }
-            ten.CheckPlace();
-            fourteen.CheckPlace();
-            while (!eleven.ColIsPlaced() || !eleven.RowIsPlaced() || !twelve.ColIsPlaced() || !twelve.RowIsPlaced() || !fifteen.ColIsPlaced() || !fifteen.RowIsPlaced())
-            {
-                RandomMove(zero);
+                if (map.GetNum(10).Placed && map.GetNum(11).Placed && map.GetNum(12).Placed && map.GetNum(14).Right == map.GetNum(15))
+                {
+                    PlaceNum(map.GetNum(14));
+                    PlaceNum(map.GetNum(15));
+                    return;
+                }
+                while (!map.TenFourteenPlaced() && !map.TenElevenPlaced() && !map.TwelveFifteenPlaced())
+                {
+                    RandomMove(zero);
+                }
+                if (map.TenFourteenPlaced())
+                {
+                    ten.CheckPlace();
+                    fourteen.CheckPlace();
+                    while (!eleven.CheckPlace() || !twelve.CheckPlace() || !fifteen.CheckPlace())
+                    {
+                        RandomMove(zero);
+                    }
+                }
+                else if (map.TenElevenPlaced())
+                {
+                    ten.Placed = true;
+                    eleven.Placed = true;
+                    int counter = 0;
+                    while ((twelve.Row != 2 || twelve.Col != 2 || fifteen.Row != 3 || fifteen.Col != 3 || fourteen.Col != 2 || fourteen.Row != 3) /*&& counter < 4*/)
+                    {
+                        RandomMove(zero);
+                        counter++;
+                    }
+                    if (twelve.Row == 2 || twelve.Col == 2 || fifteen.Row == 3 || fifteen.Col == 3 || fourteen.Col == 2 || fourteen.Row == 3)
+                    {
+                        map.MoveLeft(zero);
+                        map.MoveLeft(zero);
+                        map.MoveDown(zero);
+                        map.MoveRight(zero);
+                        map.MoveRight(zero);
+                    }
+                    else
+                    {
+                        ten.Placed = false;
+                        eleven.Placed = false;
+                        RandomMove(zero);
+                    }
+                }
+                else//////////в некоторых случаях зависает на нерешаемой комбинации, предусмотреть альтернативный способ выхода
+                {
+                    twelve.CheckPlace();
+                    fifteen.Placed = true;
+                    while (!ten.CheckPlace() || !eleven.CheckPlace())
+                    {
+                        RandomMove(zero);
+                    }
+                    fifteen.Placed = false;
+                    while (!fifteen.CheckPlace())
+                    {
+                        map.MoveRight(zero);
+                    }
+                }
             }
         }
         private void RandomMove(Cell zero)
@@ -240,7 +288,7 @@ namespace Lab3
             map.GetNum(8).TargRow = 2;
             map.GetNum(8).TargCol = 2;
             var zero = map.GetNum(0);
-            if (zero.Down.Value==8&& map.GetNum(8).Row == 2 && map.GetNum(8).Col == 3)
+            if (zero.Down.Value == 8 && map.GetNum(8).Row == 2 && map.GetNum(8).Col == 3)
             {
                 map.MoveDown(zero);
             }
