@@ -249,73 +249,73 @@ namespace Lab3
             }
             Console.WriteLine();
         }
-        public static bool AllPlaced(this Cell[,] map)
-        {
-            int size = 4;
-            for (int i = 0; i < size; i++)
-            {
-                for (int j = 0; j < size; j++)
-                {
-                    if (!map[i, j].Placed)
-                    {
-                        return false;
-                    }
-                }
-            }
-            return true;
-        }
-        public static Cell[,] DeepClone(this Cell[,] map)
-        {
-            var size = 4;
-            var res = new Cell[4, 4];
-            for (int i = 0; i < size; i++)
-            {
-                for (int j = 0; j < size; j++)
-                {
-                    res[i, j] = map[i, j].Clone();
-                }
-            }
-            return res;
-        }
-        public static bool IsFine1(this Cell[,] map)
-        {
-            var ten = map.GetNum(10);
-            var eleven = map.GetNum(11);
-            var twelve = map.GetNum(12);
-            var fourteen = map.GetNum(14);
-            var fifteen = map.GetNum(15);
-            if (ten.Col==1&&ten.Row==3&&eleven.Col==1&&eleven.Row==2&&twelve.Col==2&&twelve.Row==2&&fourteen.Col==2&&fourteen.Row==3&&fifteen.Row==3&&fifteen.Col==3)
-            {
-                return true;
-            }
-            return false;
-        }
-        public static bool IsFine2(this Cell[,] map)
-        {
-            var ten = map.GetNum(10);
-            var eleven = map.GetNum(11);
-            var twelve = map.GetNum(12);
-            var fourteen = map.GetNum(14);
-            var fifteen = map.GetNum(15);
-            if (ten.Col == 1 && ten.Row == 3 && eleven.Col == 1 && eleven.Row == 2 && twelve.Col == 2 && twelve.Row == 2 && fourteen.Col == 3 && fourteen.Row == 3 && fifteen.Row == 2 && fifteen.Col == 3)
-            {
-                return true;
-            }
-            return false;
-        }
-        public static bool IsFine3(this Cell[,] map)
-        {
-            var ten = map.GetNum(10);
-            var eleven = map.GetNum(11);
-            var twelve = map.GetNum(12);
-            var fourteen = map.GetNum(14);
-            var fifteen = map.GetNum(15);
-            if (ten.Col == 1 && ten.Row == 2 && eleven.Col == 2 && eleven.Row == 3 && twelve.Col == 1 && twelve.Row == 3 && fourteen.Col == 3 && fourteen.Row == 2 && fifteen.Row == 2 && fifteen.Col == 2)
-            {
-                return true;
-            }
-            return false;
-        }
+        //public static bool AllPlaced(this Cell[,] map)
+        //{
+        //    int size = 4;
+        //    for (int i = 0; i < size; i++)
+        //    {
+        //        for (int j = 0; j < size; j++)
+        //        {
+        //            if (!map[i, j].Placed)
+        //            {
+        //                return false;
+        //            }
+        //        }
+        //    }
+        //    return true;
+        //}
+        //public static Cell[,] DeepClone(this Cell[,] map)
+        //{
+        //    var size = 4;
+        //    var res = new Cell[4, 4];
+        //    for (int i = 0; i < size; i++)
+        //    {
+        //        for (int j = 0; j < size; j++)
+        //        {
+        //            res[i, j] = map[i, j].Clone();
+        //        }
+        //    }
+        //    return res;
+        //}
+        //public static bool IsFine1(this Cell[,] map)
+        //{
+        //    var ten = map.GetNum(10);
+        //    var eleven = map.GetNum(11);
+        //    var twelve = map.GetNum(12);
+        //    var fourteen = map.GetNum(14);
+        //    var fifteen = map.GetNum(15);
+        //    if (ten.Col==1&&ten.Row==3&&eleven.Col==1&&eleven.Row==2&&twelve.Col==2&&twelve.Row==2&&fourteen.Col==2&&fourteen.Row==3&&fifteen.Row==3&&fifteen.Col==3)
+        //    {
+        //        return true;
+        //    }
+        //    return false;
+        //}
+        //public static bool IsFine2(this Cell[,] map)
+        //{
+        //    var ten = map.GetNum(10);
+        //    var eleven = map.GetNum(11);
+        //    var twelve = map.GetNum(12);
+        //    var fourteen = map.GetNum(14);
+        //    var fifteen = map.GetNum(15);
+        //    if (ten.Col == 1 && ten.Row == 3 && eleven.Col == 1 && eleven.Row == 2 && twelve.Col == 2 && twelve.Row == 2 && fourteen.Col == 3 && fourteen.Row == 3 && fifteen.Row == 2 && fifteen.Col == 3)
+        //    {
+        //        return true;
+        //    }
+        //    return false;
+        //}
+        //public static bool IsFine3(this Cell[,] map)
+        //{
+        //    var ten = map.GetNum(10);
+        //    var eleven = map.GetNum(11);
+        //    var twelve = map.GetNum(12);
+        //    var fourteen = map.GetNum(14);
+        //    var fifteen = map.GetNum(15);
+        //    if (ten.Col == 1 && ten.Row == 2 && eleven.Col == 2 && eleven.Row == 3 && twelve.Col == 1 && twelve.Row == 3 && fourteen.Col == 3 && fourteen.Row == 2 && fifteen.Row == 2 && fifteen.Col == 2)
+        //    {
+        //        return true;
+        //    }
+        //    return false;
+        //}
         /// <summary>
         /// Привязывает соседей со всех сторон для каждой клетки поля
         /// </summary>

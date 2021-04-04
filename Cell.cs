@@ -60,10 +60,10 @@ namespace Lab3
             Col = father.Col;
             Placed = father.Placed;
         }
-        internal Cell Clone()
-        {
-            return new Cell(this);
-        }
+        //internal Cell Clone()
+        //{
+        //    return new Cell(this);
+        //}
         /// <summary>
         /// Проверяет на соседство вызывающей клетки с параметром
         /// </summary>
@@ -85,7 +85,6 @@ namespace Lab3
         {
             return Col == TargCol;
         }
-
         /// <summary>
         /// Определяет в каком направлении находится по отношению к цели с учётом приоритета
         /// </summary>

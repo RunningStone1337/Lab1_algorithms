@@ -225,6 +225,5 @@ namespace Lab3
             Field.counter = 0;
             return res.ToArray();
         }
-
     }
 }
