@@ -149,13 +149,36 @@ namespace Lab3
         {
             var zero = map.GetNum(0);
             var ten = map.GetNum(10);
+            ten.TargRow = 3;
+            ten.TargCol = 1;
+            PlaceNum(ten);
+            ten.CheckPlace();
             var fourteen = map.GetNum(14);
+            fourteen.TargCol = 2;
+            PlaceNum(fourteen);
+            fourteen.CheckPlace();
+            if (zero.Left == fourteen)
+            {
+                map.MoveUp(zero);
+                map.MoveLeft(zero);
+            }
+            if (zero.Down == fourteen)
+            {
+                map.MoveLeft(zero);
+            }
+            if (zero.Down == ten)
+            {
+                map.MoveDown(zero);
+                map.MoveRight(zero);
+            }
+
             var eleven = map.GetNum(11);
             var twelve = map.GetNum(12);
             var fifteen = map.GetNum(15);
-            while (!ten.CheckPlace()|| !fourteen.CheckPlace()||!eleven.CheckPlace()||!twelve.CheckPlace()||!fifteen.CheckPlace())
+            while (!eleven.CheckPlace() || !twelve.CheckPlace() || !fifteen.CheckPlace())
             {
-                if (map.GetNum(10).Placed && map.GetNum(11).Placed && map.GetNum(12).Placed && map.GetNum(14).Right == map.GetNum(15))
+                RandomMove(zero);
+                /*if (map.GetNum(10).Placed && map.GetNum(11).Placed && map.GetNum(12).Placed && map.GetNum(14).Right == map.GetNum(15))
                 {
                     PlaceNum(map.GetNum(14));
                     PlaceNum(map.GetNum(15));
@@ -179,7 +202,8 @@ namespace Lab3
                     ten.Placed = true;
                     eleven.Placed = true;
                     int counter = 0;
-                    while ((twelve.Row != 2 || twelve.Col != 2 || fifteen.Row != 3 || fifteen.Col != 3 || fourteen.Col != 2 || fourteen.Row != 3) /*&& counter < 4*/)
+                    //////////в некоторых случаях зависает на нерешаемой комбинации, предусмотреть альтернативный способ выхода
+                    while ((twelve.Row != 2 || twelve.Col != 2 || fifteen.Row != 3 || fifteen.Col != 3 || fourteen.Col != 2 || fourteen.Row != 3) /*&& counter < 4)
                     {
                         RandomMove(zero);
                         counter++;
@@ -212,7 +236,7 @@ namespace Lab3
                     {
                         map.MoveRight(zero);
                     }
-                }
+                }*/
             }
         }
         private void RandomMove(Cell zero)
@@ -705,7 +729,7 @@ namespace Lab3
                                     map.MoveRight(zero);
                                     break;
                                 case 2:
-                                    if ((actual.Row != 3 && !map.GetNum(13).Placed) || (actual.Row == 1 && (actual.Value == 9 || actual.Value == 5 || actual.Value == 6)))
+                                    if ((actual.Row != 3 && !map.GetNum(13).Placed) || (actual.Row == 1 && (actual.Value == 9 || actual.Value == 5 || actual.Value == 6 || actual.Value == 10)))
                                     {
                                         map.MoveRight(zero);
                                         map.MoveGroup5(zero);
