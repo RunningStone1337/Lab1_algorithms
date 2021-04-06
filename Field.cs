@@ -30,79 +30,58 @@ namespace Lab3
             PlaceNum(map.GetNum(1));
             PlaceNum(map.GetNum(2));
             PlaceNum(map.GetNum(3));
-            if (map.GetNum(4).CheckPlace())
+            var four = map.GetNum(4);
+            if (four.CheckPlace())
             {
                 return;
             }
-            map.GetNum(4).TargRow = 1;
-            map.GetNum(4).TargCol = 2;
+            four.TargRow = 1;
+            four.TargCol = 2;
             var zero = map.GetNum(0);
-            if (zero.Row == 0 && zero.Col == 3 && zero.Down.Value == 4)
+            if (zero.Row == 0 && zero.Col == 3 && zero.Down == four)
             {
                 map.MoveDown(zero);
             }
-            else if (!(map.GetNum(4).Row == 0 && map.GetNum(4).Col == 3))
+            else if (!(four.Row == 0 && four.Col == 3))
             {
-                PlaceNum(map.GetNum(4));
-                BlackMagic1(map.GetNum(4));
+                PlaceNum(four);
+                BlackMagic1(four);
             }
         }
         internal void PlaceFirstCol()
         {
-            if (map.GetNum(5).CheckPlace() && map.GetNum(9).CheckPlace() && map.GetNum(13).CheckPlace())
+            var five = map.GetNum(5);
+            var nine = map.GetNum(9);
+            var thirteen = map.GetNum(13);
+            if (five.CheckPlace() && nine.CheckPlace() && thirteen.CheckPlace())
             {
                 return;
             }
             var zero = map.GetNum(0);
-            PlaceNum(map.GetNum(13));
-            map.GetNum(5).TargRow = 2;
-            map.GetNum(9).TargRow = 2;
-            map.GetNum(9).TargCol = 1;
-            if (map.GetNum(5).Row == 3 && map.GetNum(5).Col == 1)
+            PlaceNum(thirteen);
+            if (!nine.CheckPlace())
             {
-                BlackMagic4(map.GetNum(5));
+                PlaceNum(nine);
             }
-            else
+            if (zero.Right==five&&zero.Down==nine)
             {
-                PlaceNum(map.GetNum(5));
+                map.MoveRight(zero);
+                five.CheckPlace();
             }
-            if (map.GetNum(9).Row == 1 && map.GetNum(9).Col == 0)
+            if (!five.CheckPlace())
             {
-                BlackMagic2(map.GetNum(9));
+                five.TargCol = 1;
+                five.TargRow = 2;
+                PlaceNum(five);
+                BlackMagic2(five);
             }
-            else if (zero.Right.Value == 9 && zero.Down.Value == 5)
-            {
-                BlackMagic5(map.GetNum(9));
-            }
-            else
-            {
-                PlaceNum(map.GetNum(9));
-                BlackMagic3(map.GetNum(9));
-            }
-            map.GetNum(5).TargRow = 1;
-            map.GetNum(9).TargRow = 2;
-            map.GetNum(9).TargCol = 0;
-            map.GetNum(5).CheckPlace();
-            map.GetNum(9).CheckPlace();
         }
-        private void BlackMagic5(Cell nine)
+        private void BlackMagic5(Cell fourteen)
         {
             var zero = map.GetNum(0);
-            map.MoveGroup12(zero);
-            map.MoveDown(zero);
-            map.MoveRight(zero);
-            map.MoveGroup9(zero);
-            map.MoveUp(zero);
-            map.MoveLeft(zero);
-            map.MoveGroup12(zero);
-            map.MoveGroup8(zero);
-        }
-        private void BlackMagic4(Cell five)
-        {
-            var zero = map.GetNum(0);
-            while (!zero.IsNear(five))
+            while (!zero.IsNear(fourteen))
             {
-                switch (zero.GetDirectionToMove(five))
+                switch (zero.GetDirectionToMove(fourteen))
                 {
                     case Cell.Direction.Down://если 0 сверху цели
                         map.MoveDown(zero);
@@ -120,123 +99,99 @@ namespace Lab3
                         break;
                 }
             }
-            switch (zero.GetDirectionToMove(five))
+            map.MoveLeft(zero);
+            map.MoveDown(zero);
+            map.MoveRight(zero);
+            map.MoveRight(zero);
+            map.MoveUp(zero);
+            map.MoveLeft(zero);
+            map.MoveDown(zero);
+            map.MoveLeft(zero);
+            map.MoveUp(zero);
+            map.MoveRight(zero);
+            map.MoveRight(zero);
+            map.MoveDown(zero);
+            map.MoveLeft(zero);
+            map.MoveUp(zero);
+        }
+        private void BlackMagic4(Cell fourteen)
+        {
+            var zero = map.GetNum(0);
+            while (!zero.IsNear(fourteen))
             {
-                case Cell.Direction.Down://если 0 сверху цели
-                    map.MoveDown(zero);
-                    map.MoveRight(zero);
-                    map.MoveUp(zero);
-                    map.MoveUp(zero);
-                    map.MoveLeft(zero);
-                    map.MoveLeft(zero);
-                    map.MoveDown(zero);
-                    map.MoveRight(zero);
-                    break;
+                switch (zero.GetDirectionToMove(fourteen))
+                {
+                    case Cell.Direction.Down://если 0 сверху цели
+                        map.MoveDown(zero);
+                        break;
+                    case Cell.Direction.Left://если 0 справа от цели
+                        map.MoveLeft(zero);
+                        break;
+                    case Cell.Direction.Up://если 0 снизу цели
+                        map.MoveUp(zero);
+                        break;
+                    case Cell.Direction.Right://если 0 слева от цели
+                        map.MoveRight(zero);
+                        break;
+                    default:
+                        break;
+                }
+            }
+            switch (zero.GetDirection(fourteen))
+            {
                 case Cell.Direction.Left://если 0 справа от цели
                     map.MoveUp(zero);
                     map.MoveLeft(zero);
                     goto case Cell.Direction.Down;
-                case Cell.Direction.Up://если 0 снизу от цели
+                case Cell.Direction.Down://если 0 сверху от цели
+                    map.MoveLeft(zero);
+                    map.MoveDown(zero);
                     map.MoveRight(zero);
-                    map.MoveUp(zero);
-                    goto case Cell.Direction.Left;
+                    break;
                 default:
                     break;
             }
-
         }
         internal void PlaceRest()
         {
             var zero = map.GetNum(0);
             var ten = map.GetNum(10);
-            ten.TargRow = 3;
-            ten.TargCol = 1;
-            PlaceNum(ten);
-            ten.CheckPlace();
-            var fourteen = map.GetNum(14);
-            fourteen.TargCol = 2;
-            PlaceNum(fourteen);
-            fourteen.CheckPlace();
-            if (zero.Left == fourteen)
-            {
-                map.MoveUp(zero);
-                map.MoveLeft(zero);
-            }
-            if (zero.Down == fourteen)
-            {
-                map.MoveLeft(zero);
-            }
-            if (zero.Down == ten)
-            {
-                map.MoveDown(zero);
-                map.MoveRight(zero);
-            }
-
             var eleven = map.GetNum(11);
             var twelve = map.GetNum(12);
+            var fourteen = map.GetNum(14);
             var fifteen = map.GetNum(15);
-            while (!eleven.CheckPlace() || !twelve.CheckPlace() || !fifteen.CheckPlace())
+            if (ten.CheckPlace() && eleven.CheckPlace() && twelve.CheckPlace())
             {
-                RandomMove(zero);
-                /*if (map.GetNum(10).Placed && map.GetNum(11).Placed && map.GetNum(12).Placed && map.GetNum(14).Right == map.GetNum(15))
+                PlaceNum(fourteen);
+                PlaceNum(fifteen);
+                return;
+            }
+            else
+            {
+                ten.TargRow = 3;
+                PlaceNum(ten);
+                if (ten.Up == fourteen)
                 {
-                    PlaceNum(map.GetNum(14));
-                    PlaceNum(map.GetNum(15));
-                    return;
+                    BlackMagic5(fourteen);
                 }
-                while (!map.TenFourteenPlaced() && !map.TenElevenPlaced() && !map.TwelveFifteenPlaced())
+                if (zero.Down == ten && zero.Right == fourteen) //если требуется перемешать
                 {
-                    RandomMove(zero);
+                    map.MoveDown(zero);
+                    map.MoveRight(zero);
+                    map.MoveUp(zero);
+                    map.MoveRight(zero);
+                    map.MoveDown(zero);
+                    map.MoveLeft(zero);
+                    map.MoveLeft(zero);
+                    map.MoveUp(zero);
+                    map.MoveRight(zero);
                 }
-                if (map.TenFourteenPlaced())
-                {
-                    ten.CheckPlace();
-                    fourteen.CheckPlace();
-                    while (!eleven.CheckPlace() || !twelve.CheckPlace() || !fifteen.CheckPlace())
-                    {
-                        RandomMove(zero);
-                    }
-                }
-                else if (map.TenElevenPlaced())
-                {
-                    ten.Placed = true;
-                    eleven.Placed = true;
-                    int counter = 0;
-                    //////////в некоторых случаях зависает на нерешаемой комбинации, предусмотреть альтернативный способ выхода
-                    while ((twelve.Row != 2 || twelve.Col != 2 || fifteen.Row != 3 || fifteen.Col != 3 || fourteen.Col != 2 || fourteen.Row != 3) /*&& counter < 4)
-                    {
-                        RandomMove(zero);
-                        counter++;
-                    }
-                    if (twelve.Row == 2 || twelve.Col == 2 || fifteen.Row == 3 || fifteen.Col == 3 || fourteen.Col == 2 || fourteen.Row == 3)
-                    {
-                        map.MoveLeft(zero);
-                        map.MoveLeft(zero);
-                        map.MoveDown(zero);
-                        map.MoveRight(zero);
-                        map.MoveRight(zero);
-                    }
-                    else
-                    {
-                        ten.Placed = false;
-                        eleven.Placed = false;
-                        RandomMove(zero);
-                    }
-                }
-                else//////////в некоторых случаях зависает на нерешаемой комбинации, предусмотреть альтернативный способ выхода
-                {
-                    twelve.CheckPlace();
-                    fifteen.Placed = true;
-                    while (!ten.CheckPlace() || !eleven.CheckPlace())
-                    {
-                        RandomMove(zero);
-                    }
-                    fifteen.Placed = false;
-                    while (!fifteen.CheckPlace())
-                    {
-                        map.MoveRight(zero);
-                    }
-                }*/
+                fourteen.TargCol = 2;
+                PlaceNum(fourteen);
+                BlackMagic4(fourteen);
+                PlaceNum(eleven);
+                PlaceNum(twelve);
+                PlaceNum(fifteen);
             }
         }
         private void RandomMove(Cell zero)
@@ -303,29 +258,27 @@ namespace Lab3
         }
         internal void PlaceSecondRow()
         {
-            PlaceNum(map.GetNum(6));
-            PlaceNum(map.GetNum(7));
-            if (map.GetNum(8).CheckPlace())
+            var zero = map.GetNum(0);
+            var six = map.GetNum(6);
+            var seven = map.GetNum(7);
+            var eight = map.GetNum(8);
+            if (six.CheckPlace() && seven.CheckPlace() && eight.CheckPlace())
             {
                 return;
             }
-            map.GetNum(8).TargRow = 2;
-            map.GetNum(8).TargCol = 2;
-            var zero = map.GetNum(0);
-            if (zero.Down.Value == 8 && map.GetNum(8).Row == 2 && map.GetNum(8).Col == 3)
+            PlaceNum(six);
+            PlaceNum(seven);
+            if (eight.Col == 3 && eight.Row == 2 && eight.Up == zero)
             {
-                map.MoveDown(zero);
+                PlaceNum(eight);
             }
-            else if (!(map.GetNum(8).Row == 1 && map.GetNum(8).Col == 3))//если 8 не на месте
+            if (!eight.CheckPlace())
             {
-                PlaceNum(map.GetNum(8));
-                BlackMagic6(map.GetNum(8));
+                eight.TargCol = 2;
+                eight.TargRow = 2;
+                PlaceNum(eight);
+                BlackMagic3(eight);
             }
-            map.GetNum(8).TargCol = 3;
-            map.GetNum(8).TargRow = 1;
-            map.GetNum(6).CheckPlace();
-            map.GetNum(7).CheckPlace();
-            map.GetNum(8).CheckPlace();
         }
         private void BlackMagic6(Cell eight)
         {
@@ -374,12 +327,12 @@ namespace Lab3
                     break;
             }
         }
-        private void BlackMagic3(Cell nine)
+        private void BlackMagic3(Cell eight)
         {
             var zero = map.GetNum(0);
-            while (!zero.IsNear(nine))
+            while (!zero.IsNear(eight))
             {
-                switch (zero.GetDirectionToMove(nine))
+                switch (zero.GetDirectionToMove(eight))
                 {
                     case Cell.Direction.Down://если 0 сверху цели
                         map.MoveDown(zero);
@@ -397,56 +350,76 @@ namespace Lab3
                         break;
                 }
             }
-            switch (zero.GetDirectionToMove(nine))
+            switch (zero.GetDirection(eight))
             {
-                case Cell.Direction.Down://если 0 сверху цели
-                    map.MoveGroup17(zero);
-                    break;
                 case Cell.Direction.Left://если 0 справа от цели
-                    map.MoveUp(zero);
+                    map.MoveDown(zero);
                     map.MoveLeft(zero);
-                    goto case Cell.Direction.Down;
+                    goto case Cell.Direction.Up;
                 case Cell.Direction.Up://если 0 снизу цели
+                    map.MoveLeft(zero);
+                    map.MoveUp(zero);
+                    goto case Cell.Direction.Right;
+                case Cell.Direction.Right://если 0 слева от цели
+                    map.MoveUp(zero);
+                    map.MoveRight(zero);
+                    map.MoveDown(zero);
                     map.MoveRight(zero);
                     map.MoveUp(zero);
+                    map.MoveLeft(zero);
+                    map.MoveLeft(zero);
+                    map.MoveDown(zero);
+                    break;
+                default:
+                    break;
+            }
+        }
+        private void BlackMagic2(Cell five)
+        {
+            var zero = map.GetNum(0);
+            while (!zero.IsNear(five))
+            {
+                switch (zero.GetDirectionToMove(five))
+                {
+                    case Cell.Direction.Down://если 0 сверху цели
+                        map.MoveDown(zero);
+                        break;
+                    case Cell.Direction.Left://если 0 справа от цели
+                        map.MoveLeft(zero);
+                        break;
+                    case Cell.Direction.Up://если 0 снизу цели
+                        map.MoveUp(zero);
+                        break;
+                    case Cell.Direction.Right://если 0 слева от цели
+                        map.MoveRight(zero);
+                        break;
+                    default:
+                        break;
+                }
+            }
+            switch (zero.GetDirection(five))
+            {
+                case Cell.Direction.Left://если 0 справа от цели
+                    map.MoveDown(zero);
+                    map.MoveLeft(zero);
+                    goto case Cell.Direction.Up;
+                case Cell.Direction.Up://если 0 снизу цели
+                    map.MoveLeft(zero);
+                    map.MoveUp(zero);
+                    map.MoveRight(zero);
+                    map.MoveUp(zero);
+                    map.MoveLeft(zero);
+                    map.MoveDown(zero);
+                    map.MoveDown(zero);
+                    map.MoveRight(zero);
+                    break;
+                case Cell.Direction.Down://если 0 сверху от цели
+                    map.MoveRight(zero);
+                    map.MoveDown(zero);
                     goto case Cell.Direction.Left;
                 default:
                     break;
             }
-
-        }
-        private void BlackMagic2(Cell nine)
-        {
-            var zero = map.GetNum(0);
-            while (!zero.IsNear(nine))
-            {
-                switch (zero.GetDirectionToMove(nine))
-                {
-                    case Cell.Direction.Down://если 0 сверху цели
-                        map.MoveDown(zero);
-                        break;
-                    case Cell.Direction.Left://если 0 справа от цели
-                        map.MoveLeft(zero);
-                        break;
-                    case Cell.Direction.Up://если 0 снизу цели
-                        map.MoveUp(zero);
-                        break;
-                    case Cell.Direction.Right://если 0 слева от цели
-                        map.MoveRight(zero);
-                        break;
-                    default:
-                        break;
-                }
-            }
-            map.MoveGroup17(zero);
-            map.MoveRight(zero);
-            map.MoveUp(zero);
-            map.MoveGroup17(zero);
-            map.MoveGroup9(zero);
-            map.MoveUp(zero);
-            map.MoveGroup17(zero);
-            map.MoveRight(zero);
-            map.MoveGroup9(zero);
         }
         private void BlackMagic1(Cell four)
         {
@@ -471,7 +444,7 @@ namespace Lab3
                         break;
                 }
             }
-            switch (zero.GetDirectionToMove(four))
+            switch (zero.GetDirection(four))
             {
                 case Cell.Direction.Left://если 0 справа от цели
                     map.MoveDown(zero);
@@ -525,12 +498,23 @@ namespace Lab3
                                 map.MoveUp(zero);
                                 break;
                             case Cell.Direction.Right://надо вправо
-                                break;
-                            case Cell.Direction.Down://надо вниз
-                                break;
-                            case Cell.Direction.Left://надо влево
                                 map.MoveRight(zero);
                                 map.MoveUp(zero);
+                                break;
+                            case Cell.Direction.Down://надо вниз
+                                map.MoveUp(zero);
+                                break;
+                            case Cell.Direction.Left://надо влево
+                                if (zero.CanLeft())
+                                {
+                                    map.MoveLeft(zero);
+                                    map.MoveUp(zero);
+                                }
+                                else
+                                {
+                                    map.MoveRight(zero);
+                                    map.MoveUp(zero);
+                                }
                                 break;
                             default:
                                 break;
@@ -564,6 +548,16 @@ namespace Lab3
                                 }
                                 break;
                             case Cell.Direction.Down://надо вниз
+                                if (zero.CanDown())
+                                {
+                                    map.MoveDown(zero);
+                                    map.MoveRight(zero);
+                                }
+                                else if (zero.CanUp())
+                                {
+                                    map.MoveUp(zero);
+                                    map.MoveRight(zero);
+                                }
                                 break;
                             case Cell.Direction.Left://надо влево
                                 map.MoveRight(zero);
@@ -583,6 +577,8 @@ namespace Lab3
                                 map.MoveDown(zero);
                                 break;
                             case Cell.Direction.Down://надо вниз
+                                map.MoveRight(zero);
+                                map.MoveDown(zero);
                                 break;
                             case Cell.Direction.Left://надо влево
                                 if (zero.CanLeft() && target.CanLeft())//и слева не установленная клетка и целевая может идти влево
@@ -611,9 +607,11 @@ namespace Lab3
                                 map.MoveLeft(zero);
                                 break;
                             case Cell.Direction.Down://надо вниз
+                                map.MoveDown(zero);
+                                map.MoveLeft(zero);
                                 break;
                             case Cell.Direction.Left://надо влево
-                                if (zero.CanDown())
+                                if (zero.CanDown() && zero.Previous != "up")
                                 {
                                     map.MoveDown(zero);
                                     map.MoveLeft(zero);
@@ -631,11 +629,7 @@ namespace Lab3
                     default:
                         break;
                 }
-                /*
-                 
-                 */
-
-
+                target.CheckPlace();
             }
         }
     }

@@ -241,11 +241,14 @@ namespace Lab3
             var counter = 0;
             for (int i = 0; i < arr.Length-1; i++)
             {
+                if (arr[i]==0)
+                {
+                    continue;
+                }
                 for (int j = i + 1; j < arr.Length; j++)
                 {
-                    if (arr[i] == 0)
+                    if (arr[j] == 0)
                     {
-                        counter += (i / 4) + 1;
                         continue;
                     }
                     if (arr[j] == 0)
@@ -258,6 +261,7 @@ namespace Lab3
                     }
                 }
             }
+            counter += (Array.IndexOf(arr,0) / 4) + 1;
             if (counter % 2 == 1)//если нерешаемая
             {
                 return null;
