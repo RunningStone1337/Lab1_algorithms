@@ -10,8 +10,8 @@ namespace Lab3
         internal int Value { private set; get; }
         internal int Row { set; get; }
         internal int Col { set; get; }
-        internal int TargRow {  set; get; }
-        internal int TargCol {  set; get; }
+        internal int TargRow { set; get; }
+        internal int TargCol { set; get; }
         /// <summary>
         /// Проверяет, на своём ли месте клетка
         /// </summary>
@@ -90,49 +90,49 @@ namespace Lab3
         /// </summary>
         /// <param name="actual">Целевая клетка</param>
         /// <returns></returns>
-        internal char GetDirection(Cell actual, bool accurate = false)
+        internal Direction GetDirectionToMove(Cell actual)
         {
-            if (accurate)
+            if (Row > actual.Row && !Up.Placed)//если 0 снизу цели и над 0 неустановленная клетка
             {
-                if (Row > actual.Row && !Up.Placed)//если 0 снизу цели и над 0 неустановленная клетка
-                {
-                    return 'u';
-                }
-                if (Row < actual.Row && !Down.Placed)//если 0 сверху цели
-                {
-                    return 'd';
-                }
-                if (Col < actual.Col)//если 0 слева от цели
-                {
-                    return 'r';
-                }
-                else//если 0 справа от цели
-                {
-                    return 'l';
-                }
+                return Direction.Up;
             }
-            else
+            if (Row < actual.Row && !Down.Placed)//если 0 сверху цели и под 0 неустановленная
             {
-                if (Row < actual.Row)//если 0 сверху цели
-                {
-                    return 'd';
-                }
-
-                if (Row > actual.Row)//если 0 снизу цели 
-                {
-                    return 'u';
-                }
-                if (Col < actual.Col)//если 0 слева от цели
-                {
-                    return 'r';
-                }
-                else//если 0 справа от цели
-                {
-                    return 'l';
-                }
+                return Direction.Down;
+            }
+            if (Col < actual.Col && !Right.Placed)//если 0 слева от цели и справа от 0 неустановленная
+            {
+                return Direction.Right;
+            }
+            else//если 0 справа от цели
+            {
+                return Direction.Left;
             }
         }
-
+        /// <summary>
+        /// Определяет с какой стороны от вызывающей находится переданная в параметр. Работает корректно если они действительно граничат.
+        /// </summary>
+        /// <param name="actual"></param>
+        /// <returns></returns>
+        internal Direction GetDirection(Cell actual)
+        {
+            if (Up == actual)//если 0 снизу цели 
+            {
+                return Direction.Up;
+            }
+            if (Down == actual)//если 0 сверху цели
+            {
+                return Direction.Down;
+            }
+            if (Right == actual)//если 0 слева от цели
+            {
+                return Direction.Right;
+            }
+            else//если 0 справа от цели
+            {
+                return Direction.Left;
+            }
+        }
         internal bool NeedUp()
         {
             if (Row > TargRow)
@@ -171,7 +171,7 @@ namespace Lab3
 
         internal bool CanUp()
         {
-            if (Up!=null && !Up.Placed)
+            if (Up != null && !Up.Placed)
             {
                 return true;
             }
@@ -203,6 +203,33 @@ namespace Lab3
                 return true;
             }
             return false;
+        }
+        public enum Direction
+        {
+            Up = 0, Right = 1, Down = 2, Left = 3
+        }
+        /// <summary>
+        /// Возвращает предпочтительное направление движения перемещаемой клетки
+        /// </summary>
+        /// <returns></returns>
+        internal Direction GetDirectionToMove()
+        {
+            if (NeedLeft() && !Left.Placed)
+            {
+                return Direction.Left;
+            }
+            if (NeedRight() && !Right.Placed)
+            {
+                return Direction.Right;
+            }
+            if (NeedUp() && !Up.Placed)
+            {
+                return Direction.Up;
+            }
+            else
+            {
+                return Direction.Down;
+            }
         }
     }
 }
