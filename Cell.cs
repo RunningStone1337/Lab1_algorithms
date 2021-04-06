@@ -1,12 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Lab3
 {
     public class Cell
     {
         internal bool Placed { get; set; }
+        internal bool Actual { get; set; }
         internal int Value { private set; get; }
         internal int Row { set; get; }
         internal int Col { set; get; }
@@ -28,7 +27,6 @@ namespace Lab3
                 return false;
             }
         }
-
         internal Cell Up { set; get; }
         internal Cell Right { set; get; }
         internal Cell Down { set; get; }
@@ -51,19 +49,7 @@ namespace Lab3
             Row = r;
             Col = c;
         }
-        public Cell(Cell father)
-        {
-            TargCol = father.TargCol;
-            TargRow = father.TargRow;
-            Value = father.Value;
-            Row = father.Row;
-            Col = father.Col;
-            Placed = father.Placed;
-        }
-        //internal Cell Clone()
-        //{
-        //    return new Cell(this);
-        //}
+        
         /// <summary>
         /// Проверяет на соседство вызывающей клетки с параметром
         /// </summary>
@@ -160,15 +146,6 @@ namespace Lab3
             return false;
         }
 
-        internal bool NeedDown()
-        {
-            if (Row < TargRow)
-            {
-                return true;
-            }
-            return false;
-        }
-
         internal bool CanUp()
         {
             if (Up != null && !Up.Placed)
@@ -208,6 +185,9 @@ namespace Lab3
         {
             Up = 0, Right = 1, Down = 2, Left = 3
         }
+
+        
+
         /// <summary>
         /// Возвращает предпочтительное направление движения перемещаемой клетки
         /// </summary>
