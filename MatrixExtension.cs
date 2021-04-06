@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading;
 namespace Lab3
 {
@@ -77,168 +75,7 @@ namespace Lab3
             map.Print();
             Thread.Sleep(Field.delay);
         }
-        public static bool TenFourteenPlaced(this Cell[,] map)
-        {
-            var ten = map.GetNum(10);
-            var fourteen = map.GetNum(14);
-            if (ten.RowIsPlaced() && ten.ColIsPlaced() && fourteen.ColIsPlaced() && fourteen.RowIsPlaced())
-            {
-                return true;
-            }
-            return false;
-        }
-        public static bool TenElevenPlaced(this Cell[,] map)
-        {
-            var ten = map.GetNum(10);
-            var eleven = map.GetNum(11);
-            if (ten.Row==3 && ten.Col==1 && eleven.Col==1 && eleven.Row==2)
-            {
-                return true;
-            }
-            return false;
-        }
-        public static bool TwelveFifteenPlaced(this Cell[,] map)
-        {
-            var twelve = map.GetNum(12);
-            var fifteen = map.GetNum(15);
-            if (twelve.RowIsPlaced() && twelve.ColIsPlaced() && fifteen.RowIsPlaced() && fifteen.Col == 3)
-            {
-                return true;
-            }
-            return false;
-        }
-        public static void MoveGroup1(this Cell[,] map, Cell replaced)
-        {
-            map.MoveRight(replaced);
-            map.MoveUp(replaced);
-            map.MoveUp(replaced);
-            map.MoveLeft(replaced);
-            map.MoveDown(replaced);
-        }
-        public static void MoveGroup3(this Cell[,] map, Cell replaced)
-        {
-            map.MoveUp(replaced);
-            map.MoveLeft(replaced);
-            map.MoveDown(replaced);
-        }
-        public static void MoveGroup2(this Cell[,] map, Cell replaced)
-        {
-            map.MoveLeft(replaced);
-            map.MoveUp(replaced);
-            map.MoveUp(replaced);
-            map.MoveRight(replaced);
-            map.MoveDown(replaced);
-        }
-        public static void MoveGroup4(this Cell[,] map, Cell replaced)
-        {
-            map.MoveRight(replaced);
-            map.MoveDown(replaced);
-            map.MoveDown(replaced);
-            map.MoveLeft(replaced);
-            map.MoveLeft(replaced);
-            map.MoveUp(replaced);
-            map.MoveRight(replaced);
-        }
-        public static void MoveGroup5(this Cell[,] map, Cell replaced)
-        {
-            map.MoveDown(replaced);
-            map.MoveLeft(replaced);
-            map.MoveLeft(replaced);
-            map.MoveUp(replaced);
-            map.MoveRight(replaced);
-        }
-        public static void MoveGroup6(this Cell[,] map, Cell replaced)
-        {
-            map.MoveUp(replaced);
-            map.MoveLeft(replaced);
-            map.MoveLeft(replaced);
-            map.MoveDown(replaced);
-            map.MoveRight(replaced);
-        }
-        public static void MoveGroup7(this Cell[,] map, Cell replaced)
-        {
-            map.MoveLeft(replaced);
-            map.MoveUp(replaced);
-            map.MoveRight(replaced);
-        }
-        public static void MoveGroup8(this Cell[,] map, Cell replaced)
-        {
-            map.MoveLeft(replaced);
-            map.MoveDown(replaced);
-            map.MoveRight(replaced);
-        }
-        public static void MoveGroup9(this Cell[,] map, Cell replaced)
-        {
-            map.MoveUp(replaced);
-            map.MoveLeft(replaced);
-            map.MoveLeft(replaced);
-            map.MoveDown(replaced);
-            map.MoveRight(replaced);
-        }
-        public static void MoveGroup10(this Cell[,] map, Cell replaced)
-        {
-            map.MoveRight(replaced);
-            map.MoveDown(replaced);
-            map.MoveLeft(replaced);
-        }
-        public static void MoveGroup11(this Cell[,] map, Cell replaced)
-        {
-            map.MoveUp(replaced);
-            map.MoveRight(replaced);
-            map.MoveRight(replaced);
-            map.MoveDown(replaced);
-            map.MoveLeft(replaced);
-        }
-        public static void MoveGroup12(this Cell[,] map, Cell replaced)
-        {
-            map.MoveDown(replaced);
-            map.MoveRight(replaced);
-            map.MoveRight(replaced);
-            map.MoveUp(replaced);
-            map.MoveLeft(replaced);
-        }
-        public static void MoveGroup13(this Cell[,] map, Cell replaced)
-        {
-            map.MoveRight(replaced);
-            map.MoveUp(replaced);
-            map.MoveLeft(replaced);
-        }
-        public static void MoveGroup14(this Cell[,] map, Cell replaced)
-        {
-            map.MoveRight(replaced);
-            map.MoveDown(replaced);
-            map.MoveDown(replaced);
-            map.MoveLeft(replaced);
-            map.MoveUp(replaced);
-        }
-        public static void MoveGroup15(this Cell[,] map, Cell replaced)
-        {
-            map.MoveDown(replaced);
-            map.MoveLeft(replaced);
-            map.MoveUp(replaced);
-        }
-        public static void MoveGroup16(this Cell[,] map, Cell replaced)
-        {
-            map.MoveDown(replaced);
-            map.MoveRight(replaced);
-            map.MoveUp(replaced);
-        }
-        public static void MoveGroup17(this Cell[,] map, Cell replaced)
-        {
-            map.MoveLeft(replaced);
-            map.MoveDown(replaced);
-            map.MoveRight(replaced);
-        }
-        public static void MoveGroup18(this Cell[,] map, Cell replaced)
-        {
-            map.MoveRight(replaced);
-            map.MoveUp(replaced);
-            map.MoveUp(replaced);
-            map.MoveLeft(replaced);
-            map.MoveLeft(replaced);
-            map.MoveDown(replaced);
-            map.MoveRight(replaced);
-        }
+
         /// <summary>
         /// Возвращает клетку поля с заданным значением
         /// </summary>
@@ -299,14 +136,24 @@ namespace Lab3
             {
                 for (int j = 0; j < size; j++)
                 {
+                    if (map[i, j].Actual)
+                    {
+                        Console.ForegroundColor = ConsoleColor.Green;
+                    }
                     if (map[i, j].Value.ToString().Length == 1)
                     {
+                        if (map[i, j].Value == 0)
+                        {
+                            Console.ForegroundColor = ConsoleColor.Red;
+                        }
                         Console.Write(" " + map[i, j].Value + "|");
+
                     }
                     else
                     {
                         Console.Write(map[i, j].Value + "|");
                     }
+                    Console.ForegroundColor = ConsoleColor.White;
                 }
                 Console.WriteLine();
             }
