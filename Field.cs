@@ -102,27 +102,27 @@ namespace Lab3
             var zero = map.GetNum(0);
             while (!zero.IsNear(five))
             {
-                switch (zero.GetDirection(five, true))
+                switch (zero.GetDirectionToMove(five))
                 {
-                    case 'd'://если 0 сверху цели
+                    case Cell.Direction.Down://если 0 сверху цели
                         map.MoveDown(zero);
                         break;
-                    case 'l'://если 0 справа от цели
+                    case Cell.Direction.Left://если 0 справа от цели
                         map.MoveLeft(zero);
                         break;
-                    case 'u'://если 0 снизу цели
+                    case Cell.Direction.Up://если 0 снизу цели
                         map.MoveUp(zero);
                         break;
-                    case 'r'://если 0 слева от цели
+                    case Cell.Direction.Right://если 0 слева от цели
                         map.MoveRight(zero);
                         break;
                     default:
                         break;
                 }
             }
-            switch (zero.GetDirection(five))
+            switch (zero.GetDirectionToMove(five))
             {
-                case 'd'://если 0 сверху цели
+                case Cell.Direction.Down://если 0 сверху цели
                     map.MoveDown(zero);
                     map.MoveRight(zero);
                     map.MoveUp(zero);
@@ -132,14 +132,14 @@ namespace Lab3
                     map.MoveDown(zero);
                     map.MoveRight(zero);
                     break;
-                case 'l'://если 0 справа от цели
+                case Cell.Direction.Left://если 0 справа от цели
                     map.MoveUp(zero);
                     map.MoveLeft(zero);
-                    goto case 'd';
-                case 'u'://если 0 снизу от цели
+                    goto case Cell.Direction.Down;
+                case Cell.Direction.Up://если 0 снизу от цели
                     map.MoveRight(zero);
                     map.MoveUp(zero);
-                    goto case 'l';
+                    goto case Cell.Direction.Left;
                 default:
                     break;
             }
@@ -332,35 +332,35 @@ namespace Lab3
             var zero = map.GetNum(0);
             while (!zero.IsNear(eight))
             {
-                switch (zero.GetDirection(eight, true))
+                switch (zero.GetDirectionToMove(eight))
                 {
-                    case 'd'://если 0 сверху цели
+                    case Cell.Direction.Down://если 0 сверху цели
                         map.MoveDown(zero);
                         break;
-                    case 'l'://если 0 справа от цели
+                    case Cell.Direction.Left://если 0 справа от цели
                         map.MoveLeft(zero);
                         break;
-                    case 'u'://если 0 снизу цели
+                    case Cell.Direction.Up://если 0 снизу цели
                         map.MoveUp(zero);
                         break;
-                    case 'r'://если 0 слева от цели
+                    case Cell.Direction.Right://если 0 слева от цели
                         map.MoveRight(zero);
                         break;
                     default:
                         break;
                 }
             }
-            switch (zero.GetDirection(eight))
+            switch (zero.GetDirectionToMove(eight))
             {
-                case 'l'://если 0 справа от цели
+                case Cell.Direction.Left://если 0 справа от цели
                     map.MoveDown(zero);
                     map.MoveLeft(zero);
-                    goto case 'u';
-                case 'u'://если 0 снизу цели
+                    goto case Cell.Direction.Up;
+                case Cell.Direction.Up://если 0 снизу цели
                     map.MoveLeft(zero);
                     map.MoveUp(zero);
-                    goto case 'r';
-                case 'r'://если 0 слева от цели
+                    goto case Cell.Direction.Right;
+                case Cell.Direction.Right://если 0 слева от цели
                     map.MoveUp(zero);
                     map.MoveRight(zero);
                     map.MoveDown(zero);
@@ -379,37 +379,37 @@ namespace Lab3
             var zero = map.GetNum(0);
             while (!zero.IsNear(nine))
             {
-                switch (zero.GetDirection(nine, true))
+                switch (zero.GetDirectionToMove(nine))
                 {
-                    case 'd'://если 0 сверху цели
+                    case Cell.Direction.Down://если 0 сверху цели
                         map.MoveDown(zero);
                         break;
-                    case 'l'://если 0 справа от цели
+                    case Cell.Direction.Left://если 0 справа от цели
                         map.MoveLeft(zero);
                         break;
-                    case 'u'://если 0 снизу цели
+                    case Cell.Direction.Up://если 0 снизу цели
                         map.MoveUp(zero);
                         break;
-                    case 'r'://если 0 слева от цели
+                    case Cell.Direction.Right://если 0 слева от цели
                         map.MoveRight(zero);
                         break;
                     default:
                         break;
                 }
             }
-            switch (zero.GetDirection(nine))
+            switch (zero.GetDirectionToMove(nine))
             {
-                case 'd'://если 0 сверху цели
+                case Cell.Direction.Down://если 0 сверху цели
                     map.MoveGroup17(zero);
                     break;
-                case 'l'://если 0 справа от цели
+                case Cell.Direction.Left://если 0 справа от цели
                     map.MoveUp(zero);
                     map.MoveLeft(zero);
-                    goto case 'd';
-                case 'u'://если 0 снизу цели
+                    goto case Cell.Direction.Down;
+                case Cell.Direction.Up://если 0 снизу цели
                     map.MoveRight(zero);
                     map.MoveUp(zero);
-                    goto case 'l';
+                    goto case Cell.Direction.Left;
                 default:
                     break;
             }
@@ -420,18 +420,18 @@ namespace Lab3
             var zero = map.GetNum(0);
             while (!zero.IsNear(nine))
             {
-                switch (zero.GetDirection(nine, true))
+                switch (zero.GetDirectionToMove(nine))
                 {
-                    case 'd'://если 0 сверху цели
+                    case Cell.Direction.Down://если 0 сверху цели
                         map.MoveDown(zero);
                         break;
-                    case 'l'://если 0 справа от цели
+                    case Cell.Direction.Left://если 0 справа от цели
                         map.MoveLeft(zero);
                         break;
-                    case 'u'://если 0 снизу цели
+                    case Cell.Direction.Up://если 0 снизу цели
                         map.MoveUp(zero);
                         break;
-                    case 'r'://если 0 слева от цели
+                    case Cell.Direction.Right://если 0 слева от цели
                         map.MoveRight(zero);
                         break;
                     default:
@@ -453,35 +453,35 @@ namespace Lab3
             var zero = map.GetNum(0);
             while (!zero.IsNear(four))
             {
-                switch (zero.GetDirection(four, true))
+                switch (zero.GetDirectionToMove(four))
                 {
-                    case 'd'://если 0 сверху цели
+                    case Cell.Direction.Down://если 0 сверху цели
                         map.MoveDown(zero);
                         break;
-                    case 'l'://если 0 справа от цели
+                    case Cell.Direction.Left://если 0 справа от цели
                         map.MoveLeft(zero);
                         break;
-                    case 'u'://если 0 снизу цели
+                    case Cell.Direction.Up://если 0 снизу цели
                         map.MoveUp(zero);
                         break;
-                    case 'r'://если 0 слева от цели
+                    case Cell.Direction.Right://если 0 слева от цели
                         map.MoveRight(zero);
                         break;
                     default:
                         break;
                 }
             }
-            switch (zero.GetDirection(four))
+            switch (zero.GetDirectionToMove(four))
             {
-                case 'l'://если 0 справа от цели
+                case Cell.Direction.Left://если 0 справа от цели
                     map.MoveDown(zero);
                     map.MoveLeft(zero);
-                    goto case 'u';
-                case 'u'://если 0 снизу цели
+                    goto case Cell.Direction.Up;
+                case Cell.Direction.Up://если 0 снизу цели
                     map.MoveLeft(zero);
                     map.MoveUp(zero);
-                    goto case 'r';
-                case 'r'://если 0 слева от цели
+                    goto case Cell.Direction.Right;
+                case Cell.Direction.Right://если 0 слева от цели
                     map.MoveLeft(zero);
                     map.MoveUp(zero);
                     map.MoveRight(zero);
@@ -498,478 +498,144 @@ namespace Lab3
                     break;
             }
         }
-        private void PlaceNum(Cell actual)
+        private void PlaceNum(Cell target)
         {
             var zero = map.GetNum(0);
-            actual.CheckPlace();
-            if (actual.Placed)
+            target.CheckPlace();
+            if (target.Placed)
             {
                 return;
             }
-            while (!zero.IsNear(actual))
+            while (!target.Placed)//двигаем пока не поставим на своё место
             {
-                switch (zero.GetDirection(actual, true))
+                map.MoveToNeighbourhood(target);//пока не будем рядом с целью
+                Cell.Direction destination_side = target.GetDirectionToMove();
+                /*
+                 определяем, в каком направлении двигаться
+                приоритет: лево-право, вверх-вниз.
+                определяем кратчайший для передвижения с учётом уже размещённых
+                 */
+                switch (zero.GetDirection(target))//определяем, с какой стороны граничит с целью 0
                 {
-                    case 'd'://если 0 сверху цели
-                        map.MoveDown(zero);
+                    case Cell.Direction.Up://0 снизу
+                        switch (destination_side)//определяем в каком направлении мы хотели бы передвинуть целевую клетку
+                        {
+                            case Cell.Direction.Up://если надо вверх
+                                map.MoveRight(zero);
+                                map.MoveUp(zero);
+                                break;
+                            case Cell.Direction.Right://надо вправо
+                                break;
+                            case Cell.Direction.Down://надо вниз
+                                break;
+                            case Cell.Direction.Left://надо влево
+                                map.MoveRight(zero);
+                                map.MoveUp(zero);
+                                break;
+                            default:
+                                break;
+                        }
                         break;
-                    case 'l'://если 0 справа от цели
-                        map.MoveLeft(zero);
+                    case Cell.Direction.Right://0 слева
+                        switch (destination_side)//определяем в каком направлении мы хотели бы передвинуть целевую клетку
+                        {
+                            case Cell.Direction.Up://если надо вверх
+                                if (zero.CanUp())
+                                {
+                                    map.MoveUp(zero);
+                                    map.MoveRight(zero);
+                                }
+                                else
+                                {
+                                    map.MoveDown(zero);
+                                    map.MoveRight(zero);
+                                }
+                                break;
+                            case Cell.Direction.Right://надо вправо
+                                if (zero.CanUp())
+                                {
+                                    map.MoveUp(zero);
+                                    map.MoveRight(zero);
+                                }
+                                else
+                                {
+                                    map.MoveDown(zero);
+                                    map.MoveRight(zero);
+                                }
+                                break;
+                            case Cell.Direction.Down://надо вниз
+                                break;
+                            case Cell.Direction.Left://надо влево
+                                map.MoveRight(zero);
+                                break;
+                            default:
+                                break;
+                        }
                         break;
-                    case 'u'://если 0 снизу цели
-                        map.MoveUp(zero);
+                    case Cell.Direction.Down://0 сверху
+                        switch (destination_side)//определяем в каком направлении мы хотели бы передвинуть целевую клетку
+                        {
+                            case Cell.Direction.Up://если надо вверх
+                                map.MoveDown(zero);
+                                break;
+                            case Cell.Direction.Right://надо вправо
+                                map.MoveRight(zero);
+                                map.MoveDown(zero);
+                                break;
+                            case Cell.Direction.Down://надо вниз
+                                break;
+                            case Cell.Direction.Left://надо влево
+                                if (zero.CanLeft() && target.CanLeft())//и слева не установленная клетка и целевая может идти влево
+                                {
+                                    map.MoveLeft(zero);
+                                    map.MoveDown(zero);
+                                }
+                                else
+                                {
+                                    map.MoveRight(zero);
+                                    map.MoveDown(zero);
+                                }
+                                break;
+                            default:
+                                break;
+                        }
                         break;
-                    case 'r'://если 0 слева от цели
-                        map.MoveRight(zero);
+                    case Cell.Direction.Left://0 справа
+                        switch (destination_side)//определяем в каком направлении мы хотели бы передвинуть целевую клетку
+                        {
+                            case Cell.Direction.Up://если надо вверх
+                                map.MoveUp(zero);
+                                map.MoveLeft(zero);
+                                break;
+                            case Cell.Direction.Right://надо вправо
+                                map.MoveLeft(zero);
+                                break;
+                            case Cell.Direction.Down://надо вниз
+                                break;
+                            case Cell.Direction.Left://надо влево
+                                if (zero.CanDown())
+                                {
+                                    map.MoveDown(zero);
+                                    map.MoveLeft(zero);
+                                }
+                                else
+                                {
+                                    map.MoveUp(zero);
+                                    map.MoveLeft(zero);
+                                }
+                                break;
+                            default:
+                                break;
+                        }
                         break;
                     default:
                         break;
                 }
-            }
-            while (!actual.Placed)//двигаем пока не поставим на своё место
-            {
-                if (actual.ColIsPlaced() && actual.NeedUp())//если в своём столбце и нужно поднимать
-                {
-                    switch (zero.GetDirection(actual, true))//определяем с какой стороны от целевой клетки 0
-                    {
-                        case 'd'://если 0 сверху цели
-                            switch (actual.Row - actual.TargRow)//определяем число разделяющих рядов
-                            {
-                                case 1:
-                                    map.MoveDown(zero);
-                                    break;
-                                case 2:
-                                    map.MoveDown(zero);
-                                    if (actual.Col != 3)
-                                    {
-                                        map.MoveGroup1(zero);
-                                    }
-                                    else
-                                    {
-                                        map.MoveGroup2(zero);
-                                    }
-                                    break;
-                                case 3:
-                                    map.MoveDown(zero);
-                                    if (actual.Col != 3)
-                                    {
-                                        map.MoveGroup1(zero);
-                                        map.MoveGroup1(zero);
-                                    }
-                                    else
-                                    {
-                                        map.MoveGroup2(zero);
-                                        map.MoveGroup2(zero);
-                                    }
-                                    break;
-                                default:
-                                    break;
-                            }
-                            break;
-                        case 'l'://если 0 справа от цели
-                            switch (actual.Row - actual.TargRow)//определяем число разделяющих рядов
-                            {
-                                case 1:
-                                    map.MoveGroup3(zero);
-                                    break;
-                                case 2:
-                                    map.MoveGroup3(zero);
-                                    map.MoveGroup1(zero);
-                                    break;
-                                case 3:
-                                    map.MoveGroup3(zero);
-                                    map.MoveGroup1(zero);
-                                    map.MoveGroup1(zero);
-                                    break;
-                                default:
-                                    break;
-                            }
-                            break;
+                /*
+                 
+                 */
 
-                        case 'u'://если 0 снизу цели
-                            if (actual.Col != 3)
-                            {
-                                map.MoveRight(zero);
-                                map.MoveUp(zero);
-                            }
-                            else
-                            {
-                                map.MoveLeft(zero);
-                                map.MoveUp(zero);
-                            }
-                            break;
-                        case 'r'://если 0 слева от цели
-                            if (actual.Col != 3 && actual.Row != 3)
-                            {
-                                map.MoveDown(zero);
-                                map.MoveRight(zero);
-                                map.MoveRight(zero);
-                                map.MoveUp(zero);
-                            }
-                            else
-                            {
-                                map.MoveUp(zero);
-                                map.MoveRight(zero);
-                                map.MoveDown(zero);
-                            }
-                            break;
-                        default:
-                            break;
-                    }
-                }
-                else if (actual.NeedLeft())
-                {
-                    switch (zero.GetDirection(actual, true))
-                    {
-                        case 'd'://если 0 сверху цели
-                            switch (actual.Col - actual.TargCol)//определяем число разделяющих стоолбцов
-                            {
-                                case 1:
-                                    if (actual.Col == 3 || actual.Row == 3 || (map.GetNum(13).Placed && actual.Value == 5))
-                                    {
-                                        map.MoveLeft(zero);
-                                        map.MoveDown(zero);
-                                        map.MoveRight(zero);
-                                    }
-                                    else
-                                    {
-                                        map.MoveGroup4(zero);
-                                    }
-                                    break;
-                                case 2:
-                                    if ((actual.Col != 3 && actual.Row != 3) && (actual.Value != 5))
-                                    {
-                                        map.MoveGroup4(zero);
-                                        map.MoveGroup5(zero);
-                                    }
-                                    else if (actual.Value == 5)
-                                    {
-                                        map.MoveGroup8(zero);
-                                        map.MoveGroup3(zero);
-                                        map.MoveGroup18(zero);
 
-                                    }
-                                    else
-                                    {
-                                        map.MoveGroup8(zero);
-                                        map.MoveGroup6(zero);
-                                    }
-                                    break;
-                                case 3:
-                                    if (actual.Row != 3)
-                                    {
-                                        map.MoveGroup8(zero);
-                                        map.MoveGroup5(zero);
-                                        map.MoveGroup5(zero);
-                                    }
-                                    else
-                                    {
-                                        map.MoveGroup8(zero);
-                                        map.MoveGroup9(zero);
-                                        map.MoveGroup9(zero);
-                                    }
-                                    break;
-                                default:
-                                    break;
-                            }
-                            break;
-                        case 'l'://если 0 справа от цели
-                            switch (actual.Col - actual.TargCol)//определяем число разделяющих стоолбцов
-                            {
-                                case 1:
-                                    if (actual.Row != 3)
-                                    {
-                                        map.MoveGroup5(zero);
-                                    }
-                                    else
-                                    {
-                                        map.MoveGroup9(zero);
-                                    }
-                                    break;
-                                case 2:
-                                    if (actual.Row != 3)
-                                    {
-                                        map.MoveGroup5(zero);
-                                        map.MoveGroup5(zero);
-                                    }
-                                    else
-                                    {
-                                        map.MoveGroup9(zero);
-                                        map.MoveGroup9(zero);
-                                    }
-                                    break;
-
-                                default:
-                                    break;
-                            }
-                            break;
-                        case 'u'://если 0 снизу цели
-                            switch (actual.Col - actual.TargCol)//определяем число разделяющих стоолбцов
-                            {
-                                case 1:
-                                    map.MoveGroup7(zero);
-                                    break;
-                                case 2:
-                                    map.MoveGroup7(zero);
-                                    map.MoveGroup5(zero);
-                                    break;
-                                case 3:
-                                    map.MoveGroup7(zero);
-                                    map.MoveGroup5(zero);
-                                    map.MoveGroup5(zero);
-                                    break;
-                                default:
-                                    break;
-                            }
-                            break;
-                        case 'r'://если 0 слева от цели
-                            switch (actual.Col - actual.TargCol)//определяем число разделяющих стоолбцов
-                            {
-                                case 1:
-                                    map.MoveRight(zero);
-                                    break;
-                                case 2:
-                                    if ((actual.Row != 3 && !map.GetNum(13).Placed) || (actual.Row == 1 && (actual.Value == 9 || actual.Value == 5 || actual.Value == 6 || actual.Value == 10)))
-                                    {
-                                        map.MoveRight(zero);
-                                        map.MoveGroup5(zero);
-                                    }
-                                    else if (map.GetNum(13).Placed && actual.Value == 5 && actual.Row == 3)
-                                    {
-                                        map.MoveRight(zero);
-                                        map.MoveGroup3(zero);
-                                        map.MoveRight(zero);
-                                        map.MoveUp(zero);
-                                        map.MoveUp(zero);
-                                        map.MoveLeft(zero);
-                                        map.MoveLeft(zero);
-                                        map.MoveDown(zero);
-                                        map.MoveRight(zero);
-                                        //map.MoveGroup9(zero);
-                                        //map.MoveGroup18(zero);
-                                    }
-                                    else
-                                    {
-                                        map.MoveRight(zero);
-                                        map.MoveGroup9(zero);
-                                    }
-                                    break;
-                                case 3:
-                                    if (actual.Row != 3)
-                                    {
-                                        map.MoveRight(zero);
-                                        map.MoveGroup5(zero);
-                                        map.MoveGroup5(zero);
-                                    }
-                                    else if (map.GetNum(13).Placed && actual.Value == 5)
-                                    {
-                                        map.MoveRight(zero);
-                                        map.MoveGroup9(zero);
-                                        map.MoveGroup3(zero);
-                                        map.MoveGroup18(zero);
-                                    }
-                                    else
-                                    {
-                                        map.MoveRight(zero);
-                                        map.MoveGroup9(zero);
-                                        map.MoveGroup9(zero);
-                                    }
-                                    break;
-                                default:
-                                    break;
-                            }
-                            break;
-                        default:
-                            break;
-                    }
-                }
-                else if (actual.NeedRight())
-                {
-                    switch (zero.GetDirection(actual, true))
-                    {
-                        case 'd'://если 0 сверху цели
-                            switch (actual.TargCol - actual.Col)//определяем число разделяющих стоолбцов
-                            {
-                                case 1:
-                                    map.MoveGroup10(zero);
-                                    break;
-                                case 2:
-                                    map.MoveGroup10(zero);
-                                    map.MoveGroup11(zero);
-                                    break;
-                                case 3:
-                                    map.MoveGroup10(zero);
-                                    map.MoveGroup11(zero);
-                                    map.MoveGroup11(zero);
-                                    break;
-                                default:
-                                    break;
-                            }
-                            break;
-                        case 'l'://если 0 справа от цели
-                            switch (actual.TargCol - actual.Col)//определяем число разделяющих стоолбцов
-                            {
-                                case 1:
-                                    map.MoveLeft(zero);
-                                    break;
-                                case 2:
-                                    if (actual.Row != 3)
-                                    {
-                                        map.MoveLeft(zero);
-                                        map.MoveGroup12(zero);
-                                    }
-                                    else
-                                    {
-                                        map.MoveLeft(zero);
-                                        map.MoveGroup11(zero);
-                                    }
-                                    break;
-                                case 3:
-                                    if (actual.Row != 3)
-                                    {
-                                        map.MoveLeft(zero);
-                                        map.MoveGroup12(zero);
-                                        map.MoveGroup12(zero);
-                                    }
-                                    else
-                                    {
-                                        map.MoveLeft(zero);
-                                        map.MoveGroup11(zero); ;
-                                        map.MoveGroup11(zero); ;
-
-                                    }
-                                    break;
-                                default:
-                                    break;
-                            }
-                            break;
-
-                        case 'u'://если 0 снизу цели
-                            switch (actual.TargCol - actual.Col)//определяем число разделяющих стоолбцов
-                            {
-                                case 1:
-                                    map.MoveGroup13(zero);
-                                    break;
-                                case 2:
-                                    map.MoveGroup13(zero);
-                                    map.MoveGroup12(zero);
-                                    break;
-                                case 3:
-                                    map.MoveGroup13(zero);
-                                    map.MoveGroup12(zero);
-                                    map.MoveGroup12(zero);
-                                    break;
-                                default:
-                                    break;
-                            }
-                            break;
-                        case 'r'://если 0 слева от цели
-                            switch (actual.TargCol - actual.Col)//определяем число разделяющих стоолбцов
-                            {
-                                case 1:
-                                    if (actual.Row != 3)
-                                    {
-                                        map.MoveGroup12(zero);
-                                    }
-                                    else
-                                    {
-                                        map.MoveGroup13(zero);
-                                    }
-                                    break;
-                                case 2:
-                                    if (actual.Row != 3)
-                                    {
-                                        map.MoveGroup12(zero);
-                                        map.MoveGroup12(zero);
-                                    }
-                                    else
-                                    {
-                                        map.MoveGroup11(zero);
-                                        map.MoveGroup11(zero);
-                                    }
-                                    break;
-                                default:
-                                    break;
-                            }
-                            break;
-                        default:
-                            break;
-                    }
-                }
-                else if (actual.ColIsPlaced() && actual.NeedDown())
-                {
-                    switch (zero.GetDirection(actual, true))
-                    {
-                        case 'd'://если 0 сверху цели
-                            switch (actual.TargRow - actual.Row)//определяем число разделяющих стоолбцов
-                            {
-                                case 1:
-                                    map.MoveGroup14(zero);
-                                    break;
-                                case 2:
-                                    map.MoveGroup14(zero);
-                                    map.MoveGroup14(zero);
-                                    break;
-                                default:
-                                    break;
-                            }
-                            break;
-                        case 'l'://если 0 справа от цели
-                            switch (actual.TargRow - actual.Row)//определяем число разделяющих стоолбцов
-                            {
-                                case 1:
-                                    map.MoveGroup15(zero);
-                                    break;
-                                case 2:
-                                    map.MoveGroup15(zero);
-                                    map.MoveGroup14(zero);
-                                    break;
-                                default:
-                                    break;
-                            }
-                            break;
-
-                        case 'u'://если 0 снизу цели
-                            switch (actual.TargRow - actual.Row)//определяем число разделяющих стоолбцов
-                            {
-                                case 1:
-                                    map.MoveUp(zero);
-                                    break;
-                                case 2:
-                                    if (actual.Col != 3)
-                                    {
-                                        map.MoveUp(zero);
-                                        map.MoveGroup14(zero);
-                                    }
-                                    else
-                                    {
-                                        map.MoveUp(zero);
-                                        map.MoveGroup15(zero);
-                                    }
-                                    break;
-                                default:
-                                    break;
-                            }
-                            break;
-                        case 'r'://если 0 слева от цели
-                            switch (actual.TargRow - actual.Row)//определяем число разделяющих стоолбцов
-                            {
-                                case 1:
-                                    map.MoveGroup16(zero);
-                                    break;
-                                case 2:
-                                    map.MoveGroup16(zero);
-                                    map.MoveGroup15(zero);
-                                    break;
-                                default:
-                                    break;
-                            }
-                            break;
-                        default:
-                            break;
-                    }
-                }
-                actual.CheckPlace();
             }
         }
     }
