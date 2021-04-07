@@ -20,7 +20,6 @@ namespace Lab4
             var peek = stack.Peek();
             stack.Pop();
             stack.Pop();
-            stack.Pop();
             #endregion
 #endif
 #if deque
