@@ -22,7 +22,7 @@ namespace Lab4
                 Head = Head.Next;
                 Count--;
                 return val;
-            }
+        }
             throw new InvalidOperationException("Stack empty.");
         }
         public bool IsEmpty()
