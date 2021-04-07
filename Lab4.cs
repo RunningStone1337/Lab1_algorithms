@@ -3,6 +3,7 @@
 
 using System;
 using System.Diagnostics;
+using System.Collections;
 
 namespace Lab4
 {
@@ -24,13 +25,16 @@ namespace Lab4
 #endif
 #if deque
             #region Deque
-            MyDequeqe<int> deque = new MyDequeqe<int>();
+            MyDeque<int> deque = new MyDeque<int>();
             deque.Enqueue(0);
-            deque.Enqueue(3);
-            var dpeek = deque.Dequeue();
-            deque.Pop();
-            deque.Pop();
-            deque.Pop();
+            deque.Enqueue(1);
+            deque.Enqueue(2);
+            deque.Dequeue(-1);
+            var first = deque.RemoveFirst();
+            var last = deque.RemoveLast();
+            var head = deque.PopHead();
+            var tail = deque.PopTail();
+
             #endregion
 #endif
         }
