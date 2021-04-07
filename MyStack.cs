@@ -6,34 +6,60 @@ namespace Lab4
 {
     class MyStack<T>
     {
+        Node<T> Head { get; set; }
         public int Count { get; private set; }
+
         public MyStack()
         {
             Count = 0;
+            Head = null;
         }
-        public int Pop()
+        public T Pop()
         {
-            return 0;
+            if (Count!=0)
+            {
+                var val = Peek();
+                Head = Head.Next;
+                Count--;
+                return val;
+            }
+            throw new InvalidOperationException("Stack empty.");
         }
-        public void Push()
+        public bool IsEmpty()
         {
-
+            if (Count==0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
-        private void Remove()
+        public void Push(T value)
         {
-
+            Node<T> newbie = new Node<T>(value);
+            Count++;
+            newbie.Next = Head;
+            Head = newbie;
         }
-        public void Peek()
+        public T Peek()
         {
-
+            return Head.Value;
         }
-        private class Node
+        internal class Node<T>
         {
-            public int Value { get; private set; }
+            internal T Value { get; set; }
+            internal Node<T> Next { get; set; }
 
             private Node()
             {
-
+                Next = null;
+            }
+            internal Node(T val)
+            {
+                Value = val;
+                Next = null;
             }
         }
     }
