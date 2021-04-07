@@ -3,6 +3,7 @@ using System.Diagnostics;
 using static Lab2.Lab2;
 using static Lab2.Problems;
 using static Lab3.Lab3;
+using static Lab4.Lab4;
 namespace Lab1
 {
     class Lab1
@@ -10,7 +11,7 @@ namespace Lab1
         static void Main(string[] args)
         {
             Console.WriteLine("Введите номер лабораторной работы:\n1. Алгоритмы сортировки\n2. Методы поиска, хеширование и ферзи\n" +
-                "3. Поиск подстроки в строке\n4. Дополнительные задания");
+                "3. Поиск подстроки в строке\n4. Реализация стека/дека\n5. [ДАННЫЕ УДАЛЕНЫ]\n6. Дополнительные задания");
             int num = int.Parse(Console.ReadLine());
             switch (num)
             {
@@ -24,6 +25,12 @@ namespace Lab1
                     Run3Lab();
                     break;
                 case 4:
+                    Run4Lab();
+                    break;
+                case 5:
+                    //Run5Lab();
+                    break;
+                case 6:
                     RunProblems();
                     break;
                 default:

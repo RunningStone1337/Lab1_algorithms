@@ -6,7 +6,7 @@ namespace Lab3
     class Field
     {
         internal static long counter = 0;
-        internal static int delay = 70;
+        internal static int delay = 300;
         internal static List<int> movelist;
         Cell[,] map = new Cell[4, 4];
         public Field(int?[] arr)
