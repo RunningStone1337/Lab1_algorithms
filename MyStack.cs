@@ -4,10 +4,10 @@ using System.Text;
 
 namespace Lab4
 {
-    class MyStack<T>
+    public class MyStack<T>
     {
         Node<T> Head { get; set; }
-        public int Count { get; private set; }
+        public int Count { get; protected set; }
 
         public MyStack()
         {
@@ -25,7 +25,7 @@ namespace Lab4
         }
             throw new InvalidOperationException("Stack empty.");
         }
-        public bool IsEmpty()
+        virtual public bool IsEmpty()
         {
             if (Count==0)
             {
@@ -52,10 +52,6 @@ namespace Lab4
             internal T Value { get; set; }
             internal Node<T> Next { get; set; }
 
-            private Node()
-            {
-                Next = null;
-            }
             internal Node(T val)
             {
                 Value = val;

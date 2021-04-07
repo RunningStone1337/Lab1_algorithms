@@ -24,7 +24,13 @@ namespace Lab4
 #endif
 #if deque
             #region Deque
-
+            MyDequeqe<int> deque = new MyDequeqe<int>();
+            deque.Enqueue(0);
+            deque.Enqueue(3);
+            var dpeek = deque.Dequeue();
+            deque.Pop();
+            deque.Pop();
+            deque.Pop();
             #endregion
 #endif
         }
