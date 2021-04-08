@@ -1,10 +1,11 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 
 namespace Lab4
 {
-    public class MyDeque<T>
+    public class MyDeque<T>:IEnumerable<T>
     {
 
         public int Count { get; private set; }
@@ -45,14 +46,22 @@ namespace Lab4
         /// <returns></returns>
         public T RemoveFirst()
         {
-            if (Head!=null)
+            if (Head != null)
             {
                 var val = Head.Value;
                 var newhead = Head.Right;
                 Head.Right = null;
-                newhead.Left = null;
+                Head.Left = null;
+                if (newhead != null)
+                {
+                    newhead.Left = null;
+                }
                 Head = newhead;
                 Count--;
+                if (Count<2)
+                {
+                    Tail = Head;
+                }
                 return val;
             }
             else throw new InvalidOperationException("Dequeue empty.");
@@ -68,9 +77,16 @@ namespace Lab4
                 var val = Tail.Value;
                 var newtail = Tail.Left;
                 Tail.Left = null;
-                newtail.Right = null;
+                if (newtail != null)
+                {
+                    newtail.Right = null;
+                }
                 Tail = newtail;
                 Count--;
+                if (Count<2)
+                {
+                    Head = Tail;
+                }
                 return val;
             }
             else throw new InvalidOperationException("Dequeue empty.");
@@ -139,6 +155,22 @@ namespace Lab4
             }
         }
 
+        public IEnumerator<T> GetEnumerator()
+        {
+            var temp = Head;
+            while (temp.HasNext())
+            {
+                yield return temp.Value;
+                temp = temp.Right;
+            }
+            yield return temp.Value;
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
+
         private protected class DoubleNode<T>
         {
             internal T Value { get; set; }
@@ -149,6 +181,15 @@ namespace Lab4
                 Value = val;
                 Right = null;
                 Left = null;
+            }
+
+            protected internal bool HasNext()
+            {
+                if (Right!=null)
+                {
+                    return true;
+                }
+                return false;
             }
         }
     }
