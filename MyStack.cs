@@ -1,10 +1,11 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 
 namespace Lab4
 {
-    public class MyStack<T>
+    public class MyStack<T>:IEnumerable<T>
     {
         Node<T> Head { get; set; }
         public int Count { get; protected set; }
@@ -47,15 +48,41 @@ namespace Lab4
         {
             return Head.Value;
         }
+
+        public IEnumerator<T> GetEnumerator()
+        {
+            var temp = Head;
+            while (temp.HasNext())
+            {
+                yield return temp.Value;
+                temp = temp.Next;
+            }
+            yield return temp.Value;
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
+
         internal class Node<T>
         {
-            internal T Value { get; set; }
-            internal Node<T> Next { get; set; }
+            protected internal T Value { get; set; }
+            protected internal Node<T> Next { get; set; }
 
-            internal Node(T val)
+            protected internal Node(T val)
             {
                 Value = val;
                 Next = null;
+            }
+
+            protected internal bool HasNext()
+            {
+                if (Next!=null)
+                {
+                    return true;
+                }
+                return false;
             }
         }
     }
