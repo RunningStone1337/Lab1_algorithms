@@ -98,7 +98,10 @@ namespace Lab4
             #region Task6
 
             #endregion
-
+            filename = "Task6.txt";
+            string[] strings3;
+            strings3 = File.ReadAllLines(dir + Path.DirectorySeparatorChar + filename);
+            Task6(strings3);
             #region Task7
 
             #endregion
@@ -263,6 +266,49 @@ namespace Lab4
                 return true;
             }
             return false;
+        }
+        /*
+         * Дан файл из символов. Используя стек, за один просмотр файла напечатать
+         * сначала все цифры, затем все буквы, и, наконец, все остальные символы, сохраняя
+         * исходный порядок в каждой группе символов.
+         */
+        public static void Task6(string[] text)
+        {
+            var stack = new MyStack<char>();
+            for (int i = text.Length - 1; i >= 0; i--)
+            {
+                for (int j = text[i].Length - 1; j >= 0; j--)
+                {
+                    if (!char.IsDigit(text[i][j])&&!char.IsLetter(text[i][j]))
+                    {
+                        stack.Push(text[i][j]);
+                    }
+                }
+            }
+            for (int i = text.Length - 1; i >= 0; i--)
+            {
+                for (int j = text[i].Length - 1; j >= 0; j--)
+                {
+                    if (char.IsLetter(text[i][j]))
+                    {
+                        stack.Push(text[i][j]);
+                    }
+                }
+            }
+            for (int i = text.Length - 1; i >= 0; i--)
+            {
+                for (int j = text[i].Length - 1; j >= 0; j--)
+                {
+                    if (char.IsDigit(text[i][j]))
+                    {
+                        stack.Push(text[i][j]);
+                    }
+                }
+            }
+            foreach (var item in stack)
+            {
+                Console.Write(item);
+            }
         }
     }
 }
