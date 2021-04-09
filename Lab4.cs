@@ -44,6 +44,8 @@ namespace Lab4
 #endif
             #region Tasks
             #region Task1
+            Console.WriteLine("Task 1");
+            Console.WriteLine();
             MyDeque<string> deq1 = new MyDeque<string>();
             using (StreamReader reader = new StreamReader(dir + Path.DirectorySeparatorChar + filename))
             {
@@ -60,17 +62,20 @@ namespace Lab4
             }
             #endregion
             #region Task2
-
+            Console.WriteLine("Task 2");
+            Console.WriteLine();
             #endregion
             #region Task3
+            Console.WriteLine("Task 3");
+            Console.WriteLine();
             filename = "StackData.txt";
-            Plate plate6 = new Plate(6);
-            Plate plate5 = new Plate(5);
+            Plate plate6 = new Plate(9);
+            Plate plate5 = new Plate(7);
             Plate plate4 = new Plate(4);
-            Plate plate3 = new Plate(3);
+            Plate plate3 = new Plate(4);
             Plate plate2 = new Plate(2);
             Plate plate1 = new Plate(1);
-            Plate[] plates = new Plate[] { plate5, plate4, plate3, plate2, plate1 };
+            Plate[] plates = new Plate[] { plate6, plate5, plate4, plate3, plate2, plate1 };
             BinaryFormatter bf = new BinaryFormatter();
             using (FileStream fs = new FileStream(dir + Path.DirectorySeparatorChar + filename, FileMode.OpenOrCreate))
             {
@@ -81,41 +86,71 @@ namespace Lab4
                 plates = bf.Deserialize(fs) as Plate[];
             }
             var t3res = Task3(plates);
+            foreach (var item in t3res)
+            {
+                for (int i = 0; i < t3res.PopTail().Size- item.Size; i++)
+                {
+                    Console.Write(" ");
+                }
+                Console.WriteLine(item.Visual);
+            }
             #endregion
             #region Task4
+            Console.WriteLine("Task 4");
+            Console.WriteLine();
             filename = "Task4.txt";
             string[] strings;
             strings = File.ReadAllLines(dir + Path.DirectorySeparatorChar + filename);
             var t4res = Task4(strings);
+            Console.WriteLine("Баланс круглых скобок выполнен - "+ t4res);
             #endregion
             #region Task5
 
             #endregion
+            Console.WriteLine("Task 5");
+            Console.WriteLine();
             filename = "Task5.txt";
             string[] strings2;
             strings2 = File.ReadAllLines(dir + Path.DirectorySeparatorChar + filename);
             var t5res = Task5(strings2);
+            Console.WriteLine("Баланс квадратных скобок выполнен - " + t5res);
             #region Task6
 
             #endregion
+            Console.WriteLine("Task 6");
+            Console.WriteLine();
             filename = "Task6.txt";
             string[] strings3;
             strings3 = File.ReadAllLines(dir + Path.DirectorySeparatorChar + filename);
             Task6(strings3);
+            Console.WriteLine();
+
             #region Task7
 
             #endregion
-            #region Task8
+            Console.WriteLine("Task 7");
+            Console.WriteLine();
+            filename = "Task7.txt";
+            string[] strings4;
+            strings4 = File.ReadAllLines(dir + Path.DirectorySeparatorChar + filename);
+            Task7(strings4);
+            Console.WriteLine();
 
+            #region Task8
+            Console.WriteLine("Task 8");
+            Console.WriteLine();
             #endregion
             #region Task9
-
+            Console.WriteLine("Task 9");
+            Console.WriteLine();
             #endregion
             #region Task10
-
+            Console.WriteLine("Task 10");
+            Console.WriteLine();
             #endregion
             #region Task11
-
+            Console.WriteLine("Task 11");
+            Console.WriteLine();
             #endregion
             #endregion
         }
@@ -279,7 +314,7 @@ namespace Lab4
             {
                 for (int j = text[i].Length - 1; j >= 0; j--)
                 {
-                    if (!char.IsDigit(text[i][j])&&!char.IsLetter(text[i][j]))
+                    if (!char.IsDigit(text[i][j]) && !char.IsLetter(text[i][j]))
                     {
                         stack.Push(text[i][j]);
                     }
@@ -310,5 +345,44 @@ namespace Lab4
                 Console.Write(item);
             }
         }
+        /*
+         Дан файл из целых чисел. Используя дек, за один просмотр файла напечатать
+        сначала все отрицательные числа, затем все положительные числа, сохраняя
+        исходный порядок в каждой группе.
+        */
+        public static void Task7(string[] text)
+        {
+            string str = null;
+            foreach (var st in text)
+            {
+                str += st + ' ';
+            }
+            var strings = str.Trim().Split(' ');
+            var nums = new List<int>();
+            foreach (var st in strings)
+            {
+                nums.Add(int.Parse(st));
+            }
+            var deq = new MyDeque<int>();
+            foreach (var num in nums)
+            {
+                if (num < 0)
+                {
+                    deq.Enqueue(num);
+                }
+            }
+            foreach (var num in nums)
+            {
+                if (num >= 0)
+                {
+                    deq.Enqueue(num);
+                }
+            }
+            foreach (var item in deq)
+            {
+                Console.Write(item + " ");
+            }
+        }
+
     }
 }
