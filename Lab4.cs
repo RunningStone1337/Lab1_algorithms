@@ -2,9 +2,10 @@
 #define deque
 
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
-using System.Collections;
 using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
 
 namespace Lab4
 {
@@ -14,6 +15,12 @@ namespace Lab4
         {
             Random rnd = new Random();
             Stopwatch sw = new Stopwatch();
+            string filename = "Books.txt";
+            string dir = Directory.GetCurrentDirectory();
+            while (!File.Exists(dir + Path.DirectorySeparatorChar + filename))
+            {
+                dir = dir.Substring(0, dir.LastIndexOf('\\'));
+            }
 #if stack
             #region Stack
             MyStack<int> stack = new MyStack<int>();
@@ -38,12 +45,6 @@ namespace Lab4
             #region Tasks
             #region Task1
             MyDeque<string> deq1 = new MyDeque<string>();
-            string filename = "Books.txt";
-            string dir = Directory.GetCurrentDirectory();
-            while (!File.Exists(dir + Path.DirectorySeparatorChar + filename))
-            {
-                dir = dir.Substring(0, dir.LastIndexOf('\\'));
-            }
             using (StreamReader reader = new StreamReader(dir + Path.DirectorySeparatorChar + filename))
             {
                 string line;
@@ -62,7 +63,23 @@ namespace Lab4
 
             #endregion
             #region Task3
-
+            Plate plate6 = new Plate(6);
+            Plate plate5 = new Plate(5);
+            Plate plate4 = new Plate(4);
+            Plate plate3 = new Plate(3);
+            Plate plate2 = new Plate(2);
+            Plate plate1 = new Plate(1);
+            Plate[] plates = new Plate[] { plate5, plate4, plate3, plate2, plate1 };
+            BinaryFormatter bf = new BinaryFormatter();
+            using (FileStream fs = new FileStream(dir + Path.DirectorySeparatorChar + "StackData.txt", FileMode.OpenOrCreate))
+            {
+                bf.Serialize(fs, plates);
+            }
+            using (FileStream fs = new FileStream(dir + Path.DirectorySeparatorChar + "StackData.txt", FileMode.OpenOrCreate))
+            {
+                plates = bf.Deserialize(fs) as Plate[];
+            }
+            var t3res = Task3(plates);
             #endregion
             #region Task4
 
@@ -143,49 +160,33 @@ namespace Lab4
         - диск нельзя помещать на диск меньшего размера;
         - для промежуточного хранения можно использовать стержень В.
         Реализовать алгоритм, используя три стека вместо стержней А, В, С. Информация о дисках хранится в исходном файле.*/
-        public static MyDeque<T> Task3<T>(MyStack<T> input) where T : IComparable<T>
+        public static MyDeque<Plate> Task3(Plate[] input)
         {
-            var res = new MyDeque<T>();
-            var first = new MyStack<T>();
-            var second = new MyStack<T>();
-            var third = new MyStack<T>();
+            var res = new MyDeque<Plate>();
+            var stacks = new MyStack<Plate>[3] { new MyStack<Plate>(), new MyStack<Plate>(), new MyStack<Plate>() };
+            var first = stacks[0];
+            var second = stacks[1];
+            var third = stacks[2];
             foreach (var item in input)
             {
                 first.Push(item);
             }
-            third.Push(first.Pop());
-            while (!first.IsEmpty() || !second.IsEmpty())//пока первые 2 стека не пусты
-            {
-                if (third.IsEmpty())//если 3 пустой
-                {
-                    third.Push(first.Pop());//кладём на третий
-                }
-                else if (second.IsEmpty() )//если 2 пустой
-                {
-                    second.Push(first.Pop());//кладём на второй
-                    while (!second.IsEmpty())
-                    {
-                        second.Push(third.Pop());
-                        third.Push(first.Pop());
-                       
-                        first.Push(second.Pop());
-                        third.Push(second.Pop());
-                    }
-                }
-                else if(first.Peek().CompareTo(third.Peek()) > 0)
-                {
-
-                }
-                while (true)
-                {
-
-                }
-            }
+            PlacePlate(first, third, second, first.Count);
             foreach (var item in third)
             {
                 res.Enqueue(item);
             }
             return res;
+            void PlacePlate(MyStack<Plate> first, MyStack<Plate> third, MyStack<Plate> second, int count)
+            {
+                if (count != 0)
+                {
+                    PlacePlate(first, second, third, count - 1);
+                    third.Push(first.Pop());
+                    PlacePlate(second, third, first, count - 1);
+                }
+            }
         }
+
     }
 }
