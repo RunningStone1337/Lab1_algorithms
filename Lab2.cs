@@ -1,9 +1,9 @@
 ﻿/*#define bin
 #define tree
 #define fib
-#define int*/
-#define hash
-//#define chess
+#define int
+#define hash*/
+#define chess
 using System;
 using System.Diagnostics;
 using System.Collections.Generic;

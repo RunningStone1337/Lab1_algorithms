@@ -146,14 +146,28 @@ namespace Lab4
             #region Task9
             Console.WriteLine("Task 9");
             Console.WriteLine();
+            filename = "Task9.txt";
+            string string6;
+            string6 = File.ReadAllText(dir + Path.DirectorySeparatorChar + filename);
+            Task9(string6);
+            Console.WriteLine();
             #endregion
             #region Task10
             Console.WriteLine("Task 10");
+            Console.WriteLine();
+            filename = "Task10.txt";
+            string string7;
+            string7 = File.ReadAllText(dir + Path.DirectorySeparatorChar + filename);
+            Task10(string7);
             Console.WriteLine();
             #endregion
             #region Task11
             Console.WriteLine("Task 11");
             Console.WriteLine();
+            filename = "Task11.txt";
+            string string8;
+            string8 = File.ReadAllText(dir + Path.DirectorySeparatorChar + filename);
+            Task11(string8);
             #endregion
             #endregion
         }
@@ -407,6 +421,40 @@ namespace Lab4
             {
                 File.AppendAllText(dir + Path.DirectorySeparatorChar + filename, stack.Pop()+"\n");
             }
+        }
+        /*
+         Дан текстовый файл. Используя стек, вычислить значение логического выражения,
+        записанного в текстовом файле в следующей форме:
+        < ЛВ > ::= T | F | (N<ЛВ>) | (<ЛВ>A<ЛВ>) | (<ЛВ>X<ЛВ>) | (<ЛВ>O<ЛВ>),
+        где буквами обозначены логические константы и операции:
+        T – True, F – False, N – Not, A – And, X – Xor, O – Or.
+        */
+        public static void Task9(string input)
+        {
+            
+        }
+        /*
+         * Дан текстовый файл. В текстовом файле записана формула следующего вида:
+         * <Формула> ::= <Цифра> | M(<Формула>,<Формула>) | N(Формула>,<Формула>)
+         * < Цифра > ::= 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9
+         * где буквами обозначены функции:
+         * M – определение максимума, N – определение минимума.
+         * Используя стек, вычислить значение заданного выражения
+         */
+        public static void Task10(string input)
+        {
+
+        }
+        /*
+         *Дан текстовый файл. Используя стек, проверить, является ли содержимое
+         *текстового файла правильной записью формулы вида:
+         *< Формула > ::= < Терм > | < Терм > + < Формула > | < Терм > - < Формула >
+         *< Терм > ::= < Имя > | (< Формула >)
+         *< Имя > ::= x | y | z 
+         */
+        public static void Task11(string input)
+        {
+
         }
     }
 }
