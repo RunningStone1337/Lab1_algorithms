@@ -63,6 +63,7 @@ namespace Lab4
 
             #endregion
             #region Task3
+            filename = "StackData.txt";
             Plate plate6 = new Plate(6);
             Plate plate5 = new Plate(5);
             Plate plate4 = new Plate(4);
@@ -71,18 +72,21 @@ namespace Lab4
             Plate plate1 = new Plate(1);
             Plate[] plates = new Plate[] { plate5, plate4, plate3, plate2, plate1 };
             BinaryFormatter bf = new BinaryFormatter();
-            using (FileStream fs = new FileStream(dir + Path.DirectorySeparatorChar + "StackData.txt", FileMode.OpenOrCreate))
+            using (FileStream fs = new FileStream(dir + Path.DirectorySeparatorChar + filename, FileMode.OpenOrCreate))
             {
                 bf.Serialize(fs, plates);
             }
-            using (FileStream fs = new FileStream(dir + Path.DirectorySeparatorChar + "StackData.txt", FileMode.OpenOrCreate))
+            using (FileStream fs = new FileStream(dir + Path.DirectorySeparatorChar + filename, FileMode.OpenOrCreate))
             {
                 plates = bf.Deserialize(fs) as Plate[];
             }
             var t3res = Task3(plates);
             #endregion
             #region Task4
-
+            filename = "Task4.txt";
+            string[] strings;
+            strings = File.ReadAllLines(dir + Path.DirectorySeparatorChar + filename);
+            var t4res = Task4(strings);
             #endregion
             #region Task5
 
@@ -164,15 +168,12 @@ namespace Lab4
         {
             var res = new MyDeque<Plate>();
             var stacks = new MyStack<Plate>[3] { new MyStack<Plate>(), new MyStack<Plate>(), new MyStack<Plate>() };
-            var first = stacks[0];
-            var second = stacks[1];
-            var third = stacks[2];
             foreach (var item in input)
             {
-                first.Push(item);
+                stacks[0].Push(item);
             }
-            PlacePlate(first, third, second, first.Count);
-            foreach (var item in third)
+            PlacePlate(stacks[0], stacks[2], stacks[1], stacks[0].Count);
+            foreach (var item in stacks[2])
             {
                 res.Enqueue(item);
             }
@@ -186,6 +187,37 @@ namespace Lab4
                     PlacePlate(second, third, first, count - 1);
                 }
             }
+        }
+        /*
+        * Дан текстовый файл с программой на алгоритмическом языке. За один просмотр
+        * файла проверить баланс круглых скобок в тексте, используя стек.
+         */
+        public static bool Task4(string[] text)
+        {
+            var stack = new MyStack<char>();
+            foreach (var str in text)
+            {
+                foreach (var ch in str)
+                {
+                    if (ch == '(')
+                    {
+                        stack.Push(ch);
+                    }
+                    if (ch == ')' && stack.Count != 0)
+                    {
+                        stack.Pop();
+                    }
+                    else if (ch == ')' && stack.Count == 0)
+                    {
+                        return false;
+                    }
+                }
+            }
+            if (stack.IsEmpty())
+            {
+                return true;
+            }
+            return false;
         }
 
     }
