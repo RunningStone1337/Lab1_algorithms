@@ -91,9 +91,14 @@ namespace Lab4
             #region Task5
 
             #endregion
+            filename = "Task5.txt";
+            string[] strings2;
+            strings2 = File.ReadAllLines(dir + Path.DirectorySeparatorChar + filename);
+            var t5res = Task5(strings2);
             #region Task6
 
             #endregion
+
             #region Task7
 
             #endregion
@@ -219,6 +224,45 @@ namespace Lab4
             }
             return false;
         }
+        /*
+         * Дан текстовый файл с программой на алгоритмическом языке. За один просмотр
+         * файла проверить баланс квадратных скобок в тексте, используя дек.
+         */
+        public static bool Task5(string[] text)
+        {
+            var deq = new MyDeque<char>();
+            foreach (var str in text)
+            {
+                foreach (var ch in str)
+                {
+                    if (ch == '[')
+                    {
+                        deq.Dequeue(ch);
+                    }
+                    if (ch == ']')
+                    {
+                        deq.Enqueue(ch);
+                    }
 
+                }
+            }
+            while (deq.Count > 1)
+            {
+                if (deq.PopHead() == '[' && deq.PopTail() == ']')
+                {
+                    deq.RemoveFirst();
+                    deq.RemoveLast();
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            if (deq.IsEmpty())
+            {
+                return true;
+            }
+            return false;
+        }
     }
 }
