@@ -88,7 +88,7 @@ namespace Lab4
             var t3res = Task3(plates);
             foreach (var item in t3res)
             {
-                for (int i = 0; i < t3res.PopTail().Size- item.Size; i++)
+                for (int i = 0; i < t3res.PopTail().Size - item.Size; i++)
                 {
                     Console.Write(" ");
                 }
@@ -102,7 +102,7 @@ namespace Lab4
             string[] strings;
             strings = File.ReadAllLines(dir + Path.DirectorySeparatorChar + filename);
             var t4res = Task4(strings);
-            Console.WriteLine("Баланс круглых скобок выполнен - "+ t4res);
+            Console.WriteLine("Баланс круглых скобок выполнен - " + t4res);
             #endregion
             #region Task5
 
@@ -124,7 +124,6 @@ namespace Lab4
             strings3 = File.ReadAllLines(dir + Path.DirectorySeparatorChar + filename);
             Task6(strings3);
             Console.WriteLine();
-
             #region Task7
 
             #endregion
@@ -135,9 +134,13 @@ namespace Lab4
             strings4 = File.ReadAllLines(dir + Path.DirectorySeparatorChar + filename);
             Task7(strings4);
             Console.WriteLine();
-
             #region Task8
             Console.WriteLine("Task 8");
+            Console.WriteLine();
+            filename = "Task8_source.txt";
+            string[] strings5;
+            strings5 = File.ReadAllLines(dir + Path.DirectorySeparatorChar + filename);
+            Task8(strings5, dir);
             Console.WriteLine();
             #endregion
             #region Task9
@@ -383,6 +386,27 @@ namespace Lab4
                 Console.Write(item + " ");
             }
         }
-
+        /*
+         * Дан текстовый файл. Используя стек, сформировать новый текстовый файл,
+         * содержащий строки исходного файла, записанные в обратном порядке: первая
+         * строка становится последней, вторая – предпоследней и т.д.
+         */
+        public static void Task8(string[] text, string dir)
+        {
+            var stack = new MyStack<string>();
+            var filename = "Task8_output.txt";
+            foreach (var item in text)
+            {
+                stack.Push(item);
+            }
+            if (File.Exists(dir + Path.DirectorySeparatorChar + filename))
+            {
+                File.WriteAllText(dir + Path.DirectorySeparatorChar + filename, "");
+            }
+            while (stack.Count > 0)
+            {
+                File.AppendAllText(dir + Path.DirectorySeparatorChar + filename, stack.Pop()+"\n");
+            }
+        }
     }
 }
