@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Linq;
 
 namespace Lab4
 {
@@ -64,6 +65,29 @@ namespace Lab4
             #region Task2
             Console.WriteLine("Task 2");
             Console.WriteLine();
+
+            filename = "SourceMessage.txt";
+            string path = dir + Path.DirectorySeparatorChar + filename;
+            if (!File.Exists(path))
+            {
+                File.WriteAllText(path, "This message will be crypted!");
+            }
+            var message = File.ReadAllText(path);
+            var key = Task2_keygen(message);
+            filename = "CryptedMessage.txt";
+            path = dir + Path.DirectorySeparatorChar + filename;
+            if (File.Exists(path))
+            {
+                File.Delete(path);
+            }
+            string t2crypt = Task2_crypt(message, key, path);
+            string t2encrypt = Task2_encrypt(t2crypt, key);
+            filename = "SourceMessage.txt";
+            path = dir + Path.DirectorySeparatorChar + filename;
+            Console.WriteLine("Сообщения для шифрования: " + File.ReadAllText(path));
+            Console.WriteLine("Зашифрованное сообщение: " + t2crypt);
+            Console.WriteLine("Расшифрованное сообщение: " + t2encrypt);
+
             #endregion
             #region Task3
             Console.WriteLine("Task 3");
@@ -212,9 +236,60 @@ namespace Lab4
          * расшифровать текст. Известно, что при шифровке каждый символ сообщения
          * заменялся следующим за ним в деке по часовой стрелке через один.
          */
-        public static string Task2(MyDeque<string> input)
+        public static string Task2_crypt(string message, string key, string path_to_save)
         {
-            return null;
+            var myDeq = new MyDeque<char>();
+            var res = "";
+            foreach (var ch in key)
+            {
+                myDeq.Enqueue(ch);
+            }
+            foreach (var ch in message)
+            {
+                while (myDeq.PopHead() != ch)
+                {
+                    myDeq.Enqueue(myDeq.RemoveFirst());
+                }
+                myDeq.Enqueue(myDeq.RemoveFirst());
+                myDeq.Enqueue(myDeq.RemoveFirst());
+                res += myDeq.PopHead();
+                myDeq.Dequeue(myDeq.RemoveLast());
+                myDeq.Dequeue(myDeq.RemoveLast());
+            }
+            File.WriteAllText(path_to_save, res);
+            return res;
+        }
+        public static string Task2_encrypt(string message, string key)
+        {
+            var myDeq = new MyDeque<char>();
+            var res = "";
+            foreach (var ch in key)
+            {
+                myDeq.Enqueue(ch);
+            }
+            foreach (var ch in message)
+            {
+                while (myDeq.PopTail() != ch)
+                {
+                    myDeq.Dequeue(myDeq.RemoveLast());
+                }
+                myDeq.Dequeue(myDeq.RemoveLast());
+                myDeq.Dequeue(myDeq.RemoveLast());
+                res += myDeq.PopTail();
+                myDeq.Enqueue(myDeq.RemoveFirst());
+                myDeq.Enqueue(myDeq.RemoveFirst());
+            }
+            return res;
+        }
+        public static string Task2_keygen(string input)
+        {
+            string str = "";
+            IEnumerable<char> res = input.Distinct();
+            foreach (var item in res)
+            {
+                str += item;
+            }
+            return str;
         }
         /*
          Даны три стержня и n дисков различного размера. Диски можно надевать на
@@ -419,7 +494,7 @@ namespace Lab4
             }
             while (stack.Count > 0)
             {
-                File.AppendAllText(dir + Path.DirectorySeparatorChar + filename, stack.Pop()+"\n");
+                File.AppendAllText(dir + Path.DirectorySeparatorChar + filename, stack.Pop() + "\n");
             }
         }
         /*
@@ -431,7 +506,7 @@ namespace Lab4
         */
         public static void Task9(string input)
         {
-            
+
         }
         /*
          * Дан текстовый файл. В текстовом файле записана формула следующего вида:
