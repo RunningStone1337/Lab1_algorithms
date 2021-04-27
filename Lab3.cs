@@ -251,10 +251,6 @@ namespace Lab3
                     {
                         continue;
                     }
-                    if (arr[j] == 0)
-                    {
-                        continue;
-                    }
                     if (arr[i] > arr[j])
                     {
                         counter++;
