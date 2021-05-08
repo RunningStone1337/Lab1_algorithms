@@ -173,7 +173,7 @@ namespace Lab4
             filename = "Task9.txt";
             string string6;
             string6 = File.ReadAllText(dir + Path.DirectorySeparatorChar + filename);
-            Task9(string6);
+            Console.WriteLine("Значение заданного логического выражения: " + Task9(string6));
             Console.WriteLine();
             #endregion
             #region Task10
@@ -182,7 +182,7 @@ namespace Lab4
             filename = "Task10.txt";
             string string7;
             string7 = File.ReadAllText(dir + Path.DirectorySeparatorChar + filename);
-            Task10(string7);
+            Console.WriteLine("Значение заданного алгебраического выражения: " + Task10(string7));
             Console.WriteLine();
             #endregion
             #region Task11
@@ -191,7 +191,7 @@ namespace Lab4
             filename = "Task11.txt";
             string string8;
             string8 = File.ReadAllText(dir + Path.DirectorySeparatorChar + filename);
-            Task11(string8);
+            //Task11(string8);
             #endregion
             #endregion
         }
@@ -568,188 +568,6 @@ namespace Lab4
             {
                 sout += stack.Pop();
             }
-            while (!IsConstant(sout[sout.Length-1]))
-            {
-                if (IsConstant(sout[0]))
-                {
-                    stack.Push(sout[0]);
-                    sout = sout.Substring(1);
-                }
-                else
-                {
-                    var oper = sout[0];
-                    sout = sout.Substring(1);
-                    switch (oper)
-                    {
-                        case 'A':
-                            sout = AndOper() + sout;
-                            break;
-                        case 'O':
-                            sout = OrOper() + sout;
-
-                            break;
-                        case 'X':
-                            sout = XorOper() + sout;
-
-                            break;
-                        case 'N':
-                            sout = DenyOper() + sout;
-
-                            break;
-                        default:
-                            break;
-                    }
-                }
-            }
-            if (stack.Count!=0)
-            {
-                Console.WriteLine("Некорректный синтаксис выражения.");
-                return false;
-            }
-            bool res = (true&&false)||(!false&&(!false&&true)&&(!(true&&(true^false)||(true&true))));
-            if (sout[0]=='T')
-            {
-                return true;
-            }
-            return false;
-
-            char AndOper()
-            {
-                var first = stack.Pop();
-                var second = stack.Pop();
-                if (first == 'F' || second == 'F')
-                {
-                    return 'F';
-                }
-                return 'T';
-            }
-            char OrOper()
-            {
-                var first = stack.Pop();
-                var second = stack.Pop();
-                if (first == 'F' && second == 'F')
-                {
-                    return 'F';
-                }
-                return 'T';
-            }
-            char XorOper()
-            {
-                var first = stack.Pop();
-                var second = stack.Pop();
-                if (first == 'F' && second == 'F' || second == 'T' && first == 'T')
-                {
-                    return 'F';
-                }
-                return 'T';
-            }
-            char DenyOper()
-            {
-                var first = stack.Pop();
-                if (first == 'F')
-                {
-                    return 'T';
-                }
-                return 'F';
-            }
-            int GetPriority(char c)
-            {
-                switch (c)
-                {
-                    case '(':
-                        return 3;
-                    case 'N':
-                    case 'A':
-                        return 2;
-                    case 'O':
-                    case 'X':
-                        return 1;
-                    default:
-                        break;
-                }
-                return 0;
-            }
-            bool IsConstant(char c)
-            {
-                if (c == 'T' || c == 'F')
-                {
-                    return true;
-                }
-                return false;
-            }
-        }
-        /*
-         * Дан текстовый файл. В текстовом файле записана формула следующего вида:
-         * <Формула> ::= <Цифра> | M(<Формула>,<Формула>) | N(Формула>,<Формула>)
-         * < Цифра > ::= 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9
-         * где буквами обозначены функции:
-         * M – определение максимума, N – определение минимума.
-         * Используя стек, вычислить значение заданного выражения
-         */
-        public static int Task10(string input)
-        {
-            if (!Task4(new string[] { input }))
-            {
-                Console.WriteLine("Некорректный синтаксис выражения.");
-                return -1;
-            }
-            input = input.ToUpper();
-            var stack = new MyStack<char>();
-            var sout = string.Empty;
-            foreach (var c in input)
-            {
-                if (IsConstant(c))
-                {
-                    sout += c;
-                    continue;
-                }
-                else
-                {
-                    switch (c)
-                    {
-                        case '(':
-                            stack.Push(c);
-                            break;
-                        case ')':
-                            while (stack.Peek() != '(')
-                            {
-                                sout += stack.Pop();
-                            }
-                            stack.Pop();
-                            break;
-                        case 'A':
-                        case 'O':
-                        case 'X':
-                        case 'N':
-                            if (stack.IsEmpty())
-                            {
-                                stack.Push(c);
-                            }
-                            else
-                            {
-                                while (stack.Count > 0 && (GetPriority(c) <= stack.Peek()))
-                                {
-                                    if ('(' == stack.Peek())
-                                    {
-                                        break;
-                                    }
-                                    else
-                                    {
-                                        sout += stack.Pop();
-                                    }
-                                }
-                                stack.Push(c);
-                            }
-                            break;
-                        default:
-                            break;
-                    }
-                }
-            }
-            while (!stack.IsEmpty())
-            {
-                sout += stack.Pop();
-            }
             while (!IsConstant(sout[sout.Length - 1]))
             {
                 if (IsConstant(sout[0]))
@@ -861,15 +679,283 @@ namespace Lab4
             }
         }
         /*
+         * Дан текстовый файл. В текстовом файле записана формула следующего вида:
+         * <Формула> ::= <Цифра> | M(<Формула>,<Формула>) | N(Формула>,<Формула>)
+         * < Цифра > ::= 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9
+         * где буквами обозначены функции:
+         * M – определение максимума, N – определение минимума.
+         * Используя стек, вычислить значение заданного выражения
+         */
+        public static int Task10(string input)
+        {
+            if (!Task4(new string[] { input }))
+            {
+                Console.WriteLine("Некорректный синтаксис выражения.");
+                return -1;
+            }
+            input = input.ToUpper();
+            var stack = new MyStack<char>();
+            var sout = string.Empty;
+            foreach (var c in input)
+            {
+                if (char.IsDigit(c))
+                {
+                    sout += c;
+                    continue;
+                }
+                else
+                {
+                    switch (c)
+                    {
+                        case '(':
+                        case ',':
+                        case 'M':
+                        case 'N':
+                            stack.Push(c);
+                            break;
+                        case ')':
+                            if(stack.Peek() != ',')
+                            {
+                                Console.WriteLine("Некорректный синтаксис выражения.");
+                                return -1;
+                            }
+                            stack.Pop();
+                            stack.Pop();
+                            sout += stack.Pop();
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            }
+            while (!stack.IsEmpty())
+            {
+                sout += stack.Pop();
+            }
+            while (!char.IsDigit(sout[sout.Length - 1]))
+            {
+                if (char.IsDigit(sout[0]))
+                {
+                    stack.Push(sout[0]);
+                    sout = sout.Substring(1);
+                }
+                else
+                {
+                    var oper = sout[0];
+                    sout = sout.Substring(1);
+                    switch (oper)
+                    {
+                        case 'M':
+                            sout = Max() + sout;
+                            break;
+                        case 'N':
+                            sout = Min() + sout;
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            }
+            if (stack.Count != 0)
+            {
+                Console.WriteLine("Некорректный синтаксис выражения.");
+                return -1;
+            }
+            int res = Math.Max(Math.Max(7,9),Math.Min(3,7));
+            return Convert.ToInt32(sout[0].ToString());
+            int Max()
+            {
+                int first = Convert.ToInt32(stack.Pop().ToString());
+                int second = Convert.ToInt32(stack.Pop().ToString());
+                return first >= second ? first : second;
+            }
+            int Min()
+            {
+                int first = Convert.ToInt32(stack.Pop().ToString());
+                int second = Convert.ToInt32(stack.Pop().ToString());
+                return first < second ? first : second;
+            }
+        }
+        /*
          *Дан текстовый файл. Используя стек, проверить, является ли содержимое
          *текстового файла правильной записью формулы вида:
          *< Формула > ::= < Терм > | < Терм > + < Формула > | < Терм > - < Формула >
          *< Терм > ::= < Имя > | (< Формула >)
          *< Имя > ::= x | y | z 
          */
-        public static void Task11(string input)
-        {
+        //public static void Task11(string input)
+        //{
+        //    if (!Task4(new string[] { input }))
+        //    {
+        //        Console.WriteLine("Некорректный синтаксис выражения.");
+        //        return false;
+        //    }
+        //    input = input.ToUpper();
+        //    var stack = new MyStack<char>();
+        //    var sout = string.Empty;
+        //    foreach (var c in input)
+        //    {
+        //        if (IsConstant(c))
+        //        {
+        //            sout += c;
+        //            continue;
+        //        }
+        //        else
+        //        {
+        //            switch (c)
+        //            {
+        //                case '(':
+        //                    stack.Push(c);
+        //                    break;
+        //                case ')':
+        //                    while (stack.Peek() != '(')
+        //                    {
+        //                        sout += stack.Pop();
+        //                    }
+        //                    stack.Pop();
+        //                    break;
+        //                case 'A':
+        //                case 'O':
+        //                case 'X':
+        //                case 'N':
+        //                    if (stack.IsEmpty())
+        //                    {
+        //                        stack.Push(c);
+        //                    }
+        //                    else
+        //                    {
+        //                        while (stack.Count > 0 && (GetPriority(c) <= stack.Peek()))
+        //                        {
+        //                            if ('(' == stack.Peek())
+        //                            {
+        //                                break;
+        //                            }
+        //                            else
+        //                            {
+        //                                sout += stack.Pop();
+        //                            }
+        //                        }
+        //                        stack.Push(c);
+        //                    }
+        //                    break;
+        //                default:
+        //                    break;
+        //            }
+        //        }
+        //    }
+        //    while (!stack.IsEmpty())
+        //    {
+        //        sout += stack.Pop();
+        //    }
+        //    while (!IsConstant(sout[sout.Length - 1]))
+        //    {
+        //        if (IsConstant(sout[0]))
+        //        {
+        //            stack.Push(sout[0]);
+        //            sout = sout.Substring(1);
+        //        }
+        //        else
+        //        {
+        //            var oper = sout[0];
+        //            sout = sout.Substring(1);
+        //            switch (oper)
+        //            {
+        //                case 'A':
+        //                    sout = AndOper() + sout;
+        //                    break;
+        //                case 'O':
+        //                    sout = OrOper() + sout;
 
-        }
+        //                    break;
+        //                case 'X':
+        //                    sout = XorOper() + sout;
+
+        //                    break;
+        //                case 'N':
+        //                    sout = DenyOper() + sout;
+
+        //                    break;
+        //                default:
+        //                    break;
+        //            }
+        //        }
+        //    }
+        //    if (stack.Count != 0)
+        //    {
+        //        Console.WriteLine("Некорректный синтаксис выражения.");
+        //        return false;
+        //    }
+        //    bool res = (true && false) || (!false && (!false && true) && (!(true && (true ^ false) || (true & true))));
+        //    if (sout[0] == 'T')
+        //    {
+        //        return true;
+        //    }
+        //    return false;
+
+        //    char AndOper()
+        //    {
+        //        var first = stack.Pop();
+        //        var second = stack.Pop();
+        //        if (first == 'F' || second == 'F')
+        //        {
+        //            return 'F';
+        //        }
+        //        return 'T';
+        //    }
+        //    char OrOper()
+        //    {
+        //        var first = stack.Pop();
+        //        var second = stack.Pop();
+        //        if (first == 'F' && second == 'F')
+        //        {
+        //            return 'F';
+        //        }
+        //        return 'T';
+        //    }
+        //    char XorOper()
+        //    {
+        //        var first = stack.Pop();
+        //        var second = stack.Pop();
+        //        if (first == 'F' && second == 'F' || second == 'T' && first == 'T')
+        //        {
+        //            return 'F';
+        //        }
+        //        return 'T';
+        //    }
+        //    char DenyOper()
+        //    {
+        //        var first = stack.Pop();
+        //        if (first == 'F')
+        //        {
+        //            return 'T';
+        //        }
+        //        return 'F';
+        //    }
+        //    int GetPriority(char c)
+        //    {
+        //        switch (c)
+        //        {
+        //            case '(':
+        //                return 3;
+        //            case 'N':
+        //            case 'A':
+        //                return 2;
+        //            case 'O':
+        //            case 'X':
+        //                return 1;
+        //            default:
+        //                break;
+        //        }
+        //        return 0;
+        //    }
+        //    bool IsConstant(char c)
+        //    {
+        //        if (c == 'T' || c == 'F')
+        //        {
+        //            return true;
+        //        }
+        //        return false;
+        //    }
+        //}
     }
 }
