@@ -191,7 +191,8 @@ namespace Lab4
             filename = "Task11.txt";
             string string8;
             string8 = File.ReadAllText(dir + Path.DirectorySeparatorChar + filename);
-            //Task11(string8);
+            Console.WriteLine("Введённая формула корректна: " + Task11(string8));
+            Console.WriteLine();
             #endregion
             #endregion
         }
@@ -560,6 +561,10 @@ namespace Lab4
                             }
                             break;
                         default:
+                            {
+                                Console.WriteLine("Некорректный синтаксис выражения.");
+                                return false;
+                            }
                             break;
                     }
                 }
@@ -714,7 +719,7 @@ namespace Lab4
                             stack.Push(c);
                             break;
                         case ')':
-                            if(stack.Peek() != ',')
+                            if (stack.Peek() != ',')
                             {
                                 Console.WriteLine("Некорректный синтаксис выражения.");
                                 return -1;
@@ -724,6 +729,10 @@ namespace Lab4
                             sout += stack.Pop();
                             break;
                         default:
+                            {
+                                Console.WriteLine("Некорректный синтаксис выражения.");
+                                return -1;
+                            }
                             break;
                     }
                 }
@@ -752,6 +761,10 @@ namespace Lab4
                             sout = Min() + sout;
                             break;
                         default:
+                            {
+                                Console.WriteLine("Некорректный синтаксис выражения.");
+                                return -1;
+                            }
                             break;
                     }
                 }
@@ -761,7 +774,7 @@ namespace Lab4
                 Console.WriteLine("Некорректный синтаксис выражения.");
                 return -1;
             }
-            int res = Math.Max(Math.Max(7,9),Math.Min(3,7));
+            int res = Math.Max(Math.Max(7, 9), Math.Min(3, 7));
             return Convert.ToInt32(sout[0].ToString());
             int Max()
             {
@@ -783,179 +796,103 @@ namespace Lab4
          *< Терм > ::= < Имя > | (< Формула >)
          *< Имя > ::= x | y | z 
          */
-        //public static void Task11(string input)
-        //{
-        //    if (!Task4(new string[] { input }))
-        //    {
-        //        Console.WriteLine("Некорректный синтаксис выражения.");
-        //        return false;
-        //    }
-        //    input = input.ToUpper();
-        //    var stack = new MyStack<char>();
-        //    var sout = string.Empty;
-        //    foreach (var c in input)
-        //    {
-        //        if (IsConstant(c))
-        //        {
-        //            sout += c;
-        //            continue;
-        //        }
-        //        else
-        //        {
-        //            switch (c)
-        //            {
-        //                case '(':
-        //                    stack.Push(c);
-        //                    break;
-        //                case ')':
-        //                    while (stack.Peek() != '(')
-        //                    {
-        //                        sout += stack.Pop();
-        //                    }
-        //                    stack.Pop();
-        //                    break;
-        //                case 'A':
-        //                case 'O':
-        //                case 'X':
-        //                case 'N':
-        //                    if (stack.IsEmpty())
-        //                    {
-        //                        stack.Push(c);
-        //                    }
-        //                    else
-        //                    {
-        //                        while (stack.Count > 0 && (GetPriority(c) <= stack.Peek()))
-        //                        {
-        //                            if ('(' == stack.Peek())
-        //                            {
-        //                                break;
-        //                            }
-        //                            else
-        //                            {
-        //                                sout += stack.Pop();
-        //                            }
-        //                        }
-        //                        stack.Push(c);
-        //                    }
-        //                    break;
-        //                default:
-        //                    break;
-        //            }
-        //        }
-        //    }
-        //    while (!stack.IsEmpty())
-        //    {
-        //        sout += stack.Pop();
-        //    }
-        //    while (!IsConstant(sout[sout.Length - 1]))
-        //    {
-        //        if (IsConstant(sout[0]))
-        //        {
-        //            stack.Push(sout[0]);
-        //            sout = sout.Substring(1);
-        //        }
-        //        else
-        //        {
-        //            var oper = sout[0];
-        //            sout = sout.Substring(1);
-        //            switch (oper)
-        //            {
-        //                case 'A':
-        //                    sout = AndOper() + sout;
-        //                    break;
-        //                case 'O':
-        //                    sout = OrOper() + sout;
-
-        //                    break;
-        //                case 'X':
-        //                    sout = XorOper() + sout;
-
-        //                    break;
-        //                case 'N':
-        //                    sout = DenyOper() + sout;
-
-        //                    break;
-        //                default:
-        //                    break;
-        //            }
-        //        }
-        //    }
-        //    if (stack.Count != 0)
-        //    {
-        //        Console.WriteLine("Некорректный синтаксис выражения.");
-        //        return false;
-        //    }
-        //    bool res = (true && false) || (!false && (!false && true) && (!(true && (true ^ false) || (true & true))));
-        //    if (sout[0] == 'T')
-        //    {
-        //        return true;
-        //    }
-        //    return false;
-
-        //    char AndOper()
-        //    {
-        //        var first = stack.Pop();
-        //        var second = stack.Pop();
-        //        if (first == 'F' || second == 'F')
-        //        {
-        //            return 'F';
-        //        }
-        //        return 'T';
-        //    }
-        //    char OrOper()
-        //    {
-        //        var first = stack.Pop();
-        //        var second = stack.Pop();
-        //        if (first == 'F' && second == 'F')
-        //        {
-        //            return 'F';
-        //        }
-        //        return 'T';
-        //    }
-        //    char XorOper()
-        //    {
-        //        var first = stack.Pop();
-        //        var second = stack.Pop();
-        //        if (first == 'F' && second == 'F' || second == 'T' && first == 'T')
-        //        {
-        //            return 'F';
-        //        }
-        //        return 'T';
-        //    }
-        //    char DenyOper()
-        //    {
-        //        var first = stack.Pop();
-        //        if (first == 'F')
-        //        {
-        //            return 'T';
-        //        }
-        //        return 'F';
-        //    }
-        //    int GetPriority(char c)
-        //    {
-        //        switch (c)
-        //        {
-        //            case '(':
-        //                return 3;
-        //            case 'N':
-        //            case 'A':
-        //                return 2;
-        //            case 'O':
-        //            case 'X':
-        //                return 1;
-        //            default:
-        //                break;
-        //        }
-        //        return 0;
-        //    }
-        //    bool IsConstant(char c)
-        //    {
-        //        if (c == 'T' || c == 'F')
-        //        {
-        //            return true;
-        //        }
-        //        return false;
-        //    }
-        //}
+        public static bool Task11(string input)
+        {
+            if (!Task4(new string[] { input }))
+            {
+                Console.WriteLine("Некорректный синтаксис выражения.");
+                return false;
+            }
+            input = input.ToUpper();
+            var stack = new MyStack<char>();
+            var sout = string.Empty;
+            foreach (var c in input)
+            {
+                if (IsName(c))
+                {
+                    sout += c;
+                    continue;
+                }
+                else
+                {
+                    switch (c)
+                    {
+                        case '(':
+                        case '+':
+                        case '-':
+                            stack.Push(c);
+                            break;
+                        case ')':
+                            while (stack.Peek() != '(')
+                            {
+                                sout += stack.Pop();
+                            }
+                            stack.Pop();
+                            break;
+                        default:
+                            {
+                                Console.WriteLine("Некорректный синтаксис выражения.");
+                                return false;
+                            }
+                    }
+                }
+            }
+            while (!stack.IsEmpty())
+            {
+                sout += stack.Pop();
+            }
+            while (!IsName(sout[sout.Length - 1]))
+            {
+                if (IsName(sout[0]))
+                {
+                    stack.Push(sout[0]);
+                    sout = sout.Substring(1);
+                }
+                else
+                {
+                    var oper = sout[0];
+                    sout = sout.Substring(1);
+                    switch (oper)
+                    {
+                        case '+':
+                        case '-':
+                            sout = PMoper() + sout;
+                            break;
+                        default:
+                            {
+                                Console.WriteLine("Некорректный синтаксис выражения.");
+                                return false;
+                            }
+                    }
+                }
+            }
+            if (stack.Count != 0)
+            {
+                Console.WriteLine("Некорректный синтаксис выражения.");
+                return false;
+            }
+            return true;
+            char PMoper()
+            {
+                var first = stack.Pop();
+                var second = stack.Pop();
+                if (first == 'X' || first == 'Y' || first == 'Z')
+                {
+                    if (second == 'X' || second == 'Y' || second == 'Z')
+                    {
+                        return 'X';
+                    }
+                }
+                return 'T';
+            }
+            bool IsName(char c)
+            {
+                if (c == 'X' || c == 'Y' || c == 'Z')
+                {
+                    return true;
+                }
+                return false;
+            }
+        }
     }
 }
