@@ -1,4 +1,4 @@
-﻿//#define strings
+﻿#define strings
 #define taken
 using System;
 using System.Collections.Generic;
