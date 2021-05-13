@@ -40,10 +40,17 @@ namespace Lab2
             Console.WriteLine($"Найденное число подстрок в строке: {ress}");
             Console.WriteLine($"Затраченное время на выполнение: {start - end}");
             #endregion
+            #region IntervalsProblem
+            start = DateTime.Now;
+            int[][] res2 = IntervalsProblem(new int[][] { new int[] { 1, 2 }, new int[] { 2, 4 }, new int[] { 0, 5 }, new int[] { 0, 2 }, new int[] { 4, 7 } });
+            end = DateTime.Now;
+            Console.WriteLine($"Найденное число подстрок в строке: {ress}");
+            Console.WriteLine($"Затраченное время на выполнение: {start - end}");
+            #endregion
 
         }
 
-        private static string MaxDigit(int[] arr)
+        static string MaxDigit(int[] arr)
         {
             List<int> list = new List<int>(arr.Length);
             foreach (var item in arr)
@@ -89,7 +96,7 @@ namespace Lab2
                     {
                         right = str.Substring(j, left.Length);
                     }
-                    if (left.Equals(right)&&!subs.Contains(left))
+                    if (left.Equals(right) && !subs.Contains(left))
                     {
                         subs.Add(left);
                         counter++;
@@ -98,6 +105,47 @@ namespace Lab2
                 }
             }
             return counter;
+        }
+        static int[][] IntervalsProblem(int[][] input)
+        {
+            List<int[]> list = new List<int[]>();
+            foreach (var item in input)
+            {
+                list.Add(item);
+            }
+            list.Sort((f, s) =>
+            {
+                var ff = f[0];
+                var sf = s[0];
+                return ff <= sf ? -1 : 1;
+            });
+            int counter = 0;
+            do
+            {
+                counter = 0;
+                for (int i = 0; i < list.Count - 1; i++)
+                {
+                    int j = i + 1;
+                    if (list[i][0] <= list[j][0])//если 1 точка 1 отрезка левее или совпадает
+                    {
+                        if (list[i][1] <= list[j][1])//если 2 точка 1 отрезка левее или совпадает 
+                        {
+                            counter++;
+                            list.Add(new int[] { list[i][0], list[j][1] });
+                            list.RemoveAt(j);
+                            list.RemoveAt(i);
+                            list.Sort((f, s) =>
+                            {
+                                var ff = f[0];
+                                var sf = s[0];
+                                return ff <= sf ? -1 : 1;
+                            });
+                        }
+                    }
+                }
+            } while (counter != 0);
+            int[][] res = list.ToArray();
+            return res;
         }
     }
 }
