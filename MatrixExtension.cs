@@ -2,14 +2,16 @@
 using System.Threading;
 namespace Lab3
 {
+    /// <summary>
+    /// Класс расширений для двумерного массива, в основном в нём все взаимодействия с игровым полем
+    /// </summary>
     public static class MatrixExtension
     {
         /// <summary>
-        /// 
+        /// Перемещает заданную клетку влево
         /// </summary>
         /// <param name="map"></param>
         /// <param name="replaced">Перемещаемая клетка</param>
-        /// <param name="timeout"></param>
         public static void MoveLeft(this Cell[,] map, Cell replaced)
         {
             Field.counter++;
@@ -126,7 +128,10 @@ namespace Lab3
                 }
             }
         }
-
+        /// <summary>
+        /// Вывод карты на консоль на текущее состояние поля
+        /// </summary>
+        /// <param name="map"></param>
         public static void Print(this Cell[,] map)
         {
             var size = 4;

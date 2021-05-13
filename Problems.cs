@@ -22,15 +22,25 @@ namespace Lab2
                 {
                     arr[i] = rnd.Next(0, (int)max + 1);
                 }
-                var start = DateTime.Now;
+                var start1 = DateTime.Now;
                 string res = MaxDigit(arr);
-                var end = DateTime.Now;
+                var end1 = DateTime.Now;
                 Console.WriteLine($"Составленное число: {res}");
-                Console.WriteLine($"Затраченное время на выполнение: {start - end}");
+                Console.WriteLine($"Затраченное время на выполнение: {start1 - end1}");
                 Console.WriteLine($"Введите размерность генерируемого массива в диапазоне [1;100] или 0 для перехода к следующему заданию");
                 size = int.Parse(Console.ReadLine());
             }
             #endregion
+            #region ConcatSum
+            Console.WriteLine($"Введите строку для поиска или 0 для перехода к следующему заданию");
+            var str = Console.ReadLine();
+            var start = DateTime.Now;
+            int ress = ConcatSum(str);
+            var end = DateTime.Now;
+            Console.WriteLine($"Найденное число подстрок в строке: {ress}");
+            Console.WriteLine($"Затраченное время на выполнение: {start - end}");
+            #endregion
+
         }
 
         private static string MaxDigit(int[] arr)
@@ -59,6 +69,35 @@ namespace Lab2
                 string s = second + first;
                 return f.CompareTo(s) > 0 ? -1 : 1;
             }
+        }
+        static int ConcatSum(string str)
+        {
+            int counter = 0;
+            var subs = new List<string>();
+            for (int i = 0; i < str.Length - 1; i++)
+            {
+                int j = i + 1;
+                while (j <= str.Length)
+                {
+                    string left = str.Substring(i, j - i);
+                    string right;
+                    if (left.Length > (str.Length - j))
+                    {
+                        right = str.Substring(j);
+                    }
+                    else
+                    {
+                        right = str.Substring(j, left.Length);
+                    }
+                    if (left.Equals(right)&&!subs.Contains(left))
+                    {
+                        subs.Add(left);
+                        counter++;
+                    }
+                    j++;
+                }
+            }
+            return counter;
         }
     }
 }

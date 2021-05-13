@@ -52,7 +52,6 @@ namespace Lab3
             #endregion
 #endif
 #if taken
-            //long max = (long)Math.Pow(10, 9);
             #region Taken
             Console.WriteLine("Введите 1 чтобы ввести массив вручную, 2 сгенерировать случайный массив или 0 чтобы выйти");
             var arr = new int?[16];
@@ -120,7 +119,7 @@ namespace Lab3
                     }
                 }
                 var start = DateTime.Now;
-                int[] res = Taken(arr /*new int?[] {1,2,3,4,5,6,7,8,9,11,0,14,13,15,10,12}*/);
+                int[] res = Taken(arr /*new int?[] {1,2,3,4,5,6,7,8,9,11,0,14,13,15,10,12}*/);//закомментирована просто одна из допустимых начальных комбинаций
                 var end = DateTime.Now;
                 Console.WriteLine($"Полученная последовательность перестановок: ");
                 if (res != null)
@@ -142,7 +141,13 @@ namespace Lab3
             #endregion
 #endif
         }
-
+        /// <summary>
+        /// Алгоритм Боуера-Мура. Принцип поиска основан на смещении относительно текущего символа на
+        /// определённое "стоимостью" этого символа расстояния, которое определяется позицией этого символа в подстроке.
+        /// </summary>
+        /// <param name="str">Входная строка</param>
+        /// <param name="word">Образ</param>
+        /// <returns>Индекс начала подстроки</returns>
         private static int BoyerMoor(string str, string word)
         {
             var alphabet = new int[256];
@@ -150,7 +155,7 @@ namespace Lab3
             {
                 alphabet[i] = word.Length;
             }
-            string reversed = new string(word.ToCharArray().Reverse().ToArray());
+            string reversed = new string(word.ToCharArray().Reverse().ToArray());//переворачиваем исходный образ чтобы было удобнее манипулировать
             var chars_cost = new Dictionary<char, int>();
             for (int i = 0; i < reversed.Length; i++)
             {
@@ -187,7 +192,12 @@ namespace Lab3
             }
             return -1;
         }
-
+        /// <summary>
+        /// Алгоритм КНута-Морриса-Прата. Принцип основан на подсчёте префикс-функции для исходной строки и образа
+        /// </summary>
+        /// <param name="str">Исходная строка</param>
+        /// <param name="word">Образ</param>
+        /// <returns>Индекс начала подстроки</returns>
         static int KMP(string str, string word)
         {
             bool flag = true;
@@ -215,6 +225,7 @@ namespace Lab3
                 }
             }
             return -1;
+            ///функция подсчёта префикса для строки
             void CalcPrefs(string word)
             {
                 for (int i = 0, j = 1; j < word.Length; j++, i = 0)
@@ -235,10 +246,16 @@ namespace Lab3
                 }
             }
         }
-
+        /// <summary>
+        /// Пятнашки. Суть кратко: на входе одномерный массив [0;15], 0 символизирует пустую клетку, остальные числа свои клетки
+        /// На основе массива составляется игровое поле 4х4, если комбинация решаемая, каждый элемент последовательно ставится на своё место. Иначе возвращается null
+        /// </summary>
+        /// <param name="arr"></param>
+        /// <returns></returns>
         static int[] Taken(int?[] arr)
         {
             var counter = 0;
+            ///сначала определяем, решаема ли комбинация
             for (int i = 0; i < arr.Length - 1; i++)
             {
                 if (arr[i] == 0)
@@ -262,13 +279,14 @@ namespace Lab3
             {
                 return null;
             }
+            ///иначе создаём поле  на основе массива
             var field = new Field(arr);
-            field.PlaceFirstRow();
-            field.PlaceFirstCol();
-            field.PlaceSecondRow();
-            field.PlaceRest();
+            field.PlaceFirstRow();//размещаем первый ряд
+            field.PlaceFirstCol();//размещаем первую колонку
+            field.PlaceSecondRow();//второй ряд
+            field.PlaceRest();//оставшиеся 3 клетки
             Field.counter = 0;
-            return Field.movelist.ToArray();
+            return Field.movelist.ToArray();//возвращаем результат в виде массива
         }
     }
 }

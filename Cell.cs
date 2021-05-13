@@ -2,6 +2,9 @@
 
 namespace Lab3
 {
+    /// <summary>
+    /// Класс представляет отдельную клетку на поле, которая хранит информацию о своих соседях, о своём состоянии, текущих и целевых координатах
+    /// </summary>
     public class Cell
     {
         internal bool Placed { get; set; }
@@ -32,7 +35,12 @@ namespace Lab3
         internal Cell Down { set; get; }
         internal Cell Left { set; get; }
         internal string Previous { get; set; }
-
+        /// <summary>
+        /// Конструктор 
+        /// </summary>
+        /// <param name="val">Числовое значение</param>
+        /// <param name="r">Ряд клетки на момент создания</param>
+        /// <param name="c">Столбец на момент создания</param>
         public Cell(int val, int r, int c)
         {
             if (val == 0)
@@ -119,6 +127,10 @@ namespace Lab3
                 return Direction.Left;
             }
         }
+        /// <summary>
+        /// Нужно ли вверх
+        /// </summary>
+        /// <returns></returns>
         internal bool NeedUp()
         {
             if (Row > TargRow)
@@ -127,7 +139,10 @@ namespace Lab3
             }
             return false;
         }
-
+        /// <summary>
+        /// Нужно ли влево
+        /// </summary>
+        /// <returns></returns>
         internal bool NeedLeft()
         {
             if (Col > TargCol)
@@ -136,7 +151,10 @@ namespace Lab3
             }
             return false;
         }
-
+        /// <summary>
+        /// Нужно ли вправо
+        /// </summary>
+        /// <returns></returns>
         internal bool NeedRight()
         {
             if (Col < TargCol)
@@ -145,7 +163,10 @@ namespace Lab3
             }
             return false;
         }
-
+        /// <summary>
+        /// Может ли вправо
+        /// </summary>
+        /// <returns></returns>
         internal bool CanUp()
         {
             if (Up != null && !Up.Placed)
@@ -155,15 +176,10 @@ namespace Lab3
             return false;
         }
 
-        internal bool CanRight()
-        {
-            if (Right != null && !Right.Placed)
-            {
-                return true;
-            }
-            return false;
-        }
-
+        /// <summary>
+        /// Может ли вниз
+        /// </summary>
+        /// <returns></returns>
         internal bool CanDown()
         {
             if (Down != null && !Down.Placed)
@@ -172,7 +188,10 @@ namespace Lab3
             }
             return false;
         }
-
+        /// <summary>
+        /// Может ли влево
+        /// </summary>
+        /// <returns></returns>
         internal bool CanLeft()
         {
             if (Left != null && !Left.Placed)
@@ -181,13 +200,13 @@ namespace Lab3
             }
             return false;
         }
+        /// <summary>
+        /// Перечисление для определения направления в методах, где нужно узнать приоритет движения
+        /// </summary>
         public enum Direction
         {
             Up = 0, Right = 1, Down = 2, Left = 3
         }
-
-
-
         /// <summary>
         /// Возвращает предпочтительное направление движения перемещаемой клетки
         /// </summary>

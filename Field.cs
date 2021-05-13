@@ -3,12 +3,19 @@ using System.Collections.Generic;
 
 namespace Lab3
 {
+    /// <summary>
+    /// Представляет поле 4х4, состоящее из клеток
+    /// </summary>
     class Field
     {
         internal static long counter = 0;
         internal static int delay = 300;
         internal static List<int> movelist;
         Cell[,] map = new Cell[4, 4];
+        /// <summary>
+        /// Клнструктор
+        /// </summary>
+        /// <param name="arr"></param>
         public Field(int?[] arr)
         {
             int size = 4;
@@ -22,6 +29,9 @@ namespace Lab3
             map.BindNeighbours();
             movelist = new List<int>();
         }
+        /// <summary>
+        /// Метод для размещения первого ряда
+        /// </summary>
         internal void PlaceFirstRow()
         {
             map.Print();
@@ -48,6 +58,9 @@ namespace Lab3
                 BlackMagic1(four);
             }
         }
+        /// <summary>
+        /// Мтод размещения первой колонки
+        /// </summary>
         internal void PlaceFirstCol()
         {
             var five = map.GetNum(5);
@@ -78,6 +91,10 @@ namespace Lab3
                 BlackMagic2(five);
             }
         }
+        /// <summary>
+        /// Метод размещения последних трёх клеток поля для одной из конечных конфигураций
+        /// </summary>
+        /// <param name="fourteen"></param>
         private void BlackMagic5(Cell fourteen)
         {
             fourteen.Actual = true;
@@ -118,6 +135,10 @@ namespace Lab3
             map.MoveUp(zero);
             fourteen.Actual = false;
         }
+        /// <summary>
+        /// Метод размещения последних трёх клеток поля для одной из конечных конфигураций
+        /// </summary>
+        /// <param name="fourteen"></param>
         private void BlackMagic4(Cell fourteen)
         {
             fourteen.Actual = true;
@@ -159,6 +180,9 @@ namespace Lab3
             fourteen.Actual = false;
 
         }
+        /// <summary>
+        /// Метод размещения последних трёх клеток поля
+        /// </summary>
         internal void PlaceRest()
         {
             var zero = map.GetNum(0);
@@ -203,68 +227,9 @@ namespace Lab3
                 PlaceNum(fifteen);
             }
         }
-        private void RandomMove(Cell zero)
-        {
-            Random rand = new Random();
-            int next = rand.Next(0, 4);
-            var flag = false;
-            while (!flag)
-            {
-                switch (next)
-                {
-                    case 0:
-                        if (zero.CanUp() && zero.Previous != "down")
-                        {
-                            map.MoveUp(zero);
-                            zero.Previous = "up";
-                            flag = true;
-                        }
-                        else
-                        {
-                            next = rand.Next(0, 4);
-                        }
-                        break;
-                    case 1:
-                        if (zero.CanRight() && zero.Previous != "left")
-                        {
-                            map.MoveRight(zero);
-                            zero.Previous = "right";
-                            flag = true;
-                        }
-                        else
-                        {
-                            next = rand.Next(0, 4);
-                        }
-                        break;
-                    case 2:
-                        if (zero.CanDown() && zero.Previous != "up")
-                        {
-                            map.MoveDown(zero);
-                            zero.Previous = "down";
-                            flag = true;
-                        }
-                        else
-                        {
-                            next = rand.Next(0, 4);
-                        }
-                        break;
-                    case 3:
-                        if (zero.CanLeft() && zero.Previous != "right")
-                        {
-                            map.MoveLeft(zero);
-                            zero.Previous = "left";
-                            flag = true;
-                        }
-                        else
-                        {
-                            next = rand.Next(0, 4);
-                        }
-                        break;
-                    default:
-                        break;
-                }
-            }
-        }
+       /// <summary>
+       /// Метод размещения второго ряда
+       /// </summary>
         internal void PlaceSecondRow()
         {
             var zero = map.GetNum(0);
@@ -289,7 +254,10 @@ namespace Lab3
                 BlackMagic3(eight);
             }
         }
-
+        /// <summary>
+        /// Метод размещения одной из конечных конфигураций для второго ряда
+        /// </summary>
+        /// <param name="eight"></param>
         private void BlackMagic3(Cell eight)
         {
             eight.Actual = true;
@@ -339,6 +307,10 @@ namespace Lab3
             }
             eight.Actual = false;
         }
+        /// <summary>
+        /// Метод размещения первого столбца поля для одной из конечных конфигураций
+        /// </summary>
+        /// <param name="five"></param>
         private void BlackMagic2(Cell five)
         {
             five.Actual = true;
@@ -440,6 +412,10 @@ namespace Lab3
             }
             four.Actual = false;
         }
+        /// <summary>
+        /// Метод размещения элементарной клетки на поле
+        /// </summary>
+        /// <param name="target"></param>
         private void PlaceNum(Cell target)
         {
             var zero = map.GetNum(0);
