@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Text;
 
 namespace Lab2
@@ -44,10 +45,23 @@ namespace Lab2
             start = DateTime.Now;
             int[][] res2 = IntervalsProblem(new int[][] { new int[] { 1, 2 }, new int[] { 2, 4 }, new int[] { 0, 5 }, new int[] { 0, 2 }, new int[] { 4, 7 } });
             end = DateTime.Now;
-            Console.WriteLine($"Найденное число подстрок в строке: {ress}");
+            Console.WriteLine($"Число отрезков: {ress}");
             Console.WriteLine($"Затраченное время на выполнение: {start - end}");
             #endregion
-
+            #region LongestPalindrome
+            start = DateTime.Now;
+            var res3 = LongestPalindrome("Спортивный клуб «Ротор».");
+            end = DateTime.Now;
+            Console.WriteLine($"Самый длинный палиндром: {res3}");
+            Console.WriteLine($"Затраченное время на выполнение: {start - end}");
+            #endregion
+            #region CoolestString
+            start = DateTime.Now;
+            var res4 = CoolestString("abe", "acd");
+            end = DateTime.Now;
+            Console.WriteLine($"Строка 1 может победить строку 2: {res4}");
+            Console.WriteLine($"Затраченное время на выполнение: {start - end}");
+            #endregion
         }
 
         static string MaxDigit(int[] arr)
@@ -105,6 +119,162 @@ namespace Lab2
                 }
             }
             return counter;
+        }
+        static string LongestPalindrome(string input)
+        {
+            input = input.ToLower();
+            string res = string.Empty;
+            for (int i = 0, j = i - 1, k = i + 1; i < input.Length; i++)
+            {
+                j = i - 1;
+                k = i + 1;
+                while (j >= 0 && k < input.Length)
+                {
+                    string temp = input.Substring(j, k - j + 1);
+                    if (IsPalindrome(temp) && temp.Length > res.Length)
+                    {
+                        res = temp;
+                        j--;
+                        k++;
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+                j = i - 1;
+                k = i + 2;
+                while (j >= 0 && k < input.Length)
+                {
+                    string temp = input.Substring(j, k - j + 1);
+                    if (IsPalindrome(temp) && temp.Length > res.Length)
+                    {
+                        res = temp;
+                        j--;
+                        k++;
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+            }
+            return res;
+            bool IsPalindrome(string str)
+            {
+                if (str.Length % 2 == 0)
+                {
+                    int index = str.Length / 2;
+                    string left = str.Substring(0, index);
+                    var right = new string(str.Substring(index).ToCharArray().Reverse().ToArray());
+                    for (int i = 0; i < left.Length; i++)
+                    {
+                        if (left[i] != right[i])
+                        {
+                            return false;
+                        }
+                    }
+                    return true;
+                }
+                else
+                {
+                    int index = str.Length / 2;
+                    string left = str.Substring(0, index);
+                    var right = new string(str.Substring(index + 1).ToCharArray().Reverse().ToArray());
+                    for (int i = 0; i < left.Length; i++)
+                    {
+                        if (left[i] != right[i])
+                        {
+                            return false;
+                        }
+                    }
+                    return true;
+                }
+            }
+        }
+        static bool CoolestString(string first, string second)
+        {
+            if (first.Length != second.Length)//если начальные условия не выполняются
+            {
+                return false;
+            }
+            string tempf = first;
+            var listf = new List<string>();
+            string temps = second;
+            var lists = new List<string>();
+            do//в этом блоке циклов получаем всевозможные варианты перестановок символов в первом слове
+            {
+                var innerf = tempf;
+                do
+                {
+                    tempf = new string(tempf.Append(tempf[0]).ToArray()).Remove(0, 1);
+                    listf.Add(tempf);
+                } while (tempf != new string(innerf[innerf.Length - 1] + innerf.Remove(innerf.Length - 1, 1)));
+                var fch = tempf[0];
+                var lch = tempf[tempf.Length - 1];
+                tempf = tempf.Substring(1, tempf.Length - 2);
+                tempf = lch + tempf + fch;
+                listf.Add(tempf);
+            } while (tempf != first);
+            do//то же самое со вторым словом
+            {
+                var inners = temps;
+                do
+                {
+                    temps = new string(temps.Append(temps[0]).ToArray()).Remove(0, 1);
+                    lists.Add(temps);
+                } while (temps != new string(inners[inners.Length - 1] + inners.Remove(inners.Length - 1, 1)));
+                var fch = temps[0];
+                var lch = temps[temps.Length - 1];
+                temps = temps.Substring(1, temps.Length - 2);
+                temps = lch + temps + fch;
+                lists.Add(temps);
+            } while (temps != second);
+            foreach (var fs in listf)//проверяем, могут ли  какие-то из перестановок в первом слове победить какие-то перестановки во втором
+            {
+                foreach (var ss in lists)
+                {
+                    int counter = 0;
+                    for (int i = 0; i < fs.Length; i++)
+                    {
+                        if (fs[i] >= ss[i])
+                        {
+                            counter++;
+                        }
+                        else
+                        {
+                            break;
+                        }
+                    }
+                    if (counter == ss.Length)
+                    {
+                        return true;
+                    }
+                }
+            }
+            foreach (var ss in lists)//то же самое наоборот
+            {
+                foreach (var fs in listf)
+                {
+                    int counter = 0;
+                    for (int i = 0; i < fs.Length; i++)
+                    {
+                        if (ss[i] >= fs[i])
+                        {
+                            counter++;
+                        }
+                        else
+                        {
+                            break;
+                        }
+                    }
+                    if (counter == ss.Length)
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;//если ничего не нашлось
         }
         static int[][] IntervalsProblem(int[][] input)
         {
