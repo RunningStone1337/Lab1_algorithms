@@ -62,6 +62,27 @@ namespace Lab2
             Console.WriteLine($"Строка 1 может победить строку 2: {res4}");
             Console.WriteLine($"Затраченное время на выполнение: {start - end}");
             #endregion
+            #region BiggestTriangle
+            int[] tr = { 12, 6, 2, 5 };
+            Console.WriteLine("Полученный периметр периметры:" + BiggestTriangle(tr));
+            #endregion
+            #region MatrixSort
+            int[,] mx = { { 3, 3, 1, 1 }, { 2, 2, 1, 2 }, { 1, 1, 1, 2 } };
+            Console.WriteLine("Полученная матрица:");
+            var resm = MatrixSort(mx);
+            for (int i = 0; i < resm.GetLength(0); i++)
+            {
+                for (int j = 0; j < resm.GetLength(1); j++)
+                {
+                    Console.Write(resm[i, j] + " ");
+                }
+                Console.WriteLine();
+            }
+            #endregion
+            #region RightAngle
+            int angles = 5;
+            Console.WriteLine($"Наименьший подмногоугольник имеет {RightAngle(58)} вершин");
+            #endregion
         }
 
         static string MaxDigit(int[] arr)
@@ -278,44 +299,151 @@ namespace Lab2
         }
         static int[][] IntervalsProblem(int[][] input)
         {
-            List<int[]> list = new List<int[]>();
-            foreach (var item in input)
+            if (input == null || input.Length == 0) return new int[0][];
+            Array.Sort(input, 0, input.Length, new IntervalComparer());
+            var stack = new Stack<int[]>();
+            var curr = input[0];
+            for (int i = 1; i < input.Length; i++)
             {
-                list.Add(item);
-            }
-            list.Sort((f, s) =>
-            {
-                var ff = f[0];
-                var sf = s[0];
-                return ff <= sf ? -1 : 1;
-            });
-            int counter = 0;
-            do
-            {
-                counter = 0;
-                for (int i = 0; i < list.Count - 1; i++)
+                var next = input[i];
+                if (curr[1] >= next[0])
+                    curr = new int[] { curr[0], Math.Max(curr[1], next[1]) };
+                else
                 {
-                    int j = i + 1;
-                    if (list[i][0] <= list[j][0])//если 1 точка 1 отрезка левее или совпадает
-                    {
-                        if (list[i][1] <= list[j][1])//если 2 точка 1 отрезка левее или совпадает 
-                        {
-                            counter++;
-                            list.Add(new int[] { list[i][0], list[j][1] });
-                            list.RemoveAt(j);
-                            list.RemoveAt(i);
-                            list.Sort((f, s) =>
-                            {
-                                var ff = f[0];
-                                var sf = s[0];
-                                return ff <= sf ? -1 : 1;
-                            });
-                        }
-                    }
+                    stack.Push(curr);
+                    curr = next;
                 }
-            } while (counter != 0);
-            int[][] res = list.ToArray();
+            }
+            stack.Push(curr);
+            var res = new int[stack.Count][];
+            for (int i = res.Length - 1; i >= 0; i--)
+                res[i] = stack.Pop();
             return res;
         }
+        class IntervalComparer : IComparer<int[]>
+        {
+            public int Compare(int[] x, int[] y)
+            {
+                return x[0].CompareTo(y[0]);
+            }
+        }
+        static int BiggestTriangle(int[] mas)
+        {
+            List<int> arr = new List<int>(mas);
+            arr.Sort();
+            arr.Reverse();
+            while (arr[0] >= arr[1] + arr[2])
+            {
+                if (arr.Count > 3)
+                    arr.RemoveAt(0);
+                else return 0;
+            }
+            return arr[0] + arr[1] + arr[2];
+        }
+        static int?[,] MatrixSort(int[,] input)
+        {
+            var list = new List<int>();
+            foreach (var val in input)
+            {
+                list.Add(val);
+            }
+            list.Sort();
+            var res = new int?[input.GetLength(0), input.GetLength(1)];
+            for (int i = 0; i < input.GetLength(0); i++)
+            {
+                for (int j = 0; j < input.GetLength(1); j++)
+                {
+                    if (res[i, j] == null)
+                    {
+                        res[i, j] = list[0];
+                        list.RemoveAt(0);
+                    }
+                }
+                for (int k = 0; k < input.GetLength(0); k++)
+                {
+                    if (k > input.GetLength(0))
+                    {
+                        break;
+                    }
+                    if (res[k, i] == null)
+                    {
+                        res[k, i] = list[0];
+                        list.RemoveAt(0);
+                    }
+                }
+            }
+            return res;
+        }
+        static int RightAngle(int input)
+        {
+            if (input % 3 == 0)
+            {
+                return 3;
+            }
+            else if (input % 2 == 1)
+            {
+                int sqrt = (int)Math.Sqrt(input);
+                if (sqrt<3)
+                {
+                    return input;
+                }
+                int res = sqrt;
+                for (int j = sqrt; j > 2; j--)
+                {
+                    if (input % j == 0 && IsSimple(j))
+                    {
+                        res = j;
+                    }
+                }
+                return res;
+            }
+            else if (input % 2 == 0 && input % 4 != 0)
+            {
+                int sqrt = (int)Math.Sqrt(input);
+                if (sqrt < 3)
+                {
+                    return input;
+                }
+                int res = sqrt;
+                for (int j = sqrt; j > 2; j--)
+                {
+                    if (input % j == 1 && IsSimple(j))
+                    {
+                        res = j;
+                    }
+                }
+                if (res == sqrt)
+                {
+                    return input / 2;
+                }
+                return res;
+            }
+            else
+            {
+                return 4;
+            }
+
+            bool IsSimple(int num)
+            {
+                int counter = 0;
+                for (int i = 1; i <= num; i++)
+                {
+                    if (num % i == 0)
+                    {
+                        counter++;
+                    }
+                    if (counter > 2)
+                    {
+                        return false;
+                    }
+                }
+                if (counter != 2)
+                {
+                    return false;
+                }
+                return true;
+            }
+        }
     }
+
 }
